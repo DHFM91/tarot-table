@@ -9,13 +9,35 @@ A portable tarot reading table for the browser. Shuffle, cut and deal a full 78-
 ## Features
 
 - **8 spreads:** Single Card, Past · Present · Future, Situation · Action · Outcome, Mind · Body · Spirit, Five-Card Cross, Two Paths, Horseshoe, Celtic Cross
-- **5 shuffles**, each modeled on how the real one moves cards: Overhand, Riffle, Hindu, Wash (scramble) and Pile, plus Turn & Riffle
+- **6 shuffles**, each modeled on how the real one moves and turns cards: Overhand, Riffle (straight), Riffle (one half turned), Hindu, Wash (scramble) and Pile
 - **3 cuts:** none, a single cut you place yourself, or the three-pile left-hand cut gathered in your chosen order
 - **3 deals:** from the top, picked by hand from a face-down fan, or every seventh card
-- **Reversals:** from how you shuffle (like a real deck), random 50/50, or off
+- **Reversals:** from your deck and how you shuffle (like a real deck), random 50/50, or off. See below.
 - Every card has its own distinct upright and reversed meaning
 - Reading guide: position-by-position meanings, plus patterns across the spread (Major Arcana weight, leading and missing suits, reversals, court cards, repeated numbers)
 - Works offline, on phones, and from a thumb drive
+
+## How reversed cards work
+
+With the default setting, reversals come from the deck itself, the way they do with real cards:
+
+1. **Your deck starts in a realistic state.** A *well-used deck* (the default) has every card randomly upright or reversed. A *lightly used deck* starts with about a quarter reversed, and a *brand-new deck* is in order with every card upright.
+2. **Each shuffle style turns cards in its own way:**
+
+| Shuffle | How it turns cards |
+|---|---|
+| Overhand | Each packet has a 4% chance of landing turned end-over-end |
+| Hindu | Each packet has a 3% chance of flipping |
+| Riffle (straight) | Never turns cards: the halves are married as they are |
+| Riffle (one half turned) | One hand's stack (35 to 43 cards) is rotated before the halves are married |
+| Pile | Each pile has a 10% chance of being picked up turned |
+| Wash | Each card has a 50% chance of being flipped |
+
+3. **The deck carries over** from reading to reading, so what you did last time still shows.
+
+On a brand-new deck, one shuffle leaves on average about 6 cards reversed for Overhand, 2 for Hindu, 8 for Pile, 0 for a straight Riffle, and about half the deck for a turned Riffle or a Wash. On a well-used deck every card is already a toss-up, so the shuffle mostly decides *which* cards end up reversed.
+
+The other settings are **random 50/50** (each drawn card, whatever the shuffle) and **upright only**.
 
 ## Run it offline / from a thumb drive
 

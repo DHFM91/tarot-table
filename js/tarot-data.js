@@ -127,11 +127,12 @@ const SPREADS={
  celtic:{name:"Celtic Cross",desc:"The classic ten-card deep dive.",pos:[["Present","The heart of the situation",1.4,2.7],["Challenge","What crosses you",1.4,2.7,90],["Foundation","The root beneath it",1.4,4.55],["Recent Past","What's passing away",0,2.7],["Crown","Your aim, or the best outcome",1.4,.85],["Near Future","What's approaching",2.8,2.7],["Self","Your attitude",4.3,5.4],["Environment","Others and your surroundings",4.3,3.6],["Hopes & Fears","What you wish for or dread",4.3,1.8],["Outcome","Where it's heading",4.3,0]]}};
 
 const SHUFFLES={
- overhand:{name:"Overhand",desc:"The everyday shuffle: small packets slid from hand to hand."},
- riffle:{name:"Riffle",desc:"Split the deck and interleave the halves, casino-style. Keeps every card's orientation."},
- hindu:{name:"Hindu",desc:"Pull larger packets off the top into the other hand. Popular in India and Japan."},
- wash:{name:"Wash (Scramble)",desc:"Spread the cards face-down and swirl them. This turns cards, so it creates reversals."},
- pile:{name:"Pile Shuffle",desc:"Deal into piles and gather them up. A ritual many readers use to clear a deck."}};
+ overhand:{name:"Overhand",desc:"The everyday shuffle: small packets slid from hand to hand. Now and then a packet lands turned around."},
+ riffle:{name:"Riffle (straight)",desc:"Split the deck and marry the halves, casino-style, without turning either stack. Every card keeps its orientation."},
+ turn:{name:"Riffle (one half turned)",desc:"Rotate one hand's stack end-over-end before marrying the halves, so about half the deck changes orientation."},
+ hindu:{name:"Hindu",desc:"Pull larger packets off the top into the other hand. Popular in India and Japan. Occasionally a packet flips."},
+ wash:{name:"Wash (Scramble)",desc:"Spread the cards face-down and swirl them. Turns cards every which way: the biggest stir for reversals."},
+ pile:{name:"Pile Shuffle",desc:"Deal into piles and gather them up. A ritual many readers use to clear a deck. A pile is sometimes picked up turned."}};
 const CUTS={
  none:{name:"No cut",desc:"Trust the shuffle and go straight to the deal."},
  single:{name:"Single cut",desc:"Lift a portion off the top and place it underneath."},

@@ -10,7 +10,18 @@ ok(D.deck.length===78,'78 cards');ok(new Set(D.deck.map(c=>c.id)).size===78,'uni
 ok(D.deck.every(c=>c.up.k&&c.up.m&&c.rv.k&&c.rv.m&&c.up.m!==c.rv.m),'every card has distinct upright+reversed');
 ok(D.byId['major-13'].name==='Death'&&D.byId['cups-14'].name==='King of Cups'&&D.byId['wands-01'].name==='Ace of Wands','ids map');
 for(const st of ['overhand','riffle','hindu','wash','pile','turn'])for(let t=0;t<300;t++){let d=E.freshDeck();for(let k=0;k<3;k++)d=E.shuffle(d,st,{piles:3+t%7});ok(perm(d),st+' perm');}
-for(const st of ['overhand','riffle','hindu','pile']){let d=E.freshDeck();for(let k=0;k<50;k++)d=E.shuffle(d,st);ok(d.every(o=>!o.r),st+' keeps orientation')}
+// deck kinds: starting share of reversed cards
+for(const [kind,want] of [['used',.5],['light',.25],['new',0]]){let r=0,T=2000;for(let t=0;t<T;t++)r+=E.newDeck(kind).filter(o=>o.r).length;const avg=r/T/78;ok(Math.abs(avg-want)<.02,kind+' deck reversed '+avg.toFixed(3));ok(perm(E.newDeck(kind)),kind+' perm')}
+ok(E.newDeck('new').every((o,i)=>o.i===i&&!o.r),'new deck ordered upright');
+// every style now turns some cards from a brand-new deck, wash most of all
+{const avg={};for(const st of ['overhand','hindu','riffle','pile','wash','turn']){let r=0,T=4000;for(let t=0;t<T;t++)r+=E.shuffle(E.freshDeck(),st).filter(o=>o.r).length;avg[st]=r/T}
+ ok(avg.overhand>1&&avg.overhand<12,'overhand turns a few '+avg.overhand);ok(avg.hindu>0.5&&avg.hindu<8,'hindu turns a few '+avg.hindu);
+ ok(avg.riffle===0,'straight riffle never turns '+avg.riffle);ok(avg.turn>=35&&avg.turn<=43,'turned riffle about half '+avg.turn);ok(avg.pile>4&&avg.pile<12,'pile turns some '+avg.pile);ok(Math.abs(avg.wash-39)<1.5,'wash about half '+avg.wash);
+ ok(avg.wash>avg.pile&&avg.wash>avg.overhand&&avg.wash>avg.hindu,'wash stirs most of the random styles');console.log('avg reversed after 1 shuffle of a new deck:',JSON.stringify(avg,(k,v)=>typeof v==='number'?+v.toFixed(1):v))}
+// a lightly used deck drifts toward half with shuffling, faster for wash
+{const run=(st,n)=>{let r=0,T=1500;for(let t=0;t<T;t++){let d=E.newDeck('light');for(let k=0;k<n;k++)d=E.shuffle(d,st);r+=d.filter(o=>o.r).length}return r/T/78};
+ const o1=run('overhand',1),o10=run('overhand',10),w1=run('wash',1);ok(o1<o10&&o10<.5&&w1>.47,'drift toward half '+[o1,o10,w1].map(x=>x.toFixed(3)))}
+{const p=E.turnPacket([{i:1,r:false},{i:2,r:true}]);ok(p[0].i===2&&p[0].r===false&&p[1].i===1&&p[1].r===true,'turnPacket')}
 {let r=0,T=2000;for(let t=0;t<T;t++)r+=E.wash(E.freshDeck()).filter(o=>o.r).length;const avg=r/T;ok(avg>36&&avg<42,'wash ~half reversed '+avg)}
 {const d=E.turnAndRiffle(E.freshDeck());const rv=d.filter(o=>o.r).length;ok(rv>=35&&rv<=43,'turn half reversed '+rv)}
 {const f=E.freshDeck(),x=E.shuffle(f,'wash');ok(f.every((o,i)=>o.i===i&&!o.r),'input not mutated')}

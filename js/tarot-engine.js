@@ -38,6 +38,8 @@ function seededRng(seed) {
   };
 }
 const coin = rng => rng(2) === 0;
+/** True with probability p (0..1). */
+const chance = (p, rng) => rng(1000000) < p * 1000000;
 function fisherYates(a, rng) {
   for (let j = a.length - 1; j > 0; j--) { const k = rng(j + 1); [a[j], a[k]] = [a[k], a[j]]; }
   return a;
@@ -47,6 +49,30 @@ function fisherYates(a, rng) {
 /** A brand-new deck: standard order, all upright. */
 function freshDeck() { return D.deck.map((c, i) => ({ i, r: false })); }
 
+/** Share of cards that start reversed for each kind of deck. */
+const DECK_KINDS = Object.freeze({
+  used:  { name: "Well-used deck", desc: "Shuffled many times before; cards are turned every which way (about half reversed).", reversed: 0.5 },
+  light: { name: "Lightly used deck", desc: "Only shuffled a little before; about a quarter of the cards are reversed.", reversed: 0.25 },
+  new:   { name: "Brand-new deck", desc: "Straight out of the box: in order, every card upright.", reversed: 0 }
+});
+/** A deck of the given kind: "used" | "light" | "new". Used and light decks start in random order. */
+function newDeck(kind = "used", rng = cryptoRng) {
+  const k = DECK_KINDS[kind];
+  if (!k) throw new Error("Unknown deck kind: " + kind);
+  if (kind === "new") return freshDeck();
+  return fisherYates(D.deck.map((c, i) => ({ i, r: chance(k.reversed, rng) })), rng);
+}
+
+/**
+ * How each shuffle turns cards, as in real hands:
+ *   overhand / hindu: each packet has this chance of landing turned end-over-end
+ *   pile: chance that each pile is picked up turned around
+ *   wash: chance that each card gets flipped while swirling
+ */
+const TURN_CHANCE = Object.freeze({ overhand: 0.04, hindu: 0.03, pile: 0.10, wash: 0.5 });
+/** Turn a packet end-over-end: its order reverses and every card in it flips. */
+function turnPacket(p) { return p.slice().reverse().map(o => ({ i: o.i, r: !o.r })); }
+
 /* ---------- shuffles ---------- */
 /** Drop cards from two packets in proportion to their sizes (Gilbert-Shannon-Reeds model). */
 function interleave(A, B, rng = cryptoRng) {
@@ -55,39 +81,40 @@ function interleave(A, B, rng = cryptoRng) {
   while (A.length || B.length) out.push(rng(A.length + B.length) < A.length ? A.shift() : B.shift());
   return out;
 }
-/** Riffle: split at a binomial point and interleave. Keeps orientation. */
+/** Straight riffle: split at a binomial point and marry the halves without turning either stack. Keeps orientation. */
 function riffle(d, rng = cryptoRng) {
   let k = 0;
   for (let j = 0; j < d.length; j++) if (coin(rng)) k++;
   return interleave(d.slice(0, k), d.slice(k), rng);
 }
-/** Overhand: peel packets of min..max cards off the top onto a new pile. */
-function overhand(d, rng = cryptoRng, min = 1, max = 8) {
+/** Overhand: peel packets of min..max cards off the top onto a new pile; now and then one lands turned. */
+function overhand(d, rng = cryptoRng, min = 1, max = 8, turn = TURN_CHANCE.overhand) {
   const src = d.slice();
   let out = [];
   while (src.length) {
     const k = Math.min(src.length, min + rng(max - min + 1));
-    out = src.splice(0, k).concat(out);
+    let p = src.splice(0, k);
+    if (chance(turn, rng)) p = turnPacket(p);
+    out = p.concat(out);
   }
   return out;
 }
 /** Hindu: like overhand, but bigger packets drawn off the top. */
-function hindu(d, rng = cryptoRng) { return overhand(d, rng, 3, 12); }
+function hindu(d, rng = cryptoRng) { return overhand(d, rng, 3, 12, TURN_CHANCE.hindu); }
 /** Wash (scramble): full random order, and each card has a 50% chance of being turned. */
 function wash(d, rng = cryptoRng) {
-  return fisherYates(d.map(o => ({ i: o.i, r: coin(rng) ? !o.r : o.r })), rng);
+  return fisherYates(d.map(o => ({ i: o.i, r: chance(TURN_CHANCE.wash, rng) ? !o.r : o.r })), rng);
 }
-/** Pile: deal round-robin into n piles, then gather the piles in random order. */
+/** Pile: deal round-robin into n piles, then gather them in random order; a pile is sometimes picked up turned. */
 function pileShuffle(d, n = 5, rng = cryptoRng) {
   const P = Array.from({ length: n }, () => []);
   d.forEach((c, j) => P[j % n].unshift(c));
-  return fisherYates([...P.keys()], rng).flatMap(j => P[j]);
+  return fisherYates([...P.keys()], rng).flatMap(j => (chance(TURN_CHANCE.pile, rng) ? turnPacket(P[j]) : P[j]));
 }
-/** Turn & Riffle: rotate roughly half the deck 180 degrees, then riffle the halves together. */
+/** Turned riffle: rotate one hand's stack (roughly half the deck) end-over-end, then riffle the halves together. */
 function turnAndRiffle(d, rng = cryptoRng) {
   const k = Math.floor(d.length / 2) - 4 + rng(9);
-  const top = d.slice(0, k).reverse().map(o => ({ i: o.i, r: !o.r }));
-  return interleave(top, d.slice(k), rng);
+  return interleave(turnPacket(d.slice(0, k)), d.slice(k), rng);
 }
 /** Run a shuffle by name: overhand | riffle | hindu | wash | pile | turn. */
 function shuffle(d, style, opts = {}) {
@@ -98,7 +125,7 @@ function shuffle(d, style, opts = {}) {
     case "hindu": return hindu(d, rng);
     case "wash": return wash(d, rng);
     case "pile": return pileShuffle(d, opts.piles || 5, rng);
-    case "turn": return turnAndRiffle(d, rng);
+    case "turn": return turnAndRiffle(d, rng); // riffle with one half turned
     default: throw new Error("Unknown shuffle: " + style);
   }
 }
@@ -201,7 +228,7 @@ function analyze(drawn, spreadKey, revMode = "natural") {
 }
 
 root.TarotEngine = Object.freeze({
-  cryptoRng, seededRng, freshDeck,
+  cryptoRng, seededRng, freshDeck, newDeck, DECK_KINDS, TURN_CHANCE, turnPacket,
   interleave, riffle, overhand, hindu, wash, pileShuffle, turnAndRiffle, shuffle,
   cutSingle, threePileSizes, cutPiles,
   dealTop, dealEveryNth, orient, dailyCard, analyze

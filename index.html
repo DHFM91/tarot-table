@@ -123,7 +123,7 @@ input[type=range]{width:100%;accent-color:var(--gold)}
   <div id="reading"></div>
  </section>
 </main>
-<footer>Tarot Table is mysticism for fun: entertainment and self-reflection only. Not advice of any kind and no liability is assumed. Your choices are your own. · v1</footer>
+<footer>Tarot Table is mysticism for fun: entertainment and self-reflection only. Not advice of any kind and no liability is assumed. Your choices are your own. · v2</footer>
 <div id="modal" hidden>
  <div class="box">
   <h2>Before you draw…</h2>
@@ -148,8 +148,8 @@ const D = TarotData, E = TarotEngine;
 const {deck: DECK, SUITS, RANKS, ROMAN, SPREADS, SHUFFLES, CUTS, DEALS} = D;
 
 /* ===== STATE ===== */
-const S={step:0,spread:"ppf",rev:"natural",q:"",shuffles:0,lastShuffle:null,piles:5,cut:"none",cutDone:false,cutK:39,three:null,taps:[],deal:"top",drawn:[],revealed:[],sel:-1,busy:false,fan:[]};
-let deck=E.freshDeck();
+const S={deckKind:"used",step:0,spread:"ppf",rev:"natural",q:"",shuffles:0,lastShuffle:null,piles:5,cut:"none",cutDone:false,cutK:39,three:null,taps:[],deal:"top",drawn:[],revealed:[],sel:-1,busy:false,fan:[]};
+let deck=E.newDeck(S.deckKind);
 const $=s=>document.querySelector(s), stage=$("#stage"), side=$("#side"), reading=$("#reading");
 function el(t,c,h){const e=document.createElement(t);if(c)e.className=c;if(h!=null)e.innerHTML=h;return e}
 function esc(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
@@ -170,19 +170,21 @@ function renderSide(){
   ${Object.keys(SPREADS).map(k=>`<button class="opt ${k===S.spread?"on":""}" data-spread="${k}"><b>${SPREADS[k].name} <span style="color:var(--dim)">· ${SPREADS[k].pos.length}</span></b><small>${SPREADS[k].desc}</small></button>`).join("")}
   <label>Reversed (upside-down) cards
    <select id="rev">
-    <option value="natural" ${S.rev==="natural"?"selected":""}>On: they come from how you shuffle</option>
+    <option value="natural" ${S.rev==="natural"?"selected":""}>On: from your deck and how you shuffle</option>
     <option value="random" ${S.rev==="random"?"selected":""}>On: each card is a random 50/50</option>
     <option value="none" ${S.rev==="none"?"selected":""}>Off: upright meanings only</option>
    </select></label>
-  <p class="hint">${S.rev==="natural"?"With the first option, cards only turn when you wash the deck or use Turn &amp; Riffle, just like a real deck.":S.rev==="random"?"Every drawn card has an even chance of landing reversed.":"Every card is read upright."}</p>
+  ${S.rev==="natural"?`<label>Your deck
+   <select id="deckKind">${Object.keys(E.DECK_KINDS).map(k=>`<option value="${k}" ${k===S.deckKind?"selected":""}>${E.DECK_KINDS[k].name}</option>`).join("")}</select></label>
+  <p class="hint">${E.DECK_KINDS[S.deckKind].desc} Your deck carries over from reading to reading, and every shuffle style turns cards in its own way.</p>`
+  :`<p class="hint">${S.rev==="random"?"Every drawn card has an even chance of landing reversed.":"Every card is read upright."}</p>`}
   <button class="btn primary" id="next">Begin shuffling →</button>`;
  }else if(st===1){
   h=`<h2>2 · Shuffle</h2><p class="hint">Pick a style and shuffle as many times as feels right. You can mix styles.</p>
   ${Object.keys(SHUFFLES).map(k=>`<button class="opt" data-shuf="${k}"><b>${SHUFFLES[k].name}</b><small>${SHUFFLES[k].desc}</small></button>`).join("")}
   <label>Piles for the pile shuffle <select id="piles">${[3,4,5,6,7,8,9].map(n=>`<option ${n===S.piles?"selected":""}>${n}</option>`).join("")}</select></label>
-  ${S.rev==="natural"?`<button class="opt" data-shuf="turn"><b>Turn &amp; Riffle</b><small>Split the deck, rotate one half, then riffle the halves together. The classic way to introduce reversals.</small></button>`:""}
   <div class="count" id="count">${countText()}</div>
-  <button class="link" id="fresh">Reset to a fresh, ordered deck</button>
+  <button class="link" id="fresh">Swap in a fresh ${E.DECK_KINDS[S.deckKind].name.toLowerCase()}</button>
   <button class="btn primary" id="next" ${S.shuffles?"":"disabled"}>Continue to the cut →</button>
   <button class="back-link" data-back="0">← Back to spread</button>`;
  }else if(st===2){
@@ -211,6 +213,7 @@ function countText(){return `Shuffles so far: ${S.shuffles}${S.lastShuffle?` · 
 side.addEventListener("input",e=>{if(e.target.id==="q")S.q=e.target.value});
 side.addEventListener("change",e=>{
  if(e.target.id==="rev"){S.rev=e.target.value;renderSide()}
+ if(e.target.id==="deckKind"){S.deckKind=e.target.value;deck=E.newDeck(S.deckKind);renderSide();toast("New "+E.DECK_KINDS[S.deckKind].name.toLowerCase()+" ready")}
  if(e.target.id==="piles")S.piles=+e.target.value;
  if(e.target.id==="cutK"){S.cutK=+e.target.value;renderStage();$("#cutK").nextElementSibling.textContent=cutLabel()}
 });
@@ -228,12 +231,12 @@ side.addEventListener("click",async e=>{
    else if(S.step===2)go(3);
    else if(S.step===3)doDeal();
    break;
-  case "fresh":deck=E.freshDeck();S.shuffles=0;S.lastShuffle=null;$("#count").textContent=countText();$("#next").disabled=true;toast("Deck reset to fresh order");break;
+  case "fresh":deck=E.newDeck(S.deckKind);S.shuffles=0;S.lastShuffle=null;$("#count").textContent=countText();$("#next").disabled=true;toast("Fresh "+E.DECK_KINDS[S.deckKind].name.toLowerCase()+" ready");break;
   case "doCut":await singleCut();break;
   case "revealAll":revealAll();break;
   case "interp":await revealAll();interpret();break;
   case "copy":copyReading();break;
-  case "again":deck=E.freshDeck();S.drawn=[];S.sel=-1;go(0);break;
+  case "again":S.drawn=[];S.sel=-1;go(0);break; // the deck carries over, like a real one
  }
 });
 
@@ -289,7 +292,7 @@ async function shuffleAction(style){
  S.busy=true;side.querySelectorAll("button").forEach(b=>b.disabled=true);
  deck=E.shuffle(deck,style,{piles:S.piles});
  await animShuffle(style);
- S.shuffles++;S.lastShuffle=style==="turn"?"Turn & Riffle":SHUFFLES[style].name;
+ S.shuffles++;S.lastShuffle=SHUFFLES[style].name;
  S.busy=false;side.querySelectorAll("button").forEach(b=>b.disabled=false);
  $("#count").textContent=countText();
 }
