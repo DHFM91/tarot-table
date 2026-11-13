@@ -1,5 +1,5 @@
 /*
- * Tarot Table: deck mechanics and reading analysis.
+ * Free Tarot Readings: deck mechanics and reading analysis.
  * Pure functions with no DOM access. Needs tarot-data.js loaded first.
  * Exposes one global: TarotEngine.
  *

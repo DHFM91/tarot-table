@@ -1,5 +1,5 @@
 /*
- * Tarot Table: narrative phrases, used by tarot-narrative.js.
+ * Free Tarot Readings: narrative phrases, used by tarot-narrative.js.
  * For each card id and orientation (up = upright, rv = reversed):
  *   o: three omens, each fits "This might mean ___ coming up in your life."
  *   c: two cautions, each fits "...but be careful of ___."

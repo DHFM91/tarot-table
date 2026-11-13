@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#0f0c1f">
-<title>Tarot Table</title>
+<title>Free Tarot Readings</title>
 <style>
 :root{--bg:#0f0c1f;--panel:#1b1636;--line:#3a3166;--ink:#ece6ff;--dim:#a79fc9;--gold:#d9b45a;--gold2:#f3d98b;--cw:90px}
 *{box-sizing:border-box}
@@ -57,6 +57,27 @@ section.right{display:flex;flex-direction:column;min-width:0}
 #detail .kw{color:var(--gold);font-style:italic;font-size:13px}
 #detail .alt{font-size:12.5px;color:var(--dim);border-top:1px solid var(--line);padding-top:6px}
 .rv{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#ff9e9e;border:1px solid #ff9e9e66;border-radius:10px;padding:1px 7px;vertical-align:middle}
+/* support with crypto (collapsible, above the footer) */
+details.support{max-width:900px;margin:10px auto 0;padding:0 16px 14px;text-align:center}
+details.support[hidden]{display:none}
+details.support summary{display:inline-flex;align-items:center;gap:9px;cursor:pointer;list-style:none;font-size:14px;color:var(--gold2);padding:8px 18px;border:1px solid var(--gold);border-radius:999px;background:#0006;user-select:none}
+details.support summary::-webkit-details-marker{display:none}
+details.support summary::after{content:"▾";font-size:11px;transition:transform .15s}
+details.support[open] summary::after{transform:rotate(180deg)}
+details.support summary:hover{background:var(--panel)}
+details.support summary:focus-visible{outline:2px solid var(--gold2);outline-offset:2px}
+.coins{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:12px;text-align:left}
+.coin{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.coin-head{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.coin-head strong{font-size:15px;font-weight:normal;color:var(--gold2)}
+.coin-head span{font-size:11px;letter-spacing:.08em;color:var(--dim)}
+.coin .qr{width:100%;max-width:150px;aspect-ratio:1;align-self:center;border-radius:6px;overflow:hidden}
+.coin .qr svg{display:block;width:100%;height:100%}
+.coin code{font:12px/1.4 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color:var(--ink);background:var(--bg);border-radius:6px;padding:6px 8px;word-break:break-all;user-select:all}
+.coin .note{font-size:12px;color:var(--dim);margin:0}
+.coin button{font:bold 13px Georgia,serif;color:#1b1230;background:linear-gradient(#e2c06a,#b88f35);border:0;border-radius:8px;padding:8px 10px;cursor:pointer;margin-top:auto}
+.coin button:hover{filter:brightness(1.1)}
+.coin button.done{background:#7fd1a0}
 footer{font-size:12px;color:var(--dim);text-align:center;padding:12px;border-top:1px solid var(--line)}
 /* cards */
 .slot{position:absolute;width:var(--cw);height:calc(var(--cw)*1.65)}
@@ -115,7 +136,7 @@ input[type=range]{width:100%;accent-color:var(--gold)}
 </head>
 <body>
 <header>
- <h1>✶ TAROT TABLE</h1>
+ <h1>✶ FREE TAROT READINGS</h1>
  <div id="steps"></div>
  <button class="link" id="showDisc">For entertainment only</button>
 </header>
@@ -126,11 +147,15 @@ input[type=range]{width:100%;accent-color:var(--gold)}
   <div id="reading"></div>
  </section>
 </main>
-<footer>Tarot Table is mysticism for fun: entertainment and self-reflection only. Not advice of any kind and no liability is assumed. Your choices are your own. · v3</footer>
+<details class="support" id="support" hidden>
+ <summary><span aria-hidden="true">♥</span> Support my work with crypto</summary>
+ <div class="coins" id="coins"></div>
+</details>
+<footer>Free Tarot Readings is mysticism for fun: entertainment and self-reflection only. Not advice of any kind and no liability is assumed. Your choices are your own. · v4</footer>
 <div id="modal" hidden>
  <div class="box">
   <h2>Before you draw…</h2>
-  <p>Tarot Table is for <b>entertainment and personal reflection only</b>. Every card is drawn at random. Readings don't predict the future, and they aren't medical, legal, financial or psychological advice.</p>
+  <p>Free Tarot Readings is for <b>entertainment and personal reflection only</b>. Every card is drawn at random. Readings don't predict the future, and they aren't medical, legal, financial or psychological advice.</p>
   <p>Use it for fun and inspiration, and make real decisions with your own judgment. No liability is assumed for anything you do because of a reading.</p>
   <button class="btn primary" id="okDisc">I understand. Let's play</button>
  </div>
@@ -140,6 +165,7 @@ input[type=range]{width:100%;accent-color:var(--gold)}
 <script src="js/tarot-engine.js"></script>
 <script src="js/tarot-phrases.js"></script>
 <script src="js/tarot-narrative.js"></script>
+<script src="js/support.js"></script>
 <script>
 "use strict";
 /* ===== CONFIG: card art =====

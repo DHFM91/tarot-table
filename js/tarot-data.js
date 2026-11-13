@@ -1,5 +1,5 @@
 /*
- * Tarot Table: card data and spreads.
+ * Free Tarot Readings: card data and spreads.
  * Plain script (no modules), so it works from file:// on a thumb drive and drops into any page.
  * Exposes one global: TarotData.
  *

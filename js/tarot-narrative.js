@@ -1,5 +1,5 @@
 /*
- * Tarot Table: narrative generator.
+ * Free Tarot Readings: narrative generator.
  * Turns a finished draw into a short story of what the cards are "trying to tell you".
  * It describes; it never gives instructions. Fully offline: no AI, no network.
  * Needs tarot-data.js, tarot-engine.js and tarot-phrases.js loaded first.

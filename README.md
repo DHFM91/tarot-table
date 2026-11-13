@@ -1,10 +1,12 @@
-# Tarot Table
+# Free Tarot Readings
 
 A portable tarot reading table for the browser. Shuffle, cut and deal a full 78-card deck the way different traditions do it, then read the cards with their upright **and** reversed meanings and a short guide to the reading as a whole.
 
 **Play it:** https://davidfeuling.com/tarot-table/
 
-> **Mysticism for fun.** Tarot Table is for entertainment and personal reflection only. Every card is drawn at random. Readings don't predict the future, and they aren't medical, legal, financial or psychological advice. No liability is assumed for anything you do because of a reading.
+(The web address and repository keep the original name, tarot-table, so existing links keep working.)
+
+> **Mysticism for fun.** Free Tarot Readings is for entertainment and personal reflection only. Every card is drawn at random. Readings don't predict the future, and they aren't medical, legal, financial or psychological advice. No liability is assumed for anything you do because of a reading.
 
 ## Features
 
@@ -20,7 +22,7 @@ A portable tarot reading table for the browser. Shuffle, cut and deal a full 78-
 
 ## The story in the cards
 
-When you press **Interpret**, Tarot Table writes a short story of what the cards might be trying to tell you. It's fully offline, with no AI involved: a set of hand-checked phrases is combined by rules.
+When you press **Interpret**, the app writes a short story of what the cards might be trying to tell you. It runs fully offline: a set of pre-written phrases is combined by rules, with nothing fetched or generated at reading time.
 
 - Every card has, for both upright and reversed: three *omens* (things that might come up in your life), two *cautions*, one *image* and one *message*. That's 1,092 phrases in `js/tarot-phrases.js`.
 - The generator gives each spread position a role in the story (what's behind you, what crosses you, what's hidden, what's ahead and so on), then sets the mood from the leading element, the Major Arcana count and the number of reversals.
@@ -74,6 +76,7 @@ Any card without an image keeps its placeholder face.
 | `js/tarot-phrases.js` | The story phrases for every card and orientation. Exposes `TarotPhrases`. |
 | `js/tarot-narrative.js` | The story generator. Exposes `TarotNarrative.tell(drawn, spreadKey, { question })`, which returns `{ text, html }` paragraphs. |
 | `tests/engine.test.js` | Checks for the engine (`node tests/engine.test.js`) |
+| `js/support.js` | The "Support my work with crypto" section (same addresses and offline QR codes as davidfeuling.com) |
 | `tests/narrative.test.js` | Tells thousands of random stories and checks the writing mechanics (`node tests/narrative.test.js`) |
 
 ## Reusing the deck in another project
