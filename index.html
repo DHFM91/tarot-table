@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0f0c1f">
+<title>Tarot Table</title>
+<style>
+:root{--bg:#0f0c1f;--panel:#1b1636;--line:#3a3166;--ink:#ece6ff;--dim:#a79fc9;--gold:#d9b45a;--gold2:#f3d98b;--cw:90px}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+body{background:radial-gradient(ellipse at 50% -10%,#2b2160 0%,var(--bg) 60%) fixed var(--bg);color:var(--ink);font:15px/1.45 Georgia,"Palatino Linotype",Palatino,serif;-webkit-tap-highlight-color:transparent}
+button,select,input,textarea{font:inherit;color:inherit}
+header{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 16px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+h1{font-size:20px;margin:0;letter-spacing:.14em;color:var(--gold2);font-weight:normal}
+#steps{display:flex;gap:4px;flex-wrap:wrap}
+#steps span{font-size:12px;padding:3px 9px;border:1px solid var(--line);border-radius:20px;color:var(--dim)}
+#steps span.on{border-color:var(--gold);color:var(--gold2)}
+#steps span.done{color:var(--ink)}
+main{display:grid;grid-template-columns:330px 1fr;min-height:calc(100vh - 90px)}
+aside{border-right:1px solid var(--line);padding:16px;background:#0006}
+aside h2{font-size:15px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin:0 0 10px;font-weight:normal}
+label{display:block;margin:10px 0;color:var(--dim);font-size:13px}
+textarea,select{width:100%;margin-top:4px;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:8px}
+textarea{resize:vertical;min-height:54px}
+.opt{display:block;width:100%;text-align:left;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:8px 11px;margin:6px 0;cursor:pointer}
+.opt b{display:block;font-weight:normal;color:var(--ink)}
+.opt small{color:var(--dim);font-size:12px;display:block}
+.opt.on{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold) inset}
+.opt:hover{border-color:#6b5fb0}
+.opt:disabled{opacity:.45;cursor:default}
+.btn{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:9px 14px;cursor:pointer}
+.btn:hover{border-color:var(--gold)}
+.btn:disabled{opacity:.4;cursor:default}
+.primary{background:linear-gradient(#e2c06a,#b88f35);color:#1b1230;border:0;width:100%;margin-top:12px;font-weight:bold}
+.primary:disabled{filter:grayscale(1)}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.row .btn{flex:1}
+.hint{font-size:12.5px;color:var(--dim);margin:8px 0}
+.count{font-size:13px;color:var(--gold2);margin:8px 0}
+.back-link{background:none;border:0;color:var(--dim);cursor:pointer;padding:0;margin-top:12px;font-size:13px;text-decoration:underline}
+.link{background:none;border:0;color:var(--dim);text-decoration:underline;cursor:pointer;font-size:13px;padding:0}
+section.right{display:flex;flex-direction:column;min-width:0}
+#stage{position:relative;height:min(70vh,660px);min-height:340px;overflow:hidden}
+#reading{padding:0 22px 30px;max-width:820px}
+#reading h3{color:var(--gold2);font-weight:normal;letter-spacing:.05em;margin:22px 0 6px}
+#reading h4{margin:14px 0 2px;font-weight:normal;color:var(--ink)}
+#reading p{margin:4px 0;color:#d6cff0}
+#reading .kw{color:var(--gold);font-style:italic;font-size:13px}
+#reading .syn li{margin:6px 0;color:#d6cff0}
+#detail{margin-top:14px;padding:12px;border:1px solid var(--line);border-radius:12px;background:var(--panel);min-height:80px}
+#detail h3{margin:4px 0;font-weight:normal;color:var(--gold2)}
+#detail .pos{font-size:12.5px;color:var(--dim)}
+#detail .kw{color:var(--gold);font-style:italic;font-size:13px}
+#detail .alt{font-size:12.5px;color:var(--dim);border-top:1px solid var(--line);padding-top:6px}
+.rv{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#ff9e9e;border:1px solid #ff9e9e66;border-radius:10px;padding:1px 7px;vertical-align:middle}
+footer{font-size:12px;color:var(--dim);text-align:center;padding:12px;border-top:1px solid var(--line)}
+/* cards */
+.slot{position:absolute;width:var(--cw);height:calc(var(--cw)*1.65)}
+.slot.empty{border:1.5px dashed #6b5fb0;border-radius:8%;display:flex;align-items:center;justify-content:center;text-align:center;color:var(--dim);font-size:calc(var(--cw)*.13);padding:4px;line-height:1.2}
+.slot.empty.rot{transform:rotate(90deg);background:#0f0c1fcc;border-color:var(--gold)}
+.card{position:absolute;inset:0;perspective:900px;cursor:pointer}
+.card.rot{transform:rotate(90deg)}
+.flip{position:absolute;inset:0;transition:transform .7s cubic-bezier(.3,.7,.3,1);transform-style:preserve-3d;-webkit-transform-style:preserve-3d}
+.card.up .flip{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;border-radius:8%;backface-visibility:hidden;-webkit-backface-visibility:hidden;overflow:hidden;box-shadow:0 4px 14px #0009}
+.front{transform:rotateY(180deg)}
+.slot.sel .face{box-shadow:0 0 0 2px var(--gold2),0 0 22px #f3d98b88}
+.badge{position:absolute;top:-8px;left:-8px;width:20px;height:20px;border-radius:50%;background:var(--gold);color:#1b1230;font:bold 11px/20px sans-serif;text-align:center;z-index:3;pointer-events:none}
+.back,.mini,.fc,.pile .stack{background:radial-gradient(circle at 50% 50%,#4a3b95 0 14%,transparent 15%),radial-gradient(circle at 50% 50%,transparent 0 24%,#d9b45a55 25% 26%,transparent 27%),repeating-linear-gradient(45deg,#221b49 0 5px,#2c2462 5px 10px);border:2px solid var(--gold);border-radius:8%}
+.fi{position:absolute;inset:0;transition:transform .3s}
+.fi.rev{transform:rotate(180deg)}
+.fp{position:absolute;inset:0;background:linear-gradient(#f6eedb,#e7dcc0);color:#2a1d3d;border:calc(var(--cw)*.045) solid var(--sc);border-radius:8%;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:7% 5%;text-align:center}
+.fp .tn{font-size:calc(var(--cw)*.13);letter-spacing:.06em}
+.fp .gl{font-size:calc(var(--cw)*.42);color:var(--sc);line-height:1}
+.fp .nm{font-size:calc(var(--cw)*.115);line-height:1.15}
+.fi img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1}
+/* shuffle viz */
+.deckviz{position:absolute;left:50%;top:50%;width:0;height:0;--mw:min(110px,26vw)}
+.mini{position:absolute;width:var(--mw);height:calc(var(--mw)*1.65);left:calc(var(--mw)/-2);top:calc(var(--mw)*-.825);box-shadow:0 2px 6px #0008}
+.stagenote{position:absolute;left:0;right:0;bottom:14px;text-align:center;color:var(--dim);font-size:13px;pointer-events:none;padding:0 10px}
+/* piles */
+.piles{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:min(40px,5vw);--pw:min(105px,24vw)}
+.pile{position:relative;width:var(--pw);text-align:center;cursor:pointer;background:none;border:0;padding:0}
+.pile .stack{width:var(--pw);height:calc(var(--pw)*1.65);box-shadow:2px 2px 0 #120e26,4px 4px 0 #6b5a2a,6px 6px 0 #120e26,8px 8px 0 #6b5a2a,0 10px 20px #000a}
+.pile .lbl{display:block;margin-top:14px;color:var(--dim);font-size:13px}
+.pile .ord{position:absolute;top:-10px;right:-10px;width:26px;height:26px;border-radius:50%;background:var(--gold);color:#1b1230;font:bold 14px/26px sans-serif;z-index:2}
+.pile.picked .stack{opacity:.55}
+input[type=range]{width:100%;accent-color:var(--gold)}
+/* fan */
+.fan{position:absolute;inset:0;overflow:auto;padding:24px 18px 50px 40px;display:flex;flex-wrap:wrap;align-content:center;justify-content:center;row-gap:14px}
+.fc{width:44px;height:73px;margin-left:-24px;cursor:pointer;transition:transform .2s,opacity .2s;box-shadow:-2px 0 5px #0008;position:relative;flex:none}
+.fc:hover{transform:translateY(-10px)}
+.fc.picked{transform:translateY(-18px);opacity:.35;cursor:default}
+.fc .badge{top:-10px;left:auto;right:-6px}
+/* modal */
+#modal[hidden]{display:none}
+#modal{position:fixed;inset:0;background:#06040fcc;display:flex;align-items:center;justify-content:center;z-index:50;padding:20px}
+#modal .box{max-width:440px;background:var(--panel);border:1px solid var(--gold);border-radius:16px;padding:22px}
+#modal h2{margin:0 0 8px;color:var(--gold2);font-weight:normal;letter-spacing:.08em}
+#modal p{color:#d6cff0;font-size:14px}
+#toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--gold);color:#1b1230;padding:8px 16px;border-radius:20px;font-size:14px;opacity:0;transition:opacity .3s;pointer-events:none;z-index:60}
+@media (max-width:820px){
+ main{grid-template-columns:1fr}
+ aside{border-right:0;border-bottom:1px solid var(--line);order:2}
+ section.right{order:1}
+ #stage{height:62vh;min-height:300px}
+ #reading{padding:0 14px 24px}
+}
+@media (prefers-reduced-motion:reduce){.flip{transition:none}}
+</style>
+</head>
+<body>
+<header>
+ <h1>✶ TAROT TABLE</h1>
+ <div id="steps"></div>
+ <button class="link" id="showDisc">For entertainment only</button>
+</header>
+<main>
+ <aside id="side"></aside>
+ <section class="right">
+  <div id="stage"></div>
+  <div id="reading"></div>
+ </section>
+</main>
+<footer>Tarot Table is mysticism for fun: entertainment and self-reflection only. Not advice of any kind and no liability is assumed. Your choices are your own. · v1</footer>
+<div id="modal" hidden>
+ <div class="box">
+  <h2>Before you draw…</h2>
+  <p>Tarot Table is for <b>entertainment and personal reflection only</b>. Every card is drawn at random. Readings don't predict the future, and they aren't medical, legal, financial or psychological advice.</p>
+  <p>Use it for fun and inspiration, and make real decisions with your own judgment. No liability is assumed for anything you do because of a reading.</p>
+  <button class="btn primary" id="okDisc">I understand. Let's play</button>
+ </div>
+</div>
+<div id="toast"></div>
+<script src="js/tarot-data.js"></script>
+<script src="js/tarot-engine.js"></script>
+<script>
+"use strict";
+/* ===== CONFIG: card art =====
+   When your art is ready, put it in a folder next to index.html and set ART_FOLDER (e.g. "art").
+   File names = card ids: major-00 … major-21, wands-01 … wands-14, cups-…, swords-…, pentacles-…
+   (01 = Ace, 11 = Page, 12 = Knight, 13 = Queen, 14 = King). Missing images fall back to the placeholder face. */
+const ART_FOLDER = "";
+const ART_EXT = "jpg";
+
+const D = TarotData, E = TarotEngine;
+const {deck: DECK, SUITS, RANKS, ROMAN, SPREADS, SHUFFLES, CUTS, DEALS} = D;
+
+/* ===== STATE ===== */
+const S={step:0,spread:"ppf",rev:"natural",q:"",shuffles:0,lastShuffle:null,piles:5,cut:"none",cutDone:false,cutK:39,three:null,taps:[],deal:"top",drawn:[],revealed:[],sel:-1,busy:false,fan:[]};
+let deck=E.freshDeck();
+const $=s=>document.querySelector(s), stage=$("#stage"), side=$("#side"), reading=$("#reading");
+function el(t,c,h){const e=document.createElement(t);if(c)e.className=c;if(h!=null)e.innerHTML=h;return e}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function toast(t){const e=$("#toast");e.textContent=t;e.style.opacity=1;clearTimeout(toast.t);toast.t=setTimeout(()=>e.style.opacity=0,1600)}
+function store(k,v){try{if(v===undefined)return localStorage.getItem(k);localStorage.setItem(k,v)}catch(e){return null}}
+
+/* ===== RENDER: chrome ===== */
+const STEP_NAMES=["Spread","Shuffle","Cut","Deal","Read"];
+function renderSteps(){$("#steps").innerHTML=STEP_NAMES.map((n,i)=>`<span class="${i===S.step?"on":i<S.step?"done":""}">${i+1}. ${n}</span>`).join("")}
+function go(step){S.step=step;renderSteps();renderSide();renderStage();if(step!==4)reading.innerHTML=""}
+function optList(map,cur,attr){return Object.keys(map).map(k=>`<button class="opt ${k===cur?"on":""}" data-${attr}="${k}"><b>${map[k].name}</b><small>${map[k].desc}</small></button>`).join("")}
+
+function renderSide(){
+ const st=S.step;let h="";
+ if(st===0){
+  h=`<h2>1 · Choose a spread</h2>
+  <label>Your question (optional)<textarea id="q" placeholder="What should I focus on this month?">${esc(S.q)}</textarea></label>
+  ${Object.keys(SPREADS).map(k=>`<button class="opt ${k===S.spread?"on":""}" data-spread="${k}"><b>${SPREADS[k].name} <span style="color:var(--dim)">· ${SPREADS[k].pos.length}</span></b><small>${SPREADS[k].desc}</small></button>`).join("")}
+  <label>Reversed (upside-down) cards
+   <select id="rev">
+    <option value="natural" ${S.rev==="natural"?"selected":""}>On: they come from how you shuffle</option>
+    <option value="random" ${S.rev==="random"?"selected":""}>On: each card is a random 50/50</option>
+    <option value="none" ${S.rev==="none"?"selected":""}>Off: upright meanings only</option>
+   </select></label>
+  <p class="hint">${S.rev==="natural"?"With the first option, cards only turn when you wash the deck or use Turn &amp; Riffle, just like a real deck.":S.rev==="random"?"Every drawn card has an even chance of landing reversed.":"Every card is read upright."}</p>
+  <button class="btn primary" id="next">Begin shuffling →</button>`;
+ }else if(st===1){
+  h=`<h2>2 · Shuffle</h2><p class="hint">Pick a style and shuffle as many times as feels right. You can mix styles.</p>
+  ${Object.keys(SHUFFLES).map(k=>`<button class="opt" data-shuf="${k}"><b>${SHUFFLES[k].name}</b><small>${SHUFFLES[k].desc}</small></button>`).join("")}
+  <label>Piles for the pile shuffle <select id="piles">${[3,4,5,6,7,8,9].map(n=>`<option ${n===S.piles?"selected":""}>${n}</option>`).join("")}</select></label>
+  ${S.rev==="natural"?`<button class="opt" data-shuf="turn"><b>Turn &amp; Riffle</b><small>Split the deck, rotate one half, then riffle the halves together. The classic way to introduce reversals.</small></button>`:""}
+  <div class="count" id="count">${countText()}</div>
+  <button class="link" id="fresh">Reset to a fresh, ordered deck</button>
+  <button class="btn primary" id="next" ${S.shuffles?"":"disabled"}>Continue to the cut →</button>
+  <button class="back-link" data-back="0">← Back to spread</button>`;
+ }else if(st===2){
+  h=`<h2>3 · Cut the deck</h2>${optList(CUTS,S.cut,"cut")}<div id="cutctl"></div>
+  <button class="btn primary" id="next" ${S.cut==="none"||S.cutDone?"":"disabled"}>Continue to the deal →</button>
+  <button class="back-link" data-back="1">← Back to shuffling</button>`;
+ }else if(st===3){
+  h=`<h2>4 · Deal</h2>${optList(DEALS,S.deal,"deal")}
+  <p class="hint" id="dealhint">${S.deal==="fan"?`Tap ${SPREADS[S.spread].pos.length} card${SPREADS[S.spread].pos.length>1?"s":""} from the fan. They go into the spread in the order you pick them.`:"Cards are dealt face-down into the spread."}</p>
+  <button class="btn primary" id="next">${S.deal==="fan"?"Spread the fan":"Deal the cards"}</button>
+  <button class="back-link" data-back="2">← Back to the cut</button>`;
+ }else{
+  h=`<h2>5 · Read</h2>${S.q?`<p class="hint">“${esc(S.q)}”</p>`:""}
+  <p class="hint">Tap a card to turn it over. Tap a turned card to see what it means.</p>
+  <div class="row"><button class="btn" id="revealAll">Reveal all</button><button class="btn" id="interp">Interpret</button></div>
+  <div class="row"><button class="btn" id="copy">Copy reading</button><button class="btn" id="again">New reading</button></div>
+  <div id="detail"><p class="hint">Card details appear here.</p></div>`;
+ }
+ side.innerHTML=h;
+ if(st===2)renderCutCtl();
+ if(st===4&&S.sel>=0)showDetail(S.sel);
+}
+function countText(){return `Shuffles so far: ${S.shuffles}${S.lastShuffle?` · last: ${S.lastShuffle}`:""}${S.shuffles>0&&S.shuffles<7?" · it takes about seven riffles to fully mix a deck":""}`}
+
+/* ===== EVENTS (delegated) ===== */
+side.addEventListener("input",e=>{if(e.target.id==="q")S.q=e.target.value});
+side.addEventListener("change",e=>{
+ if(e.target.id==="rev"){S.rev=e.target.value;renderSide()}
+ if(e.target.id==="piles")S.piles=+e.target.value;
+ if(e.target.id==="cutK"){S.cutK=+e.target.value;renderStage();$("#cutK").nextElementSibling.textContent=cutLabel()}
+});
+side.addEventListener("click",async e=>{
+ const b=e.target.closest("button");if(!b||S.busy)return;
+ if(b.dataset.back){go(+b.dataset.back);return}
+ if(b.dataset.spread){S.spread=b.dataset.spread;side.querySelectorAll("[data-spread]").forEach(x=>x.classList.toggle("on",x===b));renderStage();return}
+ if(b.dataset.shuf){await shuffleAction(b.dataset.shuf);return}
+ if(b.dataset.cut){S.cut=b.dataset.cut;S.cutDone=false;S.taps=[];S.three=null;renderSide();renderStage();return}
+ if(b.dataset.deal){S.deal=b.dataset.deal;renderSide();return}
+ switch(b.id){
+  case "next":
+   if(S.step===0){S.shuffles=0;S.lastShuffle=null;go(1)}
+   else if(S.step===1){S.cut="none";S.cutDone=false;S.taps=[];S.three=null;go(2)}
+   else if(S.step===2)go(3);
+   else if(S.step===3)doDeal();
+   break;
+  case "fresh":deck=E.freshDeck();S.shuffles=0;S.lastShuffle=null;$("#count").textContent=countText();$("#next").disabled=true;toast("Deck reset to fresh order");break;
+  case "doCut":await singleCut();break;
+  case "revealAll":revealAll();break;
+  case "interp":await revealAll();interpret();break;
+  case "copy":copyReading();break;
+  case "again":deck=E.freshDeck();S.drawn=[];S.sel=-1;go(0);break;
+ }
+});
+
+/* ===== STAGE ===== */
+function renderStage(){
+ stage.innerHTML="";
+ if(S.step===0)renderSpread(true);
+ else if(S.step===1||S.step===3)renderDeckViz(S.step===1?"Your deck: 78 cards":"Ready to deal");
+ else if(S.step===2)renderCutStage();
+ else renderSpread(false);
+}
+function renderDeckViz(note){
+ const w=el("div","deckviz");for(let i=0;i<12;i++){const m=el("div","mini");m.style.marginLeft=(-i*.8)+"px";m.style.marginTop=(-i*.8)+"px";w.append(m)}
+ stage.append(w,el("div","stagenote",note));
+}
+function layout(){
+ const P=SPREADS[S.spread].pos;let mx=0,my=0;P.forEach(p=>{mx=Math.max(mx,p[2]+1);my=Math.max(my,p[3]+1.65)});
+ const pad=22,w=stage.clientWidth-pad*2,h=stage.clientHeight-pad*2;
+ const cw=Math.max(30,Math.min(w/mx,h/my,135));
+ const ox=pad+(w-mx*cw)/2,oy=pad+(h-my*cw)/2;
+ stage.style.setProperty("--cw",cw+"px");
+ return P.map(p=>({x:ox+p[2]*cw,y:oy+p[3]*cw}));
+}
+function placeSlots(){const L=layout();stage.querySelectorAll(".slot").forEach((s,i)=>{s.style.left=L[i].x+"px";s.style.top=L[i].y+"px"})}
+function faceHTML(c,rev){
+ const sc=c.suit?SUITS[c.suit].c:"#7a4fb0";
+ const tn=c.suit?(c.rank<=10?(c.rank===1?"ACE":c.rank):RANKS[c.rank-1].toUpperCase()):ROMAN[c.num];
+ const gl=c.suit?SUITS[c.suit].g:"✶";
+ const img=ART_FOLDER?`<img src="${ART_FOLDER}/${c.id}.${ART_EXT}" alt="" onerror="this.remove()">`:"";
+ return `<div class="fi ${rev?"rev":""}">${img}<div class="fp" style="--sc:${sc}"><div class="tn">${tn}</div><div class="gl">${gl}</div><div class="nm">${c.name}</div></div></div>`;
+}
+function renderSpread(empty){
+ const P=SPREADS[S.spread].pos;
+ P.forEach((p,i)=>{
+  const s=el("div","slot"+(empty?" empty"+(p[4]?" rot":""):""));
+  if(empty){s.innerHTML=`${i+1}<br>${p[0]}`}
+  else{
+   const d=S.drawn[i],c=DECK[d.i];
+   s.innerHTML=`<div class="card ${p[4]?"rot":""} ${S.revealed[i]?"up":""}" role="button" tabindex="0" aria-label="Position ${i+1}: ${p[0]}"><div class="flip"><div class="face back"></div><div class="face front">${faceHTML(c,d.r)}</div></div></div><span class="badge">${i+1}</span>`;
+   if(i===S.sel)s.classList.add("sel");
+   s.addEventListener("click",()=>cardClick(i));
+   s.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();cardClick(i)}});
+  }
+  if(p[4])s.style.zIndex=2;
+  stage.append(s);
+ });
+ placeSlots();
+}
+addEventListener("resize",()=>{if(S.step===0||S.step===4)placeSlots()});
+
+/* ===== SHUFFLE ===== */
+async function shuffleAction(style){
+ S.busy=true;side.querySelectorAll("button").forEach(b=>b.disabled=true);
+ deck=E.shuffle(deck,style,{piles:S.piles});
+ await animShuffle(style);
+ S.shuffles++;S.lastShuffle=style==="turn"?"Turn & Riffle":SHUFFLES[style].name;
+ S.busy=false;side.querySelectorAll("button").forEach(b=>b.disabled=false);
+ $("#count").textContent=countText();
+}
+function animShuffle(style){
+ const minis=[...stage.querySelectorAll(".mini")];if(!minis.length||!Element.prototype.animate)return Promise.resolve();
+ const W=minis[0].offsetWidth,N=minis.length;
+ const an=minis.map((m,i)=>{
+  const top=N-1-i;let kf,o;
+  if(style==="riffle"||style==="turn"){
+   const s=i%2?1:-1,r=style==="turn"&&s>0?180:0;
+   kf=[{transform:"none"},{transform:`translateX(${s*W*.65}px) rotate(${s*12+r}deg)`,offset:.35},{transform:`translateX(${s*W*.65}px) rotate(${s*12+r}deg)`,offset:.55},{transform:`rotate(${r}deg)`,offset:.9},{transform:"none"}];
+   o={duration:1000,delay:(i%6)*25,easing:"ease-in-out"};
+  }else if(style==="overhand"||style==="hindu"){
+   const pk=Math.floor(top/(style==="hindu"?4:2));
+   kf=[{transform:"none"},{transform:`translate(${W*.75}px,${style==="hindu"?W*.25:-W*.2}px) rotate(6deg)`},{transform:"none"}];
+   o={duration:420,delay:pk*(style==="hindu"?200:120),easing:"ease-in-out"};
+  }else if(style==="wash"){
+   const x=(Math.random()-.5)*Math.min(stage.clientWidth*.8,520),y=(Math.random()-.5)*stage.clientHeight*.55,r=Math.random()*360;
+   kf=[{transform:"none"},{transform:`translate(${x}px,${y}px) rotate(${r}deg)`,offset:.3},{transform:`translate(${-x*.6}px,${-y*.5}px) rotate(${r+160}deg)`,offset:.65},{transform:"none"}];
+   o={duration:1400,easing:"ease-in-out"};
+  }else{
+   const n=S.piles,col=i%n,x=(col-(n-1)/2)*Math.min(W*.75,(stage.clientWidth-W)/n);
+   kf=[{transform:"none"},{transform:`translate(${x}px,0)`,offset:.4},{transform:`translate(${x}px,0)`,offset:.6},{transform:"none"}];
+   o={duration:1100,delay:i*20,easing:"ease-in-out"};
+  }
+  return m.animate(kf,o).finished;
+ });
+ return Promise.all(an);
+}
+
+/* ===== CUT ===== */
+function cutLabel(){return `Lift ${S.cutK} card${S.cutK>1?"s":""} off the top · ${78-S.cutK} stay below`}
+function renderCutCtl(){
+ const c=$("#cutctl");if(!c)return;
+ if(S.cut==="single"&&!S.cutDone)c.innerHTML=`<label>Where to cut<input type="range" id="cutK" min="5" max="73" value="${S.cutK}"><span class="hint">${cutLabel()}</span></label><div class="row"><button class="btn" id="doCut">Cut here</button></div>`;
+ else if(S.cut==="three"&&!S.cutDone)c.innerHTML=`<p class="hint">Tap the three piles in the order you want to gather them. The first pile you tap becomes the new top of the deck.</p>`;
+ else if(S.cutDone)c.innerHTML=`<p class="count">✓ The deck has been cut.</p>`;
+ else c.innerHTML="";
+}
+function renderCutStage(){
+ if(S.cut==="none"||S.cutDone){renderDeckViz(S.cutDone?"Cut complete":"Deck ready");return}
+ const wrap=el("div","piles");
+ if(S.cut==="single"){
+  [["Top portion",S.cutK],["Bottom portion",78-S.cutK]].forEach(([n,k])=>{const p=el("div","pile",`<div class="stack"></div><span class="lbl">${n}<br>${k} cards</span>`);p.style.cursor="default";wrap.append(p)});
+ }else{
+  if(!S.three)S.three=E.threePileSizes(78)
+  // Cards cut to the left: the top portion lands farthest left
+  S.three.forEach((k,j)=>{
+   const tapped=S.taps.indexOf(j);
+   const p=el("button","pile"+(tapped>=0?" picked":""),`${tapped>=0?`<span class="ord">${tapped+1}</span>`:""}<div class="stack"></div><span class="lbl">Pile ${"ABC"[j]}<br>${k} cards</span>`);
+   p.addEventListener("click",()=>tapPile(j));wrap.append(p);
+  });
+ }
+ stage.append(wrap,el("div","stagenote",S.cut==="three"?"Cut with the left hand, piled to the left":"Drag the slider to choose your cut"));
+}
+async function gatherAnim(){
+ const ps=[...stage.querySelectorAll(".pile")];if(!Element.prototype.animate)return;
+ const cx=stage.clientWidth/2;
+ await Promise.all(ps.map((p,i)=>{const r=p.getBoundingClientRect(),sr=stage.getBoundingClientRect();const dx=cx-(r.left-sr.left+r.width/2);return p.animate([{transform:"none"},{transform:`translateX(${dx}px)`,opacity:.9}],{duration:550,delay:i*90,easing:"ease-in",fill:"forwards"}).finished}));
+}
+async function singleCut(){
+ S.busy=true;
+ const ps=stage.querySelectorAll(".pile");
+ if(ps[0]&&ps[0].animate)await ps[0].animate([{transform:"none"},{transform:"translateY(-40px)"},{transform:"translate(0,-40px)"}],{duration:350,fill:"forwards"}).finished;
+ await gatherAnim();
+ deck=E.cutSingle(deck,S.cutK);
+ S.cutDone=true;S.busy=false;renderSide();renderStage();
+}
+async function tapPile(j){
+ if(S.busy||S.cutDone||S.taps.includes(j))return;
+ S.taps.push(j);
+ if(S.taps.length<3){renderStage();return}
+ renderStage();S.busy=true;await gatherAnim();
+ deck=E.cutPiles(deck,S.three,S.taps);
+ S.cutDone=true;S.busy=false;renderSide();renderStage();
+}
+
+/* ===== DEAL ===== */
+function doDeal(){
+ const n=SPREADS[S.spread].pos.length;
+ if(S.deal==="fan"){renderFan(n);return}
+ finishDeal(S.deal==="top"?E.dealTop(deck,n):E.dealEveryNth(deck,n,7));
+}
+function renderFan(n){
+ stage.innerHTML="";S.fan=[];
+ const f=el("div","fan");
+ deck.forEach((c,j)=>{const x=el("div","fc");x.title="Card "+(j+1);x.addEventListener("click",()=>{
+  if(S.busy||x.classList.contains("picked")||S.fan.length>=n)return;
+  S.fan.push(j);x.classList.add("picked");x.innerHTML=`<span class="badge">${S.fan.length}</span>`;
+  const h=$("#dealhint");if(h)h.textContent=S.fan.length<n?`${n-S.fan.length} more to choose…`:"Laying out your spread…";
+  if(S.fan.length===n){S.busy=true;setTimeout(()=>{S.busy=false;finishDeal(S.fan.map(k=>deck[k]))},650)}
+ });f.append(x)});
+ stage.append(f);
+ $("#next").disabled=true;
+}
+function finishDeal(picks){
+ S.drawn=E.orient(picks,S.rev);
+ S.revealed=S.drawn.map(()=>false);S.sel=-1;
+ go(4);
+ if(!Element.prototype.animate)return;
+ const cx=stage.clientWidth/2,cy=stage.clientHeight+60;
+ stage.querySelectorAll(".slot").forEach((s,i)=>{
+  const dx=cx-(s.offsetLeft+s.offsetWidth/2),dy=cy-(s.offsetTop+s.offsetHeight/2);
+  s.animate([{transform:`translate(${dx}px,${dy}px) scale(.6)`,opacity:0},{transform:"none",opacity:1}],{duration:550,delay:i*140,easing:"cubic-bezier(.2,.8,.2,1)",fill:"backwards"});
+ });
+}
+
+/* ===== READ ===== */
+function cardClick(i){
+ if(!S.revealed[i]){S.revealed[i]=true;stage.querySelectorAll(".slot")[i].querySelector(".card").classList.add("up")}
+ showDetail(i);
+}
+function showDetail(i){
+ S.sel=i;stage.querySelectorAll(".slot").forEach((s,j)=>s.classList.toggle("sel",j===i));
+ const d=S.drawn[i],c=DECK[d.i],p=SPREADS[S.spread].pos[i],o=d.r?c.rv:c.up,alt=d.r?c.up:c.rv,box=$("#detail");if(!box)return;
+ box.innerHTML=`<div class="pos">${i+1}. ${p[0]}: <i>${p[1]}</i></div>
+ <h3>${c.name} ${d.r?'<span class="rv">Reversed</span>':""}</h3>
+ <div class="kw">${o.k}</div><p>${o.m}</p>
+ <p class="alt"><b>If it were ${d.r?"upright":"reversed"}:</b> ${alt.k}. ${alt.m}</p>
+ <p class="hint">${c.suit?`${c.suit} · ${SUITS[c.suit].el}: ${SUITS[c.suit].t}`:`Major Arcana ${ROMAN[c.num]}: a major life theme`}</p>`;
+ if(innerWidth<=820)box.scrollIntoView({behavior:"smooth",block:"nearest"});
+}
+async function revealAll(){
+ const slots=stage.querySelectorAll(".slot");
+ for(let i=0;i<S.drawn.length;i++){if(!S.revealed[i]){S.revealed[i]=true;slots[i].querySelector(".card").classList.add("up");await new Promise(r=>setTimeout(r,140))}}
+}
+function first(k){return k.split(",")[0].trim()}
+function interpret(){
+ const sp=SPREADS[S.spread],D=S.drawn.map(d=>({c:DECK[d.i],r:d.r})),n=D.length;
+ let h=`<h3>${esc(S.q?`“${S.q}”`:"Open reading")} · ${sp.name}</h3>`;
+ D.forEach((d,i)=>{const p=sp.pos[i],o=d.r?d.c.rv:d.c.up;
+  h+=`<h4>${i+1}. ${p[0]}: <b>${d.c.name}</b>${d.r?' <span class="rv">Reversed</span>':""}</h4><p><i>${p[1]}.</i> ${o.m} <span class="kw">(${o.k})</span></p>`});
+ const L=E.analyze(S.drawn,S.spread,S.rev).map(x=>`<b>${esc(x.title)}</b> ${esc(x.text)}`);
+ if(L.length)h+=`<h3>Putting it together</h3><ul class="syn">${L.map(x=>`<li>${x}</li>`).join("")}</ul>`;
+ h+=`<p class="hint" style="margin-top:18px">For entertainment and reflection only. The cards are random, and your choices are your own.</p>`;
+ reading.innerHTML=h;reading.scrollIntoView({behavior:"smooth",block:"start"});
+}
+function copyReading(){
+ if(!reading.textContent.trim())interpret();
+ const t=reading.innerText;
+ const fb=()=>{const ta=el("textarea");ta.value=t;ta.style.position="fixed";ta.style.opacity=0;document.body.append(ta);ta.select();try{document.execCommand("copy");toast("Reading copied")}catch(e){toast("Copy not supported here")}ta.remove()};
+ if(navigator.clipboard&&window.isSecureContext)navigator.clipboard.writeText(t).then(()=>toast("Reading copied"),fb);else fb();
+}
+
+/* ===== DISCLAIMER ===== */
+function showModal(){$("#modal").hidden=false}
+$("#okDisc").onclick=()=>{$("#modal").hidden=true;store("tarotTableOK","1")};
+$("#showDisc").onclick=showModal;
+if(store("tarotTableOK")!=="1")showModal();
+
+go(0);
+</script>
+</body>
