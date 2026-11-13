@@ -51,6 +51,7 @@ section.right{display:flex;flex-direction:column;min-width:0}
 #reading .story{border-left:2px solid var(--gold);padding:4px 0 4px 16px;margin:8px 0 6px}
 #reading .story p{font-size:16px;line-height:1.6;color:var(--ink);margin:0 0 12px}
 #reading .story b{color:var(--gold2);font-weight:normal}
+#detail[hidden]{display:none}
 #detail{margin-top:14px;padding:12px;border:1px solid var(--line);border-radius:12px;background:var(--panel);min-height:80px}
 #detail h3{margin:4px 0;font-weight:normal;color:var(--gold2)}
 #detail .pos{font-size:12.5px;color:var(--dim)}
@@ -151,7 +152,7 @@ input[type=range]{width:100%;accent-color:var(--gold)}
  <summary><span aria-hidden="true">♥</span> Support my work with crypto</summary>
  <div class="coins" id="coins"></div>
 </details>
-<footer>Free Tarot Readings is mysticism for fun, entertainment, and self-reflection only. Not advice of any kind and no liability is assumed. Your choices are your own. · v6</footer>
+<footer>Free Tarot Readings is mysticism for fun, entertainment, and self-reflection only. Not advice of any kind and no liability is assumed. Your choices are your own. · v7</footer>
 <div id="modal" hidden>
  <div class="box">
   <h2>Before you draw…</h2>
@@ -232,7 +233,7 @@ function renderSide(){
   <p class="hint">Tap a card to turn it over. Tap a turned card to see what it means.</p>
   <div class="row"><button class="btn" id="revealAll">Reveal all</button><button class="btn" id="interp">Interpret</button></div>
   <div class="row"><button class="btn" id="copy">Copy reading</button><button class="btn" id="again">New reading</button></div>
-  <div id="detail"><p class="hint">Card details appear here.</p></div>`;
+  <div id="detail" hidden></div>`;
  }
  side.innerHTML=h;
  if(st===2)renderCutCtl();
@@ -439,6 +440,7 @@ function cardClick(i){
 function showDetail(i){
  S.sel=i;stage.querySelectorAll(".slot").forEach((s,j)=>s.classList.toggle("sel",j===i));
  const d=S.drawn[i],c=DECK[d.i],p=SPREADS[S.spread].pos[i],o=d.r?c.rv:c.up,alt=d.r?c.up:c.rv,box=$("#detail");if(!box)return;
+ box.hidden=false;
  box.innerHTML=`<div class="pos">${i+1}. ${p[0]}: <i>${p[1]}</i></div>
  <h3>${c.name} ${d.r?'<span class="rv">Reversed</span>':""}</h3>
  <div class="kw">${o.k}</div><p>${o.m}</p>

@@ -16,19 +16,20 @@ A portable tarot reading table for the browser. Shuffle, cut and deal a full 78-
 - **3 deals:** from the top, picked by hand from a face-down fan, or every seventh card
 - **Reversals:** from your deck and how you shuffle (like a real deck), random 50/50, or off. See below.
 - Every card has its own distinct upright and reversed meaning
-- **The story in the cards:** a written narrative of what the draw is "trying to tell you", woven from every card's position, orientation, neighbors and pairings (see below)
+- **The vibe reading:** a 300 to 500 word reading of the draw's overall feel, highlighting its most interesting card (see below)
 - Reading guide: position-by-position meanings, plus patterns across the spread (Major Arcana weight, leading and missing suits, reversals, court cards, repeated numbers)
 - Works offline, on phones, and from a thumb drive
 
-## The story in the cards
+## The vibe reading
 
-When you press **Interpret**, the app writes a short story of what the cards might be trying to tell you. It runs fully offline: a set of pre-written phrases is combined by rules, with nothing fetched or generated at reading time.
+When you press **Interpret**, the app writes a 300 to 500 word reading of the draw's overall feel, above the card-by-card meanings. It runs fully offline: pre-written phrases are combined by rules, with nothing fetched or generated at reading time.
 
-- Every card has, for both upright and reversed: three *omens* (things that might come up in your life), two *cautions*, one *image* and one *message*. That's 1,092 phrases in `js/tarot-phrases.js`.
-- The generator gives each spread position a role in the story (what's behind you, what crosses you, what's hidden, what's ahead and so on), then sets the mood from the leading element, the Major Arcana count and the number of reversals.
-- It notices threads between cards: famous pairings (the Tower with the Star, the Fool with the World and others), repeated numbers, and court cards that may stand for real people.
-- It describes and never prescribes: there's no "you should" anywhere.
-- The same draw always tells the same story, and different draws choose different wording.
+- **Every card is scored** in both orientations, from -2 to +2, on four scales: negative to positive, inaction to action, stability to change, and outward to inward. Reversed scores follow a rule (bright cards dim, heavy cards ease, motion stalls, the mood turns inward), with hand-set exceptions such as the Devil reversed reading as release.
+- **The most interesting card is highlighted.** It's chosen by points: how strong its scores are, Major Arcana weight, how much it stands out from the rest of the draw, and whether it sits in a key position.
+- **The overall feel** comes from the whole spread's averages (bright, mixed or heavy; moving, balanced or still), how much change it shows, its leading and missing elements, reversals, court cards and the inward or outward lean.
+- It reads like a horoscope, but it's about the cards. It describes and never prescribes.
+- The same draw always gives the same reading.
+- `js/tarot-phrases.js` holds each card's image, message, omens and cautions. The scores and passages are in `js/tarot-narrative.js`, and both are plain text you can edit.
 
 ## How reversed cards work
 
@@ -73,11 +74,11 @@ Any card without an image keeps its placeholder face.
 | `index.html` | The reading table app (layout, animations, interaction) |
 | `js/tarot-data.js` | All 78 cards with meanings, plus spreads and method labels. Exposes `TarotData`. |
 | `js/tarot-engine.js` | Shuffles, cuts, deals, card-of-the-day and reading analysis. Pure functions, no page needed. Exposes `TarotEngine`. |
-| `js/tarot-phrases.js` | The story phrases for every card and orientation. Exposes `TarotPhrases`. |
-| `js/tarot-narrative.js` | The story generator. Exposes `TarotNarrative.tell(drawn, spreadKey, { question })`, which returns `{ text, html }` paragraphs. |
+| `js/tarot-phrases.js` | The phrases (image, message, omens, cautions) for every card and orientation. Exposes `TarotPhrases`. |
+| `js/tarot-narrative.js` | Card scores and the vibe reading. `TarotNarrative.tell(drawn, spreadKey, { question })` returns `{ text, html, highlight, scores, words }`. |
 | `tests/engine.test.js` | Checks for the engine (`node tests/engine.test.js`) |
 | `js/support.js` | The "Support my work with crypto" section (same addresses and offline QR codes as davidfeuling.com) |
-| `tests/narrative.test.js` | Tells thousands of random stories and checks the writing mechanics (`node tests/narrative.test.js`) |
+| `tests/narrative.test.js` | Writes thousands of random readings and checks length and wording rules (`node tests/narrative.test.js`) |
 
 ## Reusing the deck in another project
 
@@ -100,11 +101,11 @@ The two `js` files are plain scripts with no dependencies, so they drop into any
 </script>
 ```
 
-For the story too, also load `js/tarot-phrases.js` and `js/tarot-narrative.js`, then:
+For the vibe reading too, also load `js/tarot-phrases.js` and `js/tarot-narrative.js`, then:
 
 ```js
 const story = TarotNarrative.tell(drawn, "ppf", { question: "What's next at work?" });
-// story.text: plain paragraphs; story.html: paragraphs with card names in bold
+// story.text: plain paragraphs; story.html: card names in bold; story.highlight: index of the highlighted card
 ```
 
 A card looks like `{ id, name, suit, rank, num, up: { k, m }, rv: { k, m } }`, where `k` is keywords and `m` is a one-line meaning. Look one up with `TarotData.byId["major-17"]`.
