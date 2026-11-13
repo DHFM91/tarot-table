@@ -48,6 +48,9 @@ section.right{display:flex;flex-direction:column;min-width:0}
 #reading p{margin:4px 0;color:#d6cff0}
 #reading .kw{color:var(--gold);font-style:italic;font-size:13px}
 #reading .syn li{margin:6px 0;color:#d6cff0}
+#reading .story{border-left:2px solid var(--gold);padding:4px 0 4px 16px;margin:8px 0 6px}
+#reading .story p{font-size:16px;line-height:1.6;color:var(--ink);margin:0 0 12px}
+#reading .story b{color:var(--gold2);font-weight:normal}
 #detail{margin-top:14px;padding:12px;border:1px solid var(--line);border-radius:12px;background:var(--panel);min-height:80px}
 #detail h3{margin:4px 0;font-weight:normal;color:var(--gold2)}
 #detail .pos{font-size:12.5px;color:var(--dim)}
@@ -123,7 +126,7 @@ input[type=range]{width:100%;accent-color:var(--gold)}
   <div id="reading"></div>
  </section>
 </main>
-<footer>Tarot Table is mysticism for fun: entertainment and self-reflection only. Not advice of any kind and no liability is assumed. Your choices are your own. · v2</footer>
+<footer>Tarot Table is mysticism for fun: entertainment and self-reflection only. Not advice of any kind and no liability is assumed. Your choices are your own. · v3</footer>
 <div id="modal" hidden>
  <div class="box">
   <h2>Before you draw…</h2>
@@ -135,6 +138,8 @@ input[type=range]{width:100%;accent-color:var(--gold)}
 <div id="toast"></div>
 <script src="js/tarot-data.js"></script>
 <script src="js/tarot-engine.js"></script>
+<script src="js/tarot-phrases.js"></script>
+<script src="js/tarot-narrative.js"></script>
 <script>
 "use strict";
 /* ===== CONFIG: card art =====
@@ -423,6 +428,8 @@ function first(k){return k.split(",")[0].trim()}
 function interpret(){
  const sp=SPREADS[S.spread],D=S.drawn.map(d=>({c:DECK[d.i],r:d.r})),n=D.length;
  let h=`<h3>${esc(S.q?`“${S.q}”`:"Open reading")} · ${sp.name}</h3>`;
+ const story=TarotNarrative.tell(S.drawn,S.spread,{question:S.q.trim()});
+ h+=`<h3>What the cards are trying to tell you</h3><div class="story">${story.html.map(p=>`<p>${p}</p>`).join("")}</div><h3>Card by card</h3>`;
  D.forEach((d,i)=>{const p=sp.pos[i],o=d.r?d.c.rv:d.c.up;
   h+=`<h4>${i+1}. ${p[0]}: <b>${d.c.name}</b>${d.r?' <span class="rv">Reversed</span>':""}</h4><p><i>${p[1]}.</i> ${o.m} <span class="kw">(${o.k})</span></p>`});
  const L=E.analyze(S.drawn,S.spread,S.rev).map(x=>`<b>${esc(x.title)}</b> ${esc(x.text)}`);

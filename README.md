@@ -14,8 +14,19 @@ A portable tarot reading table for the browser. Shuffle, cut and deal a full 78-
 - **3 deals:** from the top, picked by hand from a face-down fan, or every seventh card
 - **Reversals:** from your deck and how you shuffle (like a real deck), random 50/50, or off. See below.
 - Every card has its own distinct upright and reversed meaning
+- **The story in the cards:** a written narrative of what the draw is "trying to tell you", woven from every card's position, orientation, neighbors and pairings (see below)
 - Reading guide: position-by-position meanings, plus patterns across the spread (Major Arcana weight, leading and missing suits, reversals, court cards, repeated numbers)
 - Works offline, on phones, and from a thumb drive
+
+## The story in the cards
+
+When you press **Interpret**, Tarot Table writes a short story of what the cards might be trying to tell you. It's fully offline, with no AI involved: a set of hand-checked phrases is combined by rules.
+
+- Every card has, for both upright and reversed: three *omens* (things that might come up in your life), two *cautions*, one *image* and one *message*. That's 1,092 phrases in `js/tarot-phrases.js`.
+- The generator gives each spread position a role in the story (what's behind you, what crosses you, what's hidden, what's ahead and so on), then sets the mood from the leading element, the Major Arcana count and the number of reversals.
+- It notices threads between cards: famous pairings (the Tower with the Star, the Fool with the World and others), repeated numbers, and court cards that may stand for real people.
+- It describes and never prescribes: there's no "you should" anywhere.
+- The same draw always tells the same story, and different draws choose different wording.
 
 ## How reversed cards work
 
@@ -60,7 +71,10 @@ Any card without an image keeps its placeholder face.
 | `index.html` | The reading table app (layout, animations, interaction) |
 | `js/tarot-data.js` | All 78 cards with meanings, plus spreads and method labels. Exposes `TarotData`. |
 | `js/tarot-engine.js` | Shuffles, cuts, deals, card-of-the-day and reading analysis. Pure functions, no page needed. Exposes `TarotEngine`. |
+| `js/tarot-phrases.js` | The story phrases for every card and orientation. Exposes `TarotPhrases`. |
+| `js/tarot-narrative.js` | The story generator. Exposes `TarotNarrative.tell(drawn, spreadKey, { question })`, which returns `{ text, html }` paragraphs. |
 | `tests/engine.test.js` | Checks for the engine (`node tests/engine.test.js`) |
+| `tests/narrative.test.js` | Tells thousands of random stories and checks the writing mechanics (`node tests/narrative.test.js`) |
 
 ## Reusing the deck in another project
 
@@ -81,6 +95,13 @@ The two `js` files are plain scripts with no dependencies, so they drop into any
   const drawn = TarotEngine.orient(TarotEngine.dealTop(deck, 3), "natural");
   const notes = TarotEngine.analyze(drawn, "ppf", "natural");   // [{ title, text }]
 </script>
+```
+
+For the story too, also load `js/tarot-phrases.js` and `js/tarot-narrative.js`, then:
+
+```js
+const story = TarotNarrative.tell(drawn, "ppf", { question: "What's next at work?" });
+// story.text: plain paragraphs; story.html: paragraphs with card names in bold
 ```
 
 A card looks like `{ id, name, suit, rank, num, up: { k, m }, rv: { k, m } }`, where `k` is keywords and `m` is a one-line meaning. Look one up with `TarotData.byId["major-17"]`.
