@@ -151,7 +151,7 @@ input[type=range]{width:100%;accent-color:var(--gold)}
  <summary><span aria-hidden="true">♥</span> Support my work with crypto</summary>
  <div class="coins" id="coins"></div>
 </details>
-<footer>Free Tarot Readings is mysticism for fun, entertainment, and self-reflection only. Not advice of any kind and no liability is assumed. Your choices are your own. · v5</footer>
+<footer>Free Tarot Readings is mysticism for fun, entertainment, and self-reflection only. Not advice of any kind and no liability is assumed. Your choices are your own. · v6</footer>
 <div id="modal" hidden>
  <div class="box">
   <h2>Before you draw…</h2>
@@ -460,7 +460,7 @@ function interpret(){
   h+=`<h4>${i+1}. ${p[0]}: <b>${d.c.name}</b>${d.r?' <span class="rv">Reversed</span>':""}</h4><p><i>${p[1]}.</i> ${o.m} <span class="kw">(${o.k})</span></p>`});
  const L=E.analyze(S.drawn,S.spread,S.rev).map(x=>`<b>${esc(x.title)}</b> ${esc(x.text)}`);
  if(L.length)h+=`<h3>Putting it together</h3><ul class="syn">${L.map(x=>`<li>${x}</li>`).join("")}</ul>`;
- h+=`<p class="hint" style="margin-top:18px">For entertainment and reflection only. The cards are random, and your choices are your own.</p>`;
+ h+=`<p class="hint" style="margin-top:18px">For entertainment and reflection only. Your choices are your own.</p>`;
  reading.innerHTML=h;reading.scrollIntoView({behavior:"smooth",block:"start"});
 }
 function copyReading(){
