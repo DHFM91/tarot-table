@@ -81,6 +81,7 @@ Any card without an image keeps its placeholder face.
 | `js/tarot-engine.js` | Shuffles, cuts, deals, card-of-the-day and reading analysis. Pure functions, no page needed. Exposes `TarotEngine`. |
 | `js/tarot-phrases.js` | The phrases (image, message, omens, cautions) for every card and orientation. Exposes `TarotPhrases`. |
 | `js/tarot-narrative.js` | Card scores and the vibe reading. `TarotNarrative.tell(drawn, spreadKey, { question })` returns `{ text, html, highlight, scores, words }`. |
+| `NEXT_SESSION.md` | Handoff notes for whoever picks up the work next |
 | `tests/engine.test.js` | Checks for the engine (`node tests/engine.test.js`) |
 | `js/card-faces.js` | The drawn placeholder card faces. Exposes `TarotFaces`. |
 | `js/support.js` | The "Support my work with crypto" section (same addresses and offline QR codes as davidfeuling.com) |
