@@ -216,7 +216,7 @@ const D = TarotData, E = TarotEngine;
 const {deck: DECK, SUITS, RANKS, ROMAN, SPREADS, SHUFFLES, CUTS, DEALS} = D;
 
 /* ===== STATE ===== */
-const VERSION="v12";
+const VERSION="v13";
 const S={hist:[],cutNote:"",interpreted:false,deckKind:"used",step:0,spread:"ppf",rev:"natural",q:"",shuffles:0,lastShuffle:null,piles:5,cut:"none",cutDone:false,cutK:39,three:null,taps:[],deal:"top",drawn:[],revealed:[],sel:-1,busy:false,fan:[]};
 let deck=E.newDeck(S.deckKind);
 const $=s=>document.querySelector(s), stage=$("#stage"), side=$("#side"), reading=$("#reading");
@@ -495,14 +495,14 @@ const CURRENTS=[
  {key:"m",neg:"Stillness",pos:"Motion"},
  {key:"ch",neg:"Constancy",pos:"Change"},
  {key:"inw",neg:"Without",pos:"Within"}];
-/* Averages shrink as spreads grow (cards cancel out), so the bar is scaled to the spread size:
-   a full bar means an unusually strong pull for that many cards (2 / sqrt(n) on the -2..+2 scale). */
-function currentFrac(x,n){return Math.min(1,Math.abs(x)/(2/Math.sqrt(Math.max(1,n))))}
-function currentStrength(x,n){const f=currentFrac(x,n);return f<0.12?"in balance":f<0.35?"a gentle pull":f<0.7?"a strong pull":"an overwhelming pull"}
-function currentRow(c,x,n){
- const frac=currentFrac(x,n),pct=frac*50,side=x<0?"neg":"pos",bal=frac<0.12;
+/* Bars use the reading's scaled scores (story.scaled, -1..+1): measured against the deck's typical draw
+   and scaled to the spread size, so a full bar means an unusually strong pull for that many cards. */
+function currentFrac(z){return Math.min(1,Math.abs(z))}
+function currentStrength(z){const f=currentFrac(z);return f<0.15?"in balance":f<0.4?"a gentle pull":f<0.7?"a strong pull":"an overwhelming pull"}
+function currentRow(c,x){
+ const frac=currentFrac(x),pct=frac*50,side=x<0?"neg":"pos",bal=frac<0.15;
  const bar=Math.abs(x)<0.05?"":`<div class="cur-bar ${x<0?"neg":""}" style="${x<0?`right:50%`:`left:50%`};width:${pct}%"></div>`;
- const note=bal?"In balance":`${currentStrength(x,n)} toward ${x<0?c.neg:c.pos}`.replace(/^./,m=>m.toUpperCase());
+ const note=bal?"In balance":`${currentStrength(x)} toward ${x<0?c.neg:c.pos}`.replace(/^./,m=>m.toUpperCase());
  return `<div class="cur-row" role="img" aria-label="${c.neg} to ${c.pos}: ${note}"><span class="pole l ${side==="neg"&&!bal?"on":""}">${c.neg}</span><div class="cur-track">${bar}</div><span class="pole ${side==="pos"&&!bal?"on":""}">${c.pos}</span><span class="cur-note">${note}</span></div>`;
 }
 function first(k){return k.split(",")[0].trim()}
@@ -511,7 +511,7 @@ function interpret(){
  let h=`<h3>${esc(S.q?`“${S.q}”`:"Open reading")} · ${sp.name}</h3>`;
  const story=TarotNarrative.tell(S.drawn,S.spread,{question:S.q.trim()});
  h+=`<h3>What the cards are trying to tell you</h3><div class="story">${story.html.map(p=>`<p>${p}</p>`).join("")}</div>`;
- h+=`<h3>The currents of this reading</h3><div class="currents">${CURRENTS.map(c=>currentRow(c,story.averages[c.key],S.drawn.length)).join("")}</div><p class="cur-key">How strongly the cards pull one way or the other on each current, for a spread of this size. The center line is perfect balance.</p><h3>Card by card</h3>`;
+ h+=`<h3>The currents of this reading</h3><div class="currents">${CURRENTS.map(c=>currentRow(c,story.scaled[c.key])).join("")}</div><p class="cur-key">How strongly the cards pull one way or the other on each current, for a spread of this size. The center line is perfect balance.</p><h3>Card by card</h3>`;
  D.forEach((d,i)=>{const p=sp.pos[i],o=d.r?d.c.rv:d.c.up;
   h+=`<h4>${i+1}. ${p[0]}: <b>${d.c.name}</b>${d.r?' <span class="rv">Reversed</span>':""}</h4><p><i>${p[1]}.</i> ${o.m} <span class="kw">(${o.k})</span></p>`});
  const L=E.analyze(S.drawn,S.spread,S.rev).map(x=>`<b>${esc(x.title)}</b> ${esc(x.text)}`);
@@ -552,13 +552,13 @@ function buildReport(){
  out.push("WHAT THE CARDS ARE TRYING TO TELL YOU",sub);
  story.text.forEach(p=>out.push(...wrapText(p,W),""));
  out.push("THE CURRENTS OF THIS READING",sub);
- CURRENTS.forEach(c=>{const x=story.averages[c.key],cells=12,frac=currentFrac(x,S.drawn.length),n=Math.round(frac*cells);
+ CURRENTS.forEach(c=>{const x=story.scaled[c.key],raw=story.averages[c.key],cells=12,frac=currentFrac(x),n=Math.round(frac*cells);
   const left=x<0?" ".repeat(cells-n)+"#".repeat(n):" ".repeat(cells),right=x>0?"#".repeat(n)+" ".repeat(cells-n):" ".repeat(cells);
-  const v=signed(Math.round(x*100)/100);
+  const v=signed(Math.round(raw*100)/100);
   out.push(`${c.neg.padStart(10)} [${left}|${right}] ${c.pos}`);
-  out.push(`${" ".repeat(12)}${frac<0.12?"In balance":currentStrength(x,S.drawn.length).replace(/^./,m=>m.toUpperCase())+" toward "+(x<0?c.neg:c.pos)} (average ${v})`);
+  out.push(`${" ".repeat(12)}${frac<0.15?"In balance":currentStrength(x).replace(/^./,m=>m.toUpperCase())+" toward "+(x<0?c.neg:c.pos)} (average ${v})`);
  });
- out.push(...wrapText("How strongly the cards pull one way or the other on each current. Each card scores from -2 to +2; the average counts Major Arcana a little extra, and the bars are scaled to the spread size so a full bar means an unusually strong pull for this many cards.",W),"");
+ out.push(...wrapText("How strongly the cards pull one way or the other on each current. Each card scores from -2 to +2; the average counts Major Arcana a little extra, and the bars are measured against the deck's typical draw and scaled to the spread size, so a full bar means an unusually strong pull for this many cards.",W),"");
  out.push("THE CARDS",sub);
  S.drawn.forEach((d,i)=>{
   const c=DECK[d.i],p=sp.pos[i],o=d.r?c.rv:c.up,alt=d.r?c.up:c.rv,sc=TarotNarrative.score(d.i,d.r);

@@ -78,6 +78,15 @@ function score(i, reversed) {
   return s;
 }
 
+/* The deck's own typical score on each scale (averaged over all 78 cards, upright and reversed).
+   Readings are measured against this, so a perfectly typical draw reads as balanced. */
+const DECK_MEAN = (() => {
+  const t = { v: 0, m: 0, ch: 0, inw: 0 };
+  D.deck.forEach((c, i) => [false, true].forEach(r => { const s = score(i, r); for (const k in t) t[k] += s[k]; }));
+  for (const k in t) t[k] /= D.deck.length * 2;
+  return t;
+})();
+
 /* Spread positions that carry extra weight when choosing the highlight. */
 const KEY_POSITIONS = {
   one: [0], ppf: [1, 2], sao: [0, 2], mbs: [2], cross5: [0, 4], paths: [0, 5],
@@ -87,17 +96,77 @@ const KEY_POSITIONS = {
 /* ======================================================================
    2. WORDING. Horoscope-style vagueness, but about the cards, never the stars.
    ====================================================================== */
-const VIBE = {
-  "bright|moving": "bright and fast-moving, a tailwind kind of stretch",
-  "bright|balanced": "warm and quietly favorable",
-  "bright|still": "golden but unhurried, like a long late afternoon",
-  "mixed|moving": "restless and full of crosscurrents",
-  "mixed|balanced": "bittersweet and finely balanced",
-  "mixed|still": "hushed and watchful, a held breath",
-  "heavy|moving": "stormy, with something coming to a head",
-  "heavy|balanced": "heavy-hearted, though far from hopeless",
-  "heavy|still": "foggy and slow, weather that lifts in its own time"
+/* The vibe line: a 7 x 7 emotional grid. Rows run from deep shadow (-3) to radiant light (+3),
+   columns from frozen stillness (-3) to headlong motion (+3). Two phrasings per cell, all distinct. */
+const VIBES = {
+  "-3": {
+    "-3": ["numb and bleak, a room where the clocks have drowned", "frozen dread, a cold well with no bottom"],
+    "-2": ["a slow sinking, mud rising past the ankles of the day", "grim and creeping, like damp spreading behind wallpaper"],
+    "-1": ["ominous and slow-footed, something patient waiting at the end of the hall", "dark and deliberate, a shadow lengthening with no sun to cast it"],
+    "0": ["thick with foreboding, a sky the color of old bruises", "terrible and absolute, a door already locked behind you"],
+    "1": ["a black unease twitching, floorboards ticking in the dark", "as if the walls had drawn breath and were listening"],
+    "2": ["panic running downhill, every shadow suddenly pursuing", "a frantic nightmare rush, teeth of the dark closing in"],
+    "3": ["catastrophe at full tilt, a storm tearing the roof from the world", "headlong terror, a collapse with no floor left to find"]
+  },
+  "-2": {
+    "-3": ["grief set in stone, a graveyard under unmoving fog", "leaden and inert, a drowned bell that cannot ring"],
+    "-2": ["sorrowful and sluggish, ashes settling on a deserted table", "weary and sunken, each hour dragged through wet sand"],
+    "-1": ["sullen and slow, rain pooling in the corners of old rooms", "gloomy and measured, a funeral procession with no end in sight"],
+    "0": ["gray and burdened, a long afternoon of unwelcome truths", "somber at the center, like a house after bad news"],
+    "1": ["trouble rustling awake, crows lifting from a bare field", "resentment simmering, a kettle just beginning to tremble"],
+    "2": ["tense and hurtling, a cart rattling down a ruined road", "angry momentum, grievances breaking loose like startled birds"],
+    "3": ["furious and breakneck, a landslide of old hurts", "wrecking-ball chaos, grief turned to thunder"]
+  },
+  "-1": {
+    "-3": ["wary and motionless, a held breath in an empty house", "suspended and uneasy, dust hanging in a stopped moment"],
+    "-2": ["doubtful and slow, a lamp flame leaning toward nothing", "nagging misgiving, a stairway with one step too many"],
+    "-1": ["faintly troubled, an unhurried walk with footsteps behind you", "pensive and a little chilled, evening arriving before it should"],
+    "0": ["uncertain and watchful, a mirror a second too slow", "mixed and uncomfortable, a smile with something behind it"],
+    "1": ["nervous and quickening, whispers gathering under the stairs", "jittery anticipation, a moth testing the edge of a flame"],
+    "2": ["restless and edgy, a pulse hurrying ahead of its reasons", "hurried and suspicious, glancing back at every corner"],
+    "3": ["frayed and frantic, a dozen small alarms going off at once", "reckless misgiving, running before knowing from what"]
+  },
+  "0": {
+    "-3": ["blank and motionless, a pond without a ripple", "a pause between two heartbeats, neither good nor bad"],
+    "-2": ["flat and sluggish, a road that seems to wait", "slack and idle, a river thinking about moving"],
+    "-1": ["even and leisurely, a tide that hasn't chosen a direction", "level and unbothered, an afternoon with nowhere to be"],
+    "0": ["balanced and bittersweet, dusk with both lamps lit", "poised at the middle, neither rising nor falling"],
+    "1": ["curious and waking, a page about to be turned", "mild and expectant, a breeze that might become something"],
+    "2": ["brisk and impartial, events passing like a train without stops", "busy and neutral, a market crowd streaming past"],
+    "3": ["fast and indifferent, a flooded river that takes no side", "headlong and unaligned, a whirl of events with no verdict"]
+  },
+  "1": {
+    "-3": ["tender and hushed, snow settling on a sleeping town", "a seed holding its breath underground, patient and trusting"],
+    "-2": ["a slow thaw along the windowsill, faintly encouraging", "drowsy and mending, a fever finally breaking"],
+    "-1": ["warming by degrees, a lamp lit in a far window", "soft and optimistic, morning lingering over the fields"],
+    "0": ["cautiously buoyant, a door left open a hand's width", "leaning toward kindness, a light under the threshold"],
+    "1": ["lifting and inquisitive, new green pushing through cracked stone", "budding promise, a first bird testing the dark"],
+    "2": ["encouraging and quick, a tailwind catching the sails", "spirited and willing, doors opening one after another"],
+    "3": ["eager and surging, a sunrise sprinting up the hills", "a leap that finds solid ground, fast and surprised"]
+  },
+  "2": {
+    "-3": ["glowing and suspended, amber light caught in a jar", "serene and golden, a long afternoon held in glass"],
+    "-2": ["lush and lazy, honey sliding from a spoon", "contented and slow, a hearth that keeps its coals"],
+    "-1": ["sunlit and easygoing, a boat drifting on clear water", "pleasant and mellow, laughter drifting from the next room"],
+    "0": ["luminous and steady, a garden at its fullest hour", "happy and assured, a table set for friends"],
+    "1": ["sparkling and ascending, a festival beginning to stir", "full of promise, dawn spilling into every window"],
+    "2": ["lively and warm, music spilling out of open doors", "joyful and fleet, a wind full of swallows"],
+    "3": ["dazzling and swift, fireworks over a cheering harbor", "delighted and sprinting, luck arriving faster than it can be counted"]
+  },
+  "3": {
+    "-3": ["blissful and unmoving, sunlight resting on a perfect lake", "radiant peace, the whole world asleep inside a lullaby"],
+    "-2": ["rapturous and slow, a deep tide of gladness at last arriving", "blessed and dreamy, a long exhale of pure delight"],
+    "-1": ["wondrous and easy, stars floating on a warm sea", "glowing and tender, a summer that does not end"],
+    "0": ["radiant and whole, a cathedral of light with every window open", "overflowing with joy, a well that cannot run dry"],
+    "1": ["ecstatic and soaring, wings unfolding in the sun", "jubilant and swelling, a chorus drawing its first breath"],
+    "2": ["exultant and galloping, a joyful gallop across open green", "dizzy with delight, every lock giving way to music"],
+    "3": ["euphoric and explosive, everything breaking gloriously your way", "rapture at full speed, a thousand lanterns launched at once"]
+  }
 };
+/* Averages shrink as spreads grow (cards cancel out), so they're scaled to the spread size:
+   1 means an unusually strong pull for that many cards. Shared with the "currents" bars. */
+const scaled = (x, n) => Math.max(-1, Math.min(1, x / (2 / Math.sqrt(Math.max(1, n)))));
+const bin7 = z => (z < -0.7 ? -3 : z < -0.4 ? -2 : z < -0.15 ? -1 : z <= 0.15 ? 0 : z <= 0.4 ? 1 : z <= 0.7 ? 2 : 3);
 /* One short passage per overall mood. Worded to work for one card or ten. */
 const TONE = {
   "bright|moving": [
@@ -208,8 +277,10 @@ function tell(drawn, spreadKey, opts = {}) {
   const wt = x => (x.c.suit ? 1 : 1.5), W = cards.reduce((a, x) => a + wt(x), 0);
   const avg = key => cards.reduce((a, x) => a + x.s[key] * wt(x), 0) / W;
   const A = { v: avg("v"), m: avg("m"), ch: avg("ch"), inw: avg("inw") };
-  const tV = A.v >= 0.6 ? "bright" : A.v <= -0.6 ? "heavy" : "mixed";
-  const tM = A.m >= 0.6 ? "moving" : A.m <= -0.6 ? "still" : "balanced";
+  const Z = {};
+  for (const k of ["v", "m", "ch", "inw"]) Z[k] = scaled(A[k] - DECK_MEAN[k], n);
+  const tV = Z.v >= 0.2 ? "bright" : Z.v <= -0.2 ? "heavy" : "mixed";
+  const tM = Z.m >= 0.2 ? "moving" : Z.m <= -0.2 ? "still" : "balanced";
 
   /* --- the most interesting card, by points --- */
   const key = new Set(KEY_POSITIONS[spreadKey] || [0]);
@@ -231,7 +302,7 @@ function tell(drawn, spreadKey, opts = {}) {
   let dropped = 0;
 
   /* 1. the highlight and the vibe */
-  const vibe = VIBE[tV + "|" + tM];
+  const vibe = pick(VIBES[bin7(Z.v)][bin7(Z.m)]);
   let p1 = opts.question ? `You asked: “${opts.question}” ` : "";
   p1 += n === 1
     ? `With only ${cardName(hi.c, hi.r)} on the table, the vibe is ${vibe}.`
@@ -248,15 +319,15 @@ function tell(drawn, spreadKey, opts = {}) {
     const top = Object.entries(sc).sort((a, b) => b[1] - a[1]);
     const cand = [];
     if (top.length && top[0][1] >= Math.max(2, n / 3) && (!top[1] || top[0][1] > top[1][1])) cand.push([top[0][1] / n + 0.5, ELEMENT_NOTE[D.SUITS[top[0][0]].el]]);
-    if (A.ch >= 0.8) cand.push([A.ch, NOTE.upheaval]);
-    if (A.ch <= -0.6) cand.push([-A.ch, NOTE.steady]);
+    if (Z.ch >= 0.5) cand.push([Z.ch + 0.3, NOTE.upheaval]);
+    if (Z.ch <= -0.5) cand.push([-Z.ch + 0.3, NOTE.steady]);
     if (n >= 3 && majors / n >= 0.5) cand.push([majors / n + 0.4, NOTE.big]);
     if (n >= 5 && majors === 0) cand.push([0.7, NOTE.noMajors]);
     if (n >= 3 && rev / n >= 0.6) cand.push([rev / n, NOTE.manyRev]);
     if (n >= 3 && rev === 0) cand.push([0.6, NOTE.noRev]);
     if (cards.filter(x => x.c.rank > 10).length >= 3) cand.push([0.65, NOTE.courts]);
-    if (A.inw >= 1) cand.push([A.inw * 0.6, NOTE.inward]);
-    if (A.inw <= -0.8) cand.push([-A.inw * 0.6, NOTE.outward]);
+    if (Z.inw >= 0.6) cand.push([Z.inw, NOTE.inward]);
+    if (Z.inw <= -0.6) cand.push([-Z.inw, NOTE.outward]);
     cand.sort((a, b) => b[0] - a[0]).slice(0, 2).forEach(c => notes.push(c[1]));
   }
   // the mood passage whose wording repeats least; its first sentence always stays
@@ -279,8 +350,8 @@ function tell(drawn, spreadKey, opts = {}) {
 
   const html = paras.map(p => esc(p).replace(/\u0001/g, "<b>").replace(/\u0002/g, "</b>"));
   const text = paras.map(p => p.replace(/[\u0001\u0002]/g, ""));
-  return { text, html, dropped, highlight: hi.k, second: second ? second.k : -1, scores: cards.map(x => x.s), averages: A, words: text.reduce((a, p) => a + words(p), 0) };
+  return { text, html, dropped, highlight: hi.k, second: second ? second.k : -1, scores: cards.map(x => x.s), averages: A, scaled: Z, words: text.reduce((a, p) => a + words(p), 0) };
 }
 
-root.TarotNarrative = Object.freeze({ tell, score, keyWords, MAX_REPEATS, UP, REVERSED });
+root.TarotNarrative = Object.freeze({ tell, score, scaled, VIBES, DECK_MEAN, keyWords, MAX_REPEATS, UP, REVERSED });
 })(typeof window !== "undefined" ? window : globalThis);

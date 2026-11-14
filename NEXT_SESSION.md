@@ -2,7 +2,7 @@
 
 Read this first. It covers what the project is, where everything lives, how David likes the work done, and what's still open.
 
-**Current version: v12** (shown in the page footer, set by `const VERSION` in `index.html`).
+**Current version: v13** (shown in the page footer, set by `const VERSION` in `index.html`).
 
 ---
 
@@ -64,7 +64,7 @@ Script load order in `index.html`: data, engine, phrases, narrative, card-faces,
 - Every card is scored in both orientations from -2 to +2 on **v** (negative to positive), **m** (inaction to action), **ch** (stability to change) and **inw** (outward to inward). Reversed scores follow a rule with hand-set exceptions.
 - **The highlight card** is chosen by points: score strength, a Major Arcana bonus, standing out from the draw's averages, and key-position bonuses (`KEY_POSITIONS`).
 - **Structure, about 110 to 175 words:**
-  1. "Highlighting X (position), and considering the others in the context of this draw, the general vibe is ___." (Single cards: "With only X on the table…")
+  1. "Highlighting X (position), and considering the others in the context of this draw, the general vibe is ___." (Single cards: "With only X on the table…") The vibe phrase comes from `VIBES`, a 7 x 7 grid (Shadow to Light by Stillness to Motion, two distinct phrasings per cell, 98 in all; bands set by `bin7`), using the reading's scaled scores: averages minus `DECK_MEAN`, divided by 2 / sqrt(n), clamped to -1..+1. The currents bars use the same scaled scores (`story.scaled`).
   2. A mood passage for the draw's overall feel (`TONE`, 9 combinations of bright/mixed/heavy and moving/balanced/still), at most two `NOTE`s only when the draw is strong on them, then exactly one "For a sense of mood, you might imagine ___." line.
   3. "This might mean A, B, and/or C coming up, but be careful of ___." and "If the cards are (this card is) trying to tell you anything, it's that ___."
 - **Repetition guard:** optional sentences are dropped if they repeat more than `MAX_REPEATS` (2) key words already used; where there's a choice, the least-repeated wording wins.

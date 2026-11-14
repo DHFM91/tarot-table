@@ -42,5 +42,16 @@ for (const sp in D.SPREADS) {
     if (N.tell(dr, sp, {}).text.join() !== N.tell(dr, sp, {}).text.join()) fail('not repeatable', sp);
   }
 }
+// no single vibe phrase may dominate (it used to be 'bittersweet and finely balanced' about 45% of the time)
+{
+  const all = [].concat(...Object.values(N.VIBES).map(r => [].concat(...Object.values(r))));
+  const c = {}; let T = 0;
+  for (const sp in D.SPREADS) { const n = D.SPREADS[sp].pos.length;
+    for (let t = 0; t < 1500; t++) { const txt = N.tell(E.orient(E.dealTop(E.wash(E.newDeck()), n), 'natural'), sp, {}).text[0];
+      const v = all.find(p => txt.includes(p)); if (!v) fail('no vibe phrase', txt.slice(0, 80)); c[v] = (c[v] || 0) + 1; T++; } }
+  const worst = Math.max(...Object.values(c)) / T;
+  if (worst > 0.15) fail('a vibe phrase appears in ' + (100 * worst).toFixed(1) + '% of readings');
+  if (Object.keys(c).length < 85) fail('only ' + Object.keys(c).length + ' of 98 vibe phrases ever appear');
+}
 console.log(bad ? `${bad} problems` : `clean: ${runs} readings, all 90-220 words`);
 process.exit(bad ? 1 : 0);
