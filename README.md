@@ -32,6 +32,12 @@ When you press **Interpret**, the app writes a short reading of the draw's overa
 - The same draw always gives the same reading.
 - `js/tarot-phrases.js` holds each card's mood image, message, omens and cautions. Each reading uses one subtle mood image ("For a sense of mood, you might imagine…") rather than describing the card's illustration. The scores and passages are in `js/tarot-narrative.js`, and both are plain text you can edit.
 
+## The currents of this reading
+
+Under the vibe reading, four bars show which way the cards pull overall: **Shadow ↔ Light** (negative or positive), **Stillness ↔ Motion** (waiting or acting), **Constancy ↔ Change** (holding or shifting) and **Without ↔ Within** (outward or inward). Each bar grows from a center line toward the side the cards lean, with a short label such as "A strong pull toward Motion".
+
+The bars come from the same card scores as the vibe reading, averaged across the draw (Major Arcana count a little extra). Because averages shrink as spreads grow, the bars are scaled to the spread size, so a full bar means an unusually strong pull for that many cards. The saved .txt includes a text version of the bars with the raw averages.
+
 ## How reversed cards work
 
 With the default setting, reversals come from the deck itself, the way they do with real cards:

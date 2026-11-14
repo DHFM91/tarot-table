@@ -2,7 +2,7 @@
 
 Read this first. It covers what the project is, where everything lives, how David likes the work done, and what's still open.
 
-**Current version: v11** (shown in the page footer, set by `const VERSION` in `index.html`).
+**Current version: v12** (shown in the page footer, set by `const VERSION` in `index.html`).
 
 ---
 
@@ -70,6 +70,11 @@ Script load order in `index.html`: data, engine, phrases, narrative, card-faces,
 - **Repetition guard:** optional sentences are dropped if they repeat more than `MAX_REPEATS` (2) key words already used; where there's a choice, the least-repeated wording wins.
 - The same draw always gives the same reading (seeded by the draw).
 - **Tone rules David set:** describe, never prescribe (no "you should", "try to" and so on); horoscope-style vagueness but about tarot, never astrology; no literal "Picture [the card's illustration]" lines (the mood image must stay subtle, one per reading); less is more before the card-by-card section; single-card readings must never talk about "the cards" in the plural.
+
+### The currents (added in v12)
+- Four bars under the vibe reading, defined in `CURRENTS` in `index.html`: Shadow/Light (`v`), Stillness/Motion (`m`), Constancy/Change (`ch`), Without/Within (`inw`). They use `story.averages` from `TarotNarrative.tell`.
+- The bar width is scaled to the spread size: full at |average| = 2 / sqrt(n). Labels: under 12% of full "In balance", under 35% "a gentle pull", under 70% "a strong pull", otherwise "an overwhelming pull". Violet bars lean left, gold bars lean right.
+- The saved .txt shows ASCII bars plus the raw averages, right after the vibe reading.
 
 ### Card faces (placeholders until real art)
 - Real card art is being made **in a separate thread**. Don't redesign the art here. To use it: put images in an `art/` folder named by card id (`major-00.jpg` to `major-21.jpg`, `wands-01.jpg` to `pentacles-14.jpg`; 01 = Ace, 11 = Page, 12 = Knight, 13 = Queen, 14 = King) and set `ART_FOLDER = "art"`.
