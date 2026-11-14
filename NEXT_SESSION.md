@@ -113,6 +113,8 @@ Release:
 
 ## 8. Open items and ideas
 
+**Check `TODO.md` first.** David parks loose ideas and fixes there; work through it before starting anything new.
+
 - Real card art (in progress in another thread), then wire it in via `ART_FOLDER`.
 - Phone app packaging (Capacitor or similar).
 - No license file yet, so default copyright applies. Offered; not decided.
