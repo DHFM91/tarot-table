@@ -30,7 +30,7 @@ When you press **Interpret**, the app writes a short reading of the draw's overa
 - It reads like a horoscope, but it's about the cards. It describes and never prescribes.
 - **A repetition guard** keeps it from leaning on the same words: optional sentences are dropped if they repeat more than two key words already used (`MAX_REPEATS` in `js/tarot-narrative.js`), and where there's a choice of wording, the one that repeats least is used.
 - The same draw always gives the same reading.
-- `js/tarot-phrases.js` holds each card's image, message, omens and cautions. The scores and passages are in `js/tarot-narrative.js`, and both are plain text you can edit.
+- `js/tarot-phrases.js` holds each card's mood image, message, omens and cautions. Each reading uses one subtle mood image ("For a sense of mood, you might imagine…") rather than describing the card's illustration. The scores and passages are in `js/tarot-narrative.js`, and both are plain text you can edit.
 
 ## How reversed cards work
 

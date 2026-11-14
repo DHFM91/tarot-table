@@ -32,6 +32,8 @@ for (const sp in D.SPREADS) {
     const sents = txt.split(/(?<=[.!?])\s+/); if (new Set(sents).size !== sents.length) fail('repeated sentence', sp);
     if (/undefined|null|NaN|\u0001|\u0002|\s{2,}|\.\.|,,/.test(txt)) fail('mechanics', sp, txt.slice(0, 160));
     if (/\b(you should|try to|make sure|remember to|consider)\b/i.test(txt)) fail('advice wording', sp);
+    if (/\bPicture\b/.test(txt)) fail('literal Picture line', sp);
+    if ((txt.match(/you might imagine/g) || []).length !== 1) fail('mood image count', sp);
     if (/\b(zodiac|horoscope|planet|mercury|retrograde|astrolog)/i.test(txt)) fail('astrology wording', sp);
     const hiName = D.deck[dr[o.highlight].i].name.replace(/^The /, '');
     if (!txt.includes(hiName)) fail('highlight not named', sp, hiName);

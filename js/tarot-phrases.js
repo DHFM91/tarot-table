@@ -4,7 +4,8 @@
  *   o: three omens, each fits "This might mean ___ coming up in your life."
  *   c: two cautions, each fits "...but be careful of ___."
  *   t: a message, fits "The cards may be trying to tell you that ___."
- *   i: an image, fits "Picture ___."
+ *   i: the card's literal illustration, fits "Picture ___." (kept for reuse; the reading doesn't show it)
+ *   m: a subtle mood image, fits "For a sense of mood, you might imagine ___."
  * Exposes one global: TarotPhrases.
  */
 (function (root) {
@@ -22,7 +23,8 @@ root.TarotPhrases = Object.freeze({
     "mistaking a cliff edge for a doorstep"
    ],
    "t": "the first step is usually smaller and stranger than you imagined",
-   "i": "a barefoot traveler stepping off a sunlit cliff, whistling"
+   "i": "a barefoot traveler stepping off a sunlit cliff, whistling",
+   "m": "the first morning in a new city, shoes untied, no map"
   },
   "rv": {
    "o": [
@@ -35,7 +37,8 @@ root.TarotPhrases = Object.freeze({
     "calling fear by the name of wisdom"
    ],
    "t": "caution and carelessness can wear the same face, and you may own both",
-   "i": "a traveler frozen at the cliff edge, bag half packed"
+   "i": "a traveler frozen at the cliff edge, bag half packed",
+   "m": "an unread contract signed in a hurry beside an unused plane ticket"
   }
  },
  "major-01": {
@@ -50,7 +53,8 @@ root.TarotPhrases = Object.freeze({
     "believing the trick is the same as the craft"
    ],
    "t": "everything needed for the work is already laid out on the table",
-   "i": "a conjurer at a candlelit table, one hand raised skyward"
+   "i": "a conjurer at a candlelit table, one hand raised skyward",
+   "m": "a mechanic's workbench where every tool sits exactly where the hand expects"
   },
   "rv": {
    "o": [
@@ -63,7 +67,8 @@ root.TarotPhrases = Object.freeze({
     "being dazzled by someone else's patter"
    ],
    "t": "skill left idle and skill used crookedly both curdle into the same thing",
-   "i": "a card trick with one card too many up the sleeve"
+   "i": "a card trick with one card too many up the sleeve",
+   "m": "a gifted pianist selling timeshares with a very warm handshake"
   }
  },
  "major-02": {
@@ -78,7 +83,8 @@ root.TarotPhrases = Object.freeze({
     "demanding answers before they are ready"
    ],
    "t": "the most important thing in the room is the one nobody says",
-   "i": "a veiled woman between two pillars, a scroll half hidden"
+   "i": "a veiled woman between two pillars, a scroll half hidden",
+   "m": "the quiet in a library just before someone finally says the thing"
   },
   "rv": {
    "o": [
@@ -91,7 +97,8 @@ root.TarotPhrases = Object.freeze({
     "talking over your own quiet doubt"
    ],
    "t": "the voice you have stopped listening to has been right more than once",
-   "i": "a curtain drawn over a lit window, someone watching behind it"
+   "i": "a curtain drawn over a lit window, someone watching behind it",
+   "m": "a phone buzzing in a drawer all afternoon, left unanswered"
   }
  },
  "major-03": {
@@ -106,7 +113,8 @@ root.TarotPhrases = Object.freeze({
     "giving the harvest away before tasting it"
    ],
    "t": "what you tend with patience is growing even where you cannot see",
-   "i": "a woman reclining in wheat, pomegranates at her feet"
+   "i": "a woman reclining in wheat, pomegranates at her feet",
+   "m": "bread cooling on the counter while rain taps the window"
   },
   "rv": {
    "o": [
@@ -119,7 +127,8 @@ root.TarotPhrases = Object.freeze({
     "holding on so tightly that nothing can grow"
    ],
    "t": "love given without limit can crowd out the thing it was meant to feed",
-   "i": "an overwatered garden, soil black and roots pale"
+   "i": "an overwatered garden, soil black and roots pale",
+   "m": "a houseplant fussed over daily while the novel stays unopened"
   }
  },
  "major-04": {
@@ -134,7 +143,8 @@ root.TarotPhrases = Object.freeze({
     "building walls taller than the house needs"
    ],
    "t": "a life with firm edges has room to hold something lasting",
-   "i": "a stone throne on a red mountain, ram heads carved in it"
+   "i": "a stone throne on a red mountain, ram heads carved in it",
+   "m": "a well-kept ledger and an office door locked at six sharp"
   },
   "rv": {
    "o": [
@@ -147,7 +157,8 @@ root.TarotPhrases = Object.freeze({
     "laws so numerous that nothing can move"
    ],
    "t": "control held too tightly breaks, and control let go too far floods",
-   "i": "a cracked throne, its crown hanging crooked on one post"
+   "i": "a cracked throne, its crown hanging crooked on one post",
+   "m": "an office where every desk is ruler-straight and nobody dares laugh"
   }
  },
  "major-05": {
@@ -162,7 +173,8 @@ root.TarotPhrases = Object.freeze({
     "borrowing someone else's certainty whole"
    ],
    "t": "old wisdom is worth sitting through the dull parts to reach",
-   "i": "a robed teacher between two kneeling students, keys at his feet"
+   "i": "a robed teacher between two kneeling students, keys at his feet",
+   "m": "a school assembly hall smelling of floor wax and old songs"
   },
   "rv": {
    "o": [
@@ -175,7 +187,8 @@ root.TarotPhrases = Object.freeze({
     "mistaking cynicism for independence"
    ],
    "t": "some rules have gone hollow, though others still hold the roof up",
-   "i": "an empty pulpit, hymnbooks still open to the same page"
+   "i": "an empty pulpit, hymnbooks still open to the same page",
+   "m": "a pledge mumbled by a room that stopped believing it years ago"
   }
  },
  "major-06": {
@@ -190,7 +203,8 @@ root.TarotPhrases = Object.freeze({
     "merging so completely that neither is left"
    ],
    "t": "every real choice quietly tells you who you are",
-   "i": "two figures under an angel's wide wings, each looking at the other"
+   "i": "two figures under an angel's wide wings, each looking at the other",
+   "m": "two coats hung on one hook by the door"
   },
   "rv": {
    "o": [
@@ -203,7 +217,8 @@ root.TarotPhrases = Object.freeze({
     "keeping the peace by hiding your values"
    ],
    "t": "the pull toward something and the rightness of it are not the same",
-   "i": "two glasses on a table, one poured and one untouched"
+   "i": "two glasses on a table, one poured and one untouched",
+   "m": "two playlists fighting over one car speaker on a long drive"
   }
  },
  "major-07": {
@@ -218,7 +233,8 @@ root.TarotPhrases = Object.freeze({
     "driving over what could have been steered around"
    ],
    "t": "two stubborn forces can pull the same wagon if one hand holds both reins",
-   "i": "a charioteer in armor, a black sphinx and a white one pulling"
+   "i": "a charioteer in armor, a black sphinx and a white one pulling",
+   "m": "a cyclist cresting a hill as the headwind turns to tailwind"
   },
   "rv": {
    "o": [
@@ -231,7 +247,8 @@ root.TarotPhrases = Object.freeze({
     "pulling hard in two directions at once"
    ],
    "t": "momentum is slipping while you argue with yourself about which way to go",
-   "i": "a chariot with its wheels spinning in mud, horses facing apart"
+   "i": "a chariot with its wheels spinning in mud, horses facing apart",
+   "m": "a rental car revving in a parking lot while passengers argue directions"
   }
  },
  "major-08": {
@@ -246,7 +263,8 @@ root.TarotPhrases = Object.freeze({
     "swallowing anger until it hardens"
    ],
    "t": "the quietest hand in the room is often the one that tames the lion",
-   "i": "a woman closing a lion's jaws as gently as a book"
+   "i": "a woman closing a lion's jaws as gently as a book",
+   "m": "coaxing a frightened stray cat out from under a porch, unhurried"
   },
   "rv": {
    "o": [
@@ -259,7 +277,8 @@ root.TarotPhrases = Object.freeze({
     "letting fear speak on your behalf"
    ],
    "t": "the lion feels bigger because you have stopped looking it in the eye",
-   "i": "a lion straining at a leash held by shaking hands"
+   "i": "a lion straining at a leash held by shaking hands",
+   "m": "trembling thumbs over an angry message, typed, deleted, typed again"
   }
  },
  "major-09": {
@@ -274,7 +293,8 @@ root.TarotPhrases = Object.freeze({
     "carrying the lantern for people who never asked"
    ],
    "t": "the answer has been waiting in a room you rarely visit",
-   "i": "a gray-cloaked figure on a snowy peak, lantern raised"
+   "i": "a gray-cloaked figure on a snowy peak, lantern raised",
+   "m": "a snowed-in cabin and the unhurried sound of a single kettle"
   },
   "rv": {
    "o": [
@@ -287,7 +307,8 @@ root.TarotPhrases = Object.freeze({
     "letting the lantern burn down unused"
    ],
    "t": "solitude chosen is a rest, and solitude defended is a locked door",
-   "i": "a lit window in a house with the curtains sewn shut"
+   "i": "a lit window in a house with the curtains sewn shut",
+   "m": "a spare room where the blinds stay shut and takeout menus pile up"
   }
  },
  "major-10": {
@@ -302,7 +323,8 @@ root.TarotPhrases = Object.freeze({
     "gripping the rim as it spins"
    ],
    "t": "everything at the top of the wheel was once at the bottom",
-   "i": "a great wheel in the clouds, strange creatures clinging to its rim"
+   "i": "a great wheel in the clouds, strange creatures clinging to its rim",
+   "m": "a revolving door catching you mid-swing at exactly the right moment"
   },
   "rv": {
    "o": [
@@ -315,7 +337,8 @@ root.TarotPhrases = Object.freeze({
     "pushing against a turn already underway"
    ],
    "t": "the same lesson keeps arriving in new clothes until it is finally received",
-   "i": "a wheel stuck on one spoke, grinding in its own groove"
+   "i": "a wheel stuck on one spoke, grinding in its own groove",
+   "m": "a carousel horse rising and falling past the same bored face"
   }
  },
  "major-11": {
@@ -330,7 +353,8 @@ root.TarotPhrases = Object.freeze({
     "overlooking the bill arriving for old choices"
    ],
    "t": "what you have done is already on its way back to you",
-   "i": "a figure with a raised sword and perfectly level scales"
+   "i": "a figure with a raised sword and perfectly level scales",
+   "m": "a receipt checked line by line, every figure finally adding up"
   },
   "rv": {
    "o": [
@@ -343,7 +367,8 @@ root.TarotPhrases = Object.freeze({
     "dodging a reckoning that grows by the day"
    ],
    "t": "an unpaid debt of honesty does not shrink by being ignored",
-   "i": "a scale with a thumb pressed on one pan"
+   "i": "a scale with a thumb pressed on one pan",
+   "m": "a referee looking at the sky just as the foul happens"
   }
  },
  "major-12": {
@@ -358,7 +383,8 @@ root.TarotPhrases = Object.freeze({
     "grabbing the controls before the view is clear"
    ],
    "t": "hanging still long enough shows you what motion kept hidden",
-   "i": "a man hanging by one foot from a living tree, calm"
+   "i": "a man hanging by one foot from a living tree, calm",
+   "m": "lying on the living room floor, watching the ceiling fan while the day stops"
   },
   "rv": {
    "o": [
@@ -371,7 +397,8 @@ root.TarotPhrases = Object.freeze({
     "waiting as a way of never deciding"
    ],
    "t": "the sacrifice has stopped buying anything, and the waiting has stopped teaching",
-   "i": "a bound figure dangling beside a stopped clock, eyes wide open"
+   "i": "a bound figure dangling beside a stopped clock, eyes wide open",
+   "m": "a traffic light stuck on red at an empty crossroads for hours"
   }
  },
  "major-13": {
@@ -386,7 +413,8 @@ root.TarotPhrases = Object.freeze({
     "treating a necessary ending as a punishment"
    ],
    "t": "some endings are only the ground being cleared",
-   "i": "a skeletal rider on a white horse passing a rising sun"
+   "i": "a skeletal rider on a white horse passing a rising sun",
+   "m": "a moving van pulling away, the bare house echoing and strangely light"
   },
   "rv": {
    "o": [
@@ -399,7 +427,8 @@ root.TarotPhrases = Object.freeze({
     "calling stubbornness loyalty"
    ],
    "t": "what you are holding on to left the building a long time ago",
-   "i": "a ghost still setting a table for guests who stopped coming"
+   "i": "a ghost still setting a table for guests who stopped coming",
+   "m": "an old voicemail kept, replayed, and never deleted"
   }
  },
  "major-14": {
@@ -414,7 +443,8 @@ root.TarotPhrases = Object.freeze({
     "mistaking blandness for balance"
    ],
    "t": "the right proportions, kept patiently, produce what force never could",
-   "i": "an angel pouring water between two cups in an unbroken arc"
+   "i": "an angel pouring water between two cups in an unbroken arc",
+   "m": "tea steeped exactly right, neither bitter nor weak, at an unhurried table"
   },
   "rv": {
    "o": [
@@ -427,7 +457,8 @@ root.TarotPhrases = Object.freeze({
     "demanding results from a mixture still settling"
    ],
    "t": "one ingredient has taken over, and the whole mixture tastes of it",
-   "i": "a cup overflowing while the other runs dry"
+   "i": "a cup overflowing while the other runs dry",
+   "m": "a recipe oversalted, then oversweetened, then drowned in more of both"
   }
  },
  "major-15": {
@@ -442,7 +473,8 @@ root.TarotPhrases = Object.freeze({
     "bargaining away something priceless for something shiny"
    ],
    "t": "the chains around your neck are loose enough to lift off",
-   "i": "two figures chained to a black pedestal, the collars hanging slack"
+   "i": "two figures chained to a black pedestal, the collars hanging slack",
+   "m": "an online shop at midnight, one more click, then one more"
   },
   "rv": {
    "o": [
@@ -455,7 +487,8 @@ root.TarotPhrases = Object.freeze({
     "trading one master for a quieter one"
    ],
    "t": "the thing that owned you has begun to look small",
-   "i": "an iron collar lying open on the floor, still warm"
+   "i": "an iron collar lying open on the floor, still warm",
+   "m": "walking out of the mall at closing, receipts crumpled, shoulders suddenly lighter"
   }
  },
  "major-16": {
@@ -470,7 +503,8 @@ root.TarotPhrases = Object.freeze({
     "standing in the doorway arguing with the rubble"
    ],
    "t": "the thing that fell was never as sound as it looked",
-   "i": "a stone tower split by lightning, its crown tumbling into night"
+   "i": "a stone tower split by lightning, its crown tumbling into night",
+   "m": "a phone call at dawn that rearranges the whole year"
   },
   "rv": {
    "o": [
@@ -483,7 +517,8 @@ root.TarotPhrases = Object.freeze({
     "fearing change more than the thing needing changed"
    ],
    "t": "a postponed collapse is still gathering weight in the walls",
-   "i": "a tower with a thin crack climbing one wall, still standing"
+   "i": "a tower with a thin crack climbing one wall, still standing",
+   "m": "a dripping pipe, a bucket, a plumber put off until spring"
   }
  },
  "major-17": {
@@ -498,7 +533,8 @@ root.TarotPhrases = Object.freeze({
     "wishing on a light without walking toward it"
    ],
    "t": "even after the worst storm, the sky keeps some light for you",
-   "i": "a naked figure kneeling at a pool beneath eight bright stars"
+   "i": "a naked figure kneeling at a pool beneath eight bright stars",
+   "m": "a washed street after a storm, steam rising, windows thrown open"
   },
   "rv": {
    "o": [
@@ -511,7 +547,8 @@ root.TarotPhrases = Object.freeze({
     "staring at the dark until it feels permanent"
    ],
    "t": "the light is still up there, only hidden behind your own weariness",
-   "i": "a dry pool beneath a sky of dim, flickering lights"
+   "i": "a dry pool beneath a sky of dim, flickering lights",
+   "m": "a flashlight dimming in a drawer, its batteries never replaced"
   }
  },
  "major-18": {
@@ -526,7 +563,8 @@ root.TarotPhrases = Object.freeze({
     "making a decision in the thick of fog"
    ],
    "t": "not everything glimmering in the dark is what it first appears",
-   "i": "a crayfish crawling from dark water, dogs howling at a full moon"
+   "i": "a crayfish crawling from dark water, dogs howling at a full moon",
+   "m": "driving through fog, taillights appearing and vanishing, the radio half tuned"
   },
   "rv": {
    "o": [
@@ -539,7 +577,8 @@ root.TarotPhrases = Object.freeze({
     "treating every newfound fact as the whole picture"
    ],
    "t": "the shapes that frightened you are turning out to be furniture",
-   "i": "morning mist thinning over a pond, the far shore appearing"
+   "i": "morning mist thinning over a pond, the far shore appearing",
+   "m": "waking from a strange dream as the alarm makes everything ordinary"
   }
  },
  "major-19": {
@@ -554,7 +593,8 @@ root.TarotPhrases = Object.freeze({
     "squinting past those left in the shade"
    ],
    "t": "things are simpler and brighter than your worries have allowed",
-   "i": "a laughing child on a white horse beneath a huge sun"
+   "i": "a laughing child on a white horse beneath a huge sun",
+   "m": "a noisy yellow kitchen at noon, everyone laughing over each other"
   },
   "rv": {
    "o": [
@@ -567,7 +607,8 @@ root.TarotPhrases = Object.freeze({
     "waiting for perfect weather to enjoy anything"
    ],
    "t": "the joy has not left, it is only dimmed behind passing cloud",
-   "i": "a sun behind thin cloud, its edges still golden"
+   "i": "a sun behind thin cloud, its edges still golden",
+   "m": "a bright afternoon seen through a fogged bus window, pleasant but muffled"
   }
  },
  "major-20": {
@@ -582,7 +623,8 @@ root.TarotPhrases = Object.freeze({
     "carrying the old verdict into a new life"
    ],
    "t": "the trumpet you thought was fading is calling you by name",
-   "i": "figures rising from open coffins toward a trumpet's golden call"
+   "i": "figures rising from open coffins toward a trumpet's golden call",
+   "m": "your name called across a crowded station, and you turning at once"
   },
   "rv": {
    "o": [
@@ -595,7 +637,8 @@ root.TarotPhrases = Object.freeze({
     "hiding behind a past already served"
    ],
    "t": "the verdict you keep passing on yourself is harsher than any court's",
-   "i": "a courtroom where one person is judge, jury and prisoner"
+   "i": "a courtroom where one person is judge, jury and prisoner",
+   "m": "rehearsing an apology in the mirror and finding the face unforgivable"
   }
  },
  "major-21": {
@@ -610,7 +653,8 @@ root.TarotPhrases = Object.freeze({
     "waiting for permission to call it done"
    ],
    "t": "a long circle is closing, and it closes around you complete",
-   "i": "a dancer inside a laurel wreath, four creatures at the corners"
+   "i": "a dancer inside a laurel wreath, four creatures at the corners",
+   "m": "the last box unpacked, shelves full, evening light filling the finished apartment"
   },
   "rv": {
    "o": [
@@ -623,7 +667,8 @@ root.TarotPhrases = Object.freeze({
     "lingering at the door of the next chapter"
    ],
    "t": "nearly finished is not the same as finished, and you feel the gap",
-   "i": "a wreath missing one leaf, the dancer pausing mid-step"
+   "i": "a wreath missing one leaf, the dancer pausing mid-step",
+   "m": "a jigsaw nearly done, one gap in its sky, everyone gone to bed"
   }
  },
  "wands-01": {
@@ -638,7 +683,8 @@ root.TarotPhrases = Object.freeze({
     "starting three things and finishing none"
    ],
    "t": "the idea that woke you before dawn was knocking, not passing by",
-   "i": "a match struck in a room full of dry paper"
+   "i": "a match struck in a room full of dry paper",
+   "m": "a sudden idea at a bus stop, scribbled on a receipt"
   },
   "rv": {
    "o": [
@@ -651,7 +697,8 @@ root.TarotPhrases = Object.freeze({
     "waiting for a mood that never arrives"
    ],
    "t": "something unnamed is sitting on the spark and keeping it from catching",
-   "i": "a damp matchbook, every strike leaving only a black smear"
+   "i": "a damp matchbook, every strike leaving only a black smear",
+   "m": "an engine turning over and over on a winter morning without catching"
   }
  },
  "wands-02": {
@@ -666,7 +713,8 @@ root.TarotPhrases = Object.freeze({
     "holding every option and committing to none"
    ],
    "t": "you already know which horizon you keep glancing toward when nobody is watching",
-   "i": "a figure on a battlement holding a globe, gazing seaward"
+   "i": "a figure on a battlement holding a globe, gazing seaward",
+   "m": "a map spread across the floor, routes penciled in, coffee going cold"
   },
   "rv": {
    "o": [
@@ -679,7 +727,8 @@ root.TarotPhrases = Object.freeze({
     "drawing maps of places you never visit"
    ],
    "t": "the safe harbor you keep choosing has begun to feel like a cell",
-   "i": "a ship tied to the dock, its sails never unfurled"
+   "i": "a ship tied to the dock, its sails never unfurled",
+   "m": "a passport in the drawer, renewed years ago, never stamped"
   }
  },
  "wands-03": {
@@ -694,7 +743,8 @@ root.TarotPhrases = Object.freeze({
     "looking so far ahead you miss today's details"
    ],
    "t": "the work you sent out long ago is on its way back with company",
-   "i": "a figure on a cliff watching three sails cross a gold sea"
+   "i": "a figure on a cliff watching three sails cross a gold sea",
+   "m": "the arrivals board updating one by one, every flight early"
   },
   "rv": {
    "o": [
@@ -707,7 +757,8 @@ root.TarotPhrases = Object.freeze({
     "narrowing your view to the next obstacle"
    ],
    "t": "what looks like a wall on the horizon may only be a slow tide",
-   "i": "an empty harbor at dusk, the bell ringing for no one"
+   "i": "an empty harbor at dusk, the bell ringing for no one",
+   "m": "a departures board stuck on delayed while the cafe closes around you"
   }
  },
  "wands-04": {
@@ -722,7 +773,8 @@ root.TarotPhrases = Object.freeze({
     "the one guest who resents the cheer"
    ],
    "t": "a place at the table has been quietly kept for you all along",
-   "i": "a doorway strung with garlands and lit from within"
+   "i": "a doorway strung with garlands and lit from within",
+   "m": "shoes piled at the front door, a house humming with arrivals"
   },
   "rv": {
    "o": [
@@ -735,7 +787,8 @@ root.TarotPhrases = Object.freeze({
     "ignoring the creak in the foundation"
    ],
    "t": "belonging has not left, it is only waiting in an unpacked box",
-   "i": "half-packed boxes beside a table set for guests who never came"
+   "i": "half-packed boxes beside a table set for guests who never came",
+   "m": "a housewarming postponed, the sofa still wrapped in plastic"
   }
  },
  "wands-05": {
@@ -750,7 +803,8 @@ root.TarotPhrases = Object.freeze({
     "mistaking noise for opposition"
    ],
    "t": "the friction in the room is sharpening something, even if nobody enjoys it",
-   "i": "five staves clacking together in a muddy field"
+   "i": "five staves clacking together in a muddy field",
+   "m": "a pickup basketball game where nobody agrees on the foul"
   },
   "rv": {
    "o": [
@@ -763,7 +817,8 @@ root.TarotPhrases = Object.freeze({
     "a grudge going quiet but not away"
    ],
    "t": "the fight is either ending or being walked around, and the silence will say which",
-   "i": "raised voices fading down a hallway, one door left ajar"
+   "i": "raised voices fading down a hallway, one door left ajar",
+   "m": "dishes washed quietly after an argument nobody mentions again"
   }
  },
  "wands-06": {
@@ -778,7 +833,8 @@ root.TarotPhrases = Object.freeze({
     "forgetting who held the ladder"
    ],
    "t": "people have been watching you work for longer than you realized",
-   "i": "a rider in a laurel wreath passing through a cheering street"
+   "i": "a rider in a laurel wreath passing through a cheering street",
+   "m": "your name read out in a full auditorium, applause rolling like weather"
   },
   "rv": {
    "o": [
@@ -791,7 +847,8 @@ root.TarotPhrases = Object.freeze({
     "measuring your worth by the room's reaction"
    ],
    "t": "the applause you keep waiting for may have gone to someone else",
-   "i": "a parade passing a lone figure left standing on the curb"
+   "i": "a parade passing a lone figure left standing on the curb",
+   "m": "a congratulations cake with someone else's name piped on it"
   }
  },
  "wands-07": {
@@ -806,7 +863,8 @@ root.TarotPhrases = Object.freeze({
     "defending ground no longer worth holding"
    ],
    "t": "the ground beneath you is yours, and it is being tested for a reason",
-   "i": "one figure on a hilltop fending off staves from below"
+   "i": "one figure on a hilltop fending off staves from below",
+   "m": "holding a door shut against a gale, feet braced on the tile"
   },
   "rv": {
    "o": [
@@ -819,7 +877,8 @@ root.TarotPhrases = Object.freeze({
     "surrender dressed up as being reasonable"
    ],
    "t": "some of the battles wearing you thin were never yours to fight",
-   "i": "a lone figure lowering a stave while the slope fills with shadows"
+   "i": "a lone figure lowering a stave while the slope fills with shadows",
+   "m": "an inbox with four hundred unread replies and a closed laptop"
   }
  },
  "wands-08": {
@@ -834,7 +893,8 @@ root.TarotPhrases = Object.freeze({
     "answering every message before reading it twice"
    ],
    "t": "what has been slow for months is about to move all at once",
-   "i": "a volley of staves arcing across an empty blue sky"
+   "i": "a volley of staves arcing across an empty blue sky",
+   "m": "a text arriving, then three more, the train already moving"
   },
   "rv": {
    "o": [
@@ -847,7 +907,8 @@ root.TarotPhrases = Object.freeze({
     "irritation spilling onto people who are not at fault"
    ],
    "t": "the stall and the scatter are two faces of the same unfocused hurry",
-   "i": "sparks thrown off a grinding wheel, scattering into the dark"
+   "i": "sparks thrown off a grinding wheel, scattering into the dark",
+   "m": "pigeons scattering off a square all at once, no two flying together"
   }
  },
  "wands-09": {
@@ -862,7 +923,8 @@ root.TarotPhrases = Object.freeze({
     "pushing through pain that deserves attention"
    ],
    "t": "you are closer to the end than the bandages and bruises suggest",
-   "i": "a bandaged figure leaning on a stave before a fence of poles"
+   "i": "a bandaged figure leaning on a stave before a fence of poles",
+   "m": "the last mile of a marathon, calves shaking, finish banner in sight"
   },
   "rv": {
    "o": [
@@ -875,7 +937,8 @@ root.TarotPhrases = Object.freeze({
     "building walls where a gate would have served"
    ],
    "t": "the defenses that once protected you have started to keep everyone else out",
-   "i": "a fence of splintered poles grown tall around a rusted gate"
+   "i": "a fence of splintered poles grown tall around a rusted gate",
+   "m": "a doorbell ignored, curtains drawn, three locks fastened on one door"
   }
  },
  "wands-10": {
@@ -890,7 +953,8 @@ root.TarotPhrases = Object.freeze({
     "taking pride in being the only one who can"
    ],
    "t": "the weight on your back is a pile of separate things you have never counted",
-   "i": "a figure bent under a bundle of staves, nearing a village"
+   "i": "a figure bent under a bundle of staves, nearing a village",
+   "m": "groceries for six carried in one trip, bag handles cutting into fingers"
   },
   "rv": {
    "o": [
@@ -903,7 +967,8 @@ root.TarotPhrases = Object.freeze({
     "resentment hardening in whoever stayed holding it"
    ],
    "t": "the load comes off either gently by choice or all at once by breaking",
-   "i": "a bundle of staves spilled across a road, hands finally empty"
+   "i": "a bundle of staves spilled across a road, hands finally empty",
+   "m": "heavy bags finally set down on the landing, arms still trembling"
   }
  },
  "wands-11": {
@@ -918,7 +983,8 @@ root.TarotPhrases = Object.freeze({
     "telling everyone the plan before it exists"
    ],
    "t": "a restless younger part of you has found something worth chasing",
-   "i": "a barefoot messenger on a dune, staring at a sprouting stave"
+   "i": "a barefoot messenger on a dune, staring at a sprouting stave",
+   "m": "the first warm day, a kid sprinting toward the sprinkler, hat forgotten"
   },
   "rv": {
    "o": [
@@ -931,7 +997,8 @@ root.TarotPhrases = Object.freeze({
     "promising the finished thing before it is begun"
    ],
    "t": "plenty of sparks are flying and none of them has found anything to light",
-   "i": "a kite tugging loose from a child's hand over a field"
+   "i": "a kite tugging loose from a child's hand over a field",
+   "m": "ten browser tabs, three guitar lessons, one half-built bookshelf"
   }
  },
  "wands-12": {
@@ -946,7 +1013,8 @@ root.TarotPhrases = Object.freeze({
     "charm covering for a short attention span"
    ],
    "t": "the thing you want will not wait politely while you think it over",
-   "i": "a rider on a lathered horse charging across a desert"
+   "i": "a rider on a lathered horse charging across a desert",
+   "m": "a motorcycle revving at a green light, headed nowhere in particular"
   },
   "rv": {
    "o": [
@@ -959,7 +1027,8 @@ root.TarotPhrases = Object.freeze({
     "blaming everyone else for the stalled charge"
    ],
    "t": "going faster has quietly become a way of not arriving anywhere",
-   "i": "a rider sagging in the saddle beside a smoldering field"
+   "i": "a rider sagging in the saddle beside a smoldering field",
+   "m": "a speeding hatchback running out of fuel miles from anywhere"
   }
  },
  "wands-13": {
@@ -974,7 +1043,8 @@ root.TarotPhrases = Object.freeze({
     "taking on every cause that asks"
    ],
    "t": "your own confidence is more contagious than you have noticed",
-   "i": "a woman among sunflowers with a black cat at her heel"
+   "i": "a woman among sunflowers with a black cat at her heel",
+   "m": "someone laughing loudly at a party and filling every corner of the room"
   },
   "rv": {
    "o": [
@@ -987,7 +1057,8 @@ root.TarotPhrases = Object.freeze({
     "comparing your private doubt to someone's public shine"
    ],
    "t": "some of the heat aimed at others began as doubt about yourself",
-   "i": "a candle shielded so closely its glow turns to smoke"
+   "i": "a candle shielded so closely its glow turns to smoke",
+   "m": "checking an ex's photos at two a.m., the screen lighting your jaw"
   }
  },
  "wands-14": {
@@ -1002,7 +1073,8 @@ root.TarotPhrases = Object.freeze({
     "ruling when the room needed a listener"
    ],
    "t": "the vision in your head is nearly ready to be built",
-   "i": "a tall figure on a hillside spreading his arms over a valley"
+   "i": "a tall figure on a hillside spreading his arms over a valley",
+   "m": "a coach sketching a plan on a whiteboard while the team leans in"
   },
   "rv": {
    "o": [
@@ -1015,7 +1087,8 @@ root.TarotPhrases = Object.freeze({
     "big talk standing in for the follow-through"
    ],
    "t": "the loudest voice in the room is hiding a thin plan",
-   "i": "a paper crown on a man lecturing empty chairs"
+   "i": "a paper crown on a man lecturing empty chairs",
+   "m": "a pitch meeting where the slides promise everything and the numbers go missing"
   }
  },
  "cups-01": {
@@ -1030,7 +1103,8 @@ root.TarotPhrases = Object.freeze({
     "mistaking a flood for a lasting river"
    ],
    "t": "the thing you thought had dried up was only waiting for rain",
-   "i": "a bowl filling in the dark until it spills"
+   "i": "a bowl filling in the dark until it spills",
+   "m": "the first rain after a drought, the whole street smelling of it"
   },
   "rv": {
    "o": [
@@ -1043,7 +1117,8 @@ root.TarotPhrases = Object.freeze({
     "spending warmth on someone who never notices"
    ],
    "t": "what feels like emptiness may be a locked room, not a bare one",
-   "i": "a well with the lid nailed shut"
+   "i": "a well with the lid nailed shut",
+   "m": "a love letter folded small and filed in a drawer of unsent things"
   }
  },
  "cups-02": {
@@ -1058,7 +1133,8 @@ root.TarotPhrases = Object.freeze({
     "losing yourself in the other person's rhythm"
    ],
    "t": "being truly met by someone is rarer than being merely liked",
-   "i": "two glasses touched together over a candlelit table"
+   "i": "two glasses touched together over a candlelit table",
+   "m": "two strangers realizing mid-conversation they keep finishing each other's sentences"
   },
   "rv": {
    "o": [
@@ -1071,7 +1147,8 @@ root.TarotPhrases = Object.freeze({
     "reading a coldness into every pause"
    ],
    "t": "two people can speak the same words and still hear different things",
-   "i": "two clocks in one room ticking out of step"
+   "i": "two clocks in one room ticking out of step",
+   "m": "two people on a train bench, both texting, facing opposite windows"
   }
  },
  "cups-03": {
@@ -1086,7 +1163,8 @@ root.TarotPhrases = Object.freeze({
     "assuming everyone in the room feels as warm"
    ],
    "t": "the people who show up with food are the ones who stay",
-   "i": "laughter spilling out of an open window at dusk"
+   "i": "laughter spilling out of an open window at dusk",
+   "m": "a long table of friends, a birthday, plates passed hand to hand"
   },
   "rv": {
    "o": [
@@ -1099,7 +1177,8 @@ root.TarotPhrases = Object.freeze({
     "a story passed along with extra teeth"
    ],
    "t": "being surrounded by noise can be the loneliest place to stand",
-   "i": "a party's last guests drifting home through spilled confetti"
+   "i": "a party's last guests drifting home through spilled confetti",
+   "m": "scrolling through photos of a gathering you were not invited to"
   }
  },
  "cups-04": {
@@ -1114,7 +1193,8 @@ root.TarotPhrases = Object.freeze({
     "sulking so thoroughly that no one knocks anymore"
    ],
    "t": "the boredom you feel may be a gift you haven't unwrapped",
-   "i": "someone slumped under a tree, ignoring a hand in the clouds"
+   "i": "someone slumped under a tree, ignoring a hand in the clouds",
+   "m": "staring out a window all afternoon while an invitation sits unread"
   },
   "rv": {
    "o": [
@@ -1127,7 +1207,8 @@ root.TarotPhrases = Object.freeze({
     "pretending you were never bored at all"
    ],
    "t": "what you ignored for months is quietly still being offered",
-   "i": "a sleeper sitting up as morning reaches the room"
+   "i": "a sleeper sitting up as morning reaches the room",
+   "m": "the alarm finally heard, the curtains opened, a sudden hunger for breakfast"
   }
  },
  "cups-05": {
@@ -1142,7 +1223,8 @@ root.TarotPhrases = Object.freeze({
     "wearing sorrow like the only coat you own"
    ],
    "t": "mourning can take up so much room that survivors go unseen",
-   "i": "spilled wine pooling beside two glasses still upright"
+   "i": "spilled wine pooling beside two glasses still upright",
+   "m": "a hallway of coats at a wake, everyone speaking softly and looking down"
   },
   "rv": {
    "o": [
@@ -1155,7 +1237,8 @@ root.TarotPhrases = Object.freeze({
     "tidying away a loss before it's been mourned"
    ],
    "t": "the bridge behind you stays standing even when you turn away",
-   "i": "a mourner turning from the spill toward a lit house"
+   "i": "a mourner turning from the spill toward a lit house",
+   "m": "leaving the cemetery gates and noticing, almost guiltily, that the afternoon is warm"
   }
  },
  "cups-06": {
@@ -1170,7 +1253,8 @@ root.TarotPhrases = Object.freeze({
     "confusing a reunion with a restart"
    ],
    "t": "someone who knew you young is thinking of you right now",
-   "i": "a garden of faded toys in golden afternoon light"
+   "i": "a garden of faded toys in golden afternoon light",
+   "m": "a childhood song drifting from a passing ice cream truck"
   },
   "rv": {
    "o": [
@@ -1183,7 +1267,8 @@ root.TarotPhrases = Object.freeze({
     "forgetting the leaks in the old roof"
    ],
    "t": "yesterday only looks that sweet because the bitter parts were edited out",
-   "i": "a dusty jar of summers sealed for years"
+   "i": "a dusty jar of summers sealed for years",
+   "m": "rewatching the same home video until the tape wears thin"
   }
  },
  "cups-07": {
@@ -1198,7 +1283,8 @@ root.TarotPhrases = Object.freeze({
     "collecting maybes instead of making anything"
    ],
    "t": "not every door in the hallway opens onto an actual room",
-   "i": "glittering prizes drifting in a bank of smoke"
+   "i": "glittering prizes drifting in a bank of smoke",
+   "m": "a shop window of wonderful things, each one vanishing as you step closer"
   },
   "rv": {
    "o": [
@@ -1211,7 +1297,8 @@ root.TarotPhrases = Object.freeze({
     "mourning the options you've just closed"
    ],
    "t": "the choice looked impossible only while you refused to price it",
-   "i": "mist burning off a field to show one fence"
+   "i": "mist burning off a field to show one fence",
+   "m": "a tidy decision made at the kitchen table, pen clicking shut"
   }
  },
  "cups-08": {
@@ -1226,7 +1313,8 @@ root.TarotPhrases = Object.freeze({
     "mistaking restlessness for a calling"
    ],
    "t": "what you're walking away from filled you up for years before it stopped",
-   "i": "a lone walker climbing a moonlit slope, staff in hand"
+   "i": "a lone walker climbing a moonlit slope, staff in hand",
+   "m": "leaving a party early, walking home through quiet streets, relieved and unsure"
   },
   "rv": {
    "o": [
@@ -1239,7 +1327,8 @@ root.TarotPhrases = Object.freeze({
     "wandering so long the map stops mattering"
    ],
    "t": "staying put and wandering aimlessly can be the same kind of flight",
-   "i": "a packed bag gathering dust beside the front door"
+   "i": "a packed bag gathering dust beside the front door",
+   "m": "sitting in a parked car outside the office, unable to leave or enter"
   }
  },
  "cups-09": {
@@ -1254,7 +1343,8 @@ root.TarotPhrases = Object.freeze({
     "enjoying everything except the moment itself"
    ],
    "t": "you already own more of what you wanted than you admit",
-   "i": "a contented host seated before a shelf of gleaming vessels"
+   "i": "a contented host seated before a shelf of gleaming vessels",
+   "m": "a full belly, warm socks, and a sofa that fits exactly"
   },
   "rv": {
    "o": [
@@ -1267,7 +1357,8 @@ root.TarotPhrases = Object.freeze({
     "buying a bigger shelf for the same ache"
    ],
    "t": "a full life can still leave a hollow place nobody can see",
-   "i": "a banquet table where one chair sits empty"
+   "i": "a banquet table where one chair sits empty",
+   "m": "a perfect dinner, plates cleared, and nothing having tasted of anything"
   }
  },
  "cups-10": {
@@ -1282,7 +1373,8 @@ root.TarotPhrases = Object.freeze({
     "treating contentment as something that cannot crack"
    ],
    "t": "belonging somewhere is quieter and sturdier than anything you chased",
-   "i": "a lit porch and voices drifting across the lawn"
+   "i": "a lit porch and voices drifting across the lawn",
+   "m": "everyone's shoes by the door, soft noise from the kitchen, nobody wanting to leave"
   },
   "rv": {
    "o": [
@@ -1295,7 +1387,8 @@ root.TarotPhrases = Object.freeze({
     "pretending the hairline fracture is only a shadow"
    ],
    "t": "the photo on the mantel hides a house with different weather",
-   "i": "a framed family portrait with a crack through the glass"
+   "i": "a framed family portrait with a crack through the glass",
+   "m": "a family holiday photo, everyone smiling, nobody quite touching"
   }
  },
  "cups-11": {
@@ -1310,7 +1403,8 @@ root.TarotPhrases = Object.freeze({
     "hiding the sketchbook from those who'd love it"
    ],
    "t": "the small hunch you keep brushing aside is speaking quite clearly",
-   "i": "a small fish surfacing from a glass to say hello"
+   "i": "a small fish surfacing from a glass to say hello",
+   "m": "a handwritten note slipped under the door, a doodle in the corner"
   },
   "rv": {
    "o": [
@@ -1323,7 +1417,8 @@ root.TarotPhrases = Object.freeze({
     "hiding in fantasy whenever a bill arrives"
    ],
    "t": "the story you keep spinning is softer than the facts",
-   "i": "a daydreamer asleep in a tub that has gone cold"
+   "i": "a daydreamer asleep in a tub that has gone cold",
+   "m": "sulking on a bedroom floor with headphones on, ignoring the knock"
   }
  },
  "cups-12": {
@@ -1338,7 +1433,8 @@ root.TarotPhrases = Object.freeze({
     "loving the gesture more than the person"
    ],
    "t": "the heart has been trotting toward something while you debated",
-   "i": "a slow rider crossing a stream with a gift held out"
+   "i": "a slow rider crossing a stream with a gift held out",
+   "m": "a bouquet carried through the rain by someone running toward you"
   },
   "rv": {
    "o": [
@@ -1351,7 +1447,8 @@ root.TarotPhrases = Object.freeze({
     "sulking until someone guesses the reason"
    ],
    "t": "some promises are made of water and cannot be carried far",
-   "i": "a handsome rider whose gift leaks through his fingers"
+   "i": "a handsome rider whose gift leaks through his fingers",
+   "m": "a bouquet left in the car overnight, petals browned, apology rehearsed"
   }
  },
  "cups-13": {
@@ -1366,7 +1463,8 @@ root.TarotPhrases = Object.freeze({
     "listening so well that no one asks about you"
    ],
    "t": "steadiness can be a form of tenderness that asks for nothing",
-   "i": "a still tide pool reflecting a patient sky"
+   "i": "a still tide pool reflecting a patient sky",
+   "m": "a friend listening on the phone for an hour without once hurrying you"
   },
   "rv": {
    "o": [
@@ -1379,7 +1477,8 @@ root.TarotPhrases = Object.freeze({
     "rescuing people who haven't asked to be rescued"
    ],
    "t": "carrying everyone else's weather leaves you no sky of your own",
-   "i": "a swimmer dragged under by hands that mean well"
+   "i": "a swimmer dragged under by hands that mean well",
+   "m": "carrying everyone's troubles home in your pockets, unable to lift your own head"
   }
  },
  "cups-14": {
@@ -1394,7 +1493,8 @@ root.TarotPhrases = Object.freeze({
     "keeping the peace at the price of honesty"
    ],
    "t": "calm is not the absence of feeling but its good manners",
-   "i": "a still figure on a stone seat above rolling waves"
+   "i": "a still figure on a stone seat above rolling waves",
+   "m": "a long-married couple settling an argument with one dry joke"
   },
   "rv": {
    "o": [
@@ -1407,7 +1507,8 @@ root.TarotPhrases = Object.freeze({
     "going cold to avoid going under"
    ],
    "t": "silence can be a leash held very politely",
-   "i": "a calm sea hiding a current that pulls one way"
+   "i": "a calm sea hiding a current that pulls one way",
+   "m": "polite smiles at dinner while the silence is quietly used as leverage"
   }
  },
  "swords-01": {
@@ -1422,7 +1523,8 @@ root.TarotPhrases = Object.freeze({
     "cutting away something that was still useful"
    ],
    "t": "the thing you could not name was simple all along",
-   "i": "a single clean window wiped in fogged glass"
+   "i": "a single clean window wiped in fogged glass",
+   "m": "the first cold morning when every sound arrives crisp and unmistakable"
   },
   "rv": {
    "o": [
@@ -1435,7 +1537,8 @@ root.TarotPhrases = Object.freeze({
     "trusting the loudest version of events"
    ],
    "t": "the story you keep repeating has lost some of its pieces",
-   "i": "a rusted compass spinning in a coat pocket"
+   "i": "a rusted compass spinning in a coat pocket",
+   "m": "a group chat where everyone remembers the plan differently"
   }
  },
  "swords-02": {
@@ -1450,7 +1553,8 @@ root.TarotPhrases = Object.freeze({
     "letting a deadline make the decision"
    ],
    "t": "not choosing is already a choice with its own price",
-   "i": "a blindfolded figure balancing two heavy shapes by moonlight"
+   "i": "a blindfolded figure balancing two heavy shapes by moonlight",
+   "m": "two letters on the table and a coffee going cold"
   },
   "rv": {
    "o": [
@@ -1463,7 +1567,8 @@ root.TarotPhrases = Object.freeze({
     "calling a forced choice a free one"
    ],
    "t": "the answer was visible the moment the noise quit",
-   "i": "a crowded station board flickering until one name stays lit"
+   "i": "a crowded station board flickering until one name stays lit",
+   "m": "a dozen browser tabs open and one sentence that settles everything"
   }
  },
  "swords-03": {
@@ -1478,7 +1583,8 @@ root.TarotPhrases = Object.freeze({
     "blaming the messenger for the message"
    ],
    "t": "a sorrow put off is only a sorrow stored in the walls",
-   "i": "rain running down the inside of a kitchen window"
+   "i": "rain running down the inside of a kitchen window",
+   "m": "a parked car, engine off, a song you can't finish listening to"
   },
   "rv": {
    "o": [
@@ -1491,7 +1597,8 @@ root.TarotPhrases = Object.freeze({
     "picking at a scab to keep it fresh"
    ],
    "t": "the wound has been closing quietly while you looked elsewhere",
-   "i": "a stitched seam showing pale against dark cloth"
+   "i": "a stitched seam showing pale against dark cloth",
+   "m": "the first morning you hum while doing dishes again"
   }
  },
  "swords-04": {
@@ -1506,7 +1613,8 @@ root.TarotPhrases = Object.freeze({
     "ignoring the cough that keeps returning"
    ],
    "t": "the fight can wait while the body takes its turn",
-   "i": "a stone effigy lying still in a hushed crypt"
+   "i": "a stone effigy lying still in a hushed crypt",
+   "m": "a sunday afternoon with the phone off and the blinds half drawn"
   },
   "rv": {
    "o": [
@@ -1519,7 +1627,8 @@ root.TarotPhrases = Object.freeze({
     "sleeping through the hours that mattered"
    ],
    "t": "rest taken too late or too long stops being rest",
-   "i": "a clock ticking in a room where nobody sleeps"
+   "i": "a clock ticking in a room where nobody sleeps",
+   "m": "a long weekend of naps that somehow leaves you more tired"
   }
  },
  "swords-05": {
@@ -1534,7 +1643,8 @@ root.TarotPhrases = Object.freeze({
     "gathering evidence against people you love"
    ],
    "t": "the prize may cost more than the quarrel was worth",
-   "i": "a victor gathering dropped weapons as the losers walk away"
+   "i": "a victor gathering dropped weapons as the losers walk away",
+   "m": "a shared apartment after the fight is over, quiet in the wrong way"
   },
   "rv": {
    "o": [
@@ -1547,7 +1657,8 @@ root.TarotPhrases = Object.freeze({
     "walking away and calling it peace"
    ],
    "t": "some fights end only when one person stops keeping score",
-   "i": "two people leaving a battlefield by different gates at dusk"
+   "i": "two people leaving a battlefield by different gates at dusk",
+   "m": "a long text of apology typed, deleted, and finally sent"
   }
  },
  "swords-06": {
@@ -1562,7 +1673,8 @@ root.TarotPhrases = Object.freeze({
     "leaving without the necessary goodbye"
    ],
    "t": "the quiet you wanted is nearer than the trouble behind you",
-   "i": "a low boat gliding across flat grey water at dawn"
+   "i": "a low boat gliding across flat grey water at dawn",
+   "m": "the highway thinning to two quiet lanes as the city falls behind"
   },
   "rv": {
    "o": [
@@ -1575,7 +1687,8 @@ root.TarotPhrases = Object.freeze({
     "staying put because leaving feels like admitting something"
    ],
    "t": "what you are leaving keeps climbing back into the boat",
-   "i": "a suitcase too heavy to lift into the boat"
+   "i": "a suitcase too heavy to lift into the boat",
+   "m": "carrying the old apartment's smell into the new one on your coat"
   }
  },
  "swords-07": {
@@ -1590,7 +1703,8 @@ root.TarotPhrases = Object.freeze({
     "believing your own convenient version of events"
    ],
    "t": "someone near you is walking off with more than they admit",
-   "i": "a thief tiptoeing out of camp at first light, arms full"
+   "i": "a thief tiptoeing out of camp at first light, arms full",
+   "m": "a coworker's easy smile as your idea appears in his slides"
   },
   "rv": {
    "o": [
@@ -1603,7 +1717,8 @@ root.TarotPhrases = Object.freeze({
     "being caught and blaming the one who caught you"
    ],
    "t": "a secret kept long enough starts to keep you instead",
-   "i": "a pocketful of stolen coins ringing out in a silent hall"
+   "i": "a pocketful of stolen coins ringing out in a silent hall",
+   "m": "a guilty hush at dinner just before someone clears their throat"
   }
  },
  "swords-08": {
@@ -1618,7 +1733,8 @@ root.TarotPhrases = Object.freeze({
     "waiting for permission nobody is going to give"
    ],
    "t": "most of this cage was built from sentences you keep repeating",
-   "i": "a bound figure standing in a ring of tall stakes"
+   "i": "a bound figure standing in a ring of tall stakes",
+   "m": "a room with the door ajar that you keep insisting is locked"
   },
   "rv": {
    "o": [
@@ -1631,7 +1747,8 @@ root.TarotPhrases = Object.freeze({
     "freedom that feels too bright to trust"
    ],
    "t": "the knots were looser than they looked from the inside",
-   "i": "cloth falling from a face into a sudden morning"
+   "i": "cloth falling from a face into a sudden morning",
+   "m": "opening a window you swore was painted shut, and the street rushing in"
   }
  },
  "swords-09": {
@@ -1646,7 +1763,8 @@ root.TarotPhrases = Object.freeze({
     "answering a 3 a.m. thought like truth"
    ],
    "t": "the dark hours exaggerate everything they touch",
-   "i": "a figure upright in bed, face in both hands"
+   "i": "a figure upright in bed, face in both hands",
+   "m": "a 3 a.m. ceiling where every small worry fills the room"
   },
   "rv": {
    "o": [
@@ -1659,7 +1777,8 @@ root.TarotPhrases = Object.freeze({
     "calling relief a sign of danger"
    ],
    "t": "the thing that sat on your chest is climbing down",
-   "i": "first light thinning the dark behind a curtain"
+   "i": "first light thinning the dark behind a curtain",
+   "m": "the first bird starting up outside after a night of dread"
   }
  },
  "swords-10": {
@@ -1674,7 +1793,8 @@ root.TarotPhrases = Object.freeze({
     "performing the victim long after the fall"
    ],
    "t": "nothing lower remains, and that is its own strange mercy",
-   "i": "a still figure face down on dark sand at sunrise"
+   "i": "a still figure face down on dark sand at sunrise",
+   "m": "an empty parking lot at dawn after the last bad news has landed"
   },
   "rv": {
    "o": [
@@ -1687,7 +1807,8 @@ root.TarotPhrases = Object.freeze({
     "reopening a chapter that finished itself"
    ],
    "t": "getting up again is quieter and slower than anyone tells you",
-   "i": "a hand pressing against cold floorboards to rise"
+   "i": "a hand pressing against cold floorboards to rise",
+   "m": "making coffee anyway the morning after everything fell apart"
   }
  },
  "swords-11": {
@@ -1702,7 +1823,8 @@ root.TarotPhrases = Object.freeze({
     "suspicion that sees plots in coincidences"
    ],
    "t": "the odd detail you spotted is the real thread",
-   "i": "a young watcher on a windy hill, eyes everywhere"
+   "i": "a young watcher on a windy hill, eyes everywhere",
+   "m": "a notebook full of questions, with arrows between the best ones"
   },
   "rv": {
    "o": [
@@ -1715,7 +1837,8 @@ root.TarotPhrases = Object.freeze({
     "sharing secrets that were never yours"
    ],
    "t": "a lot of talk is standing where an idea should be",
-   "i": "a parrot in a library repeating things it never read"
+   "i": "a parrot in a library repeating things it never read",
+   "m": "a break room where every sentence begins with did you hear"
   }
  },
  "swords-12": {
@@ -1730,7 +1853,8 @@ root.TarotPhrases = Object.freeze({
     "mistaking haste for certainty"
    ],
    "t": "conviction is carrying you faster than your doubts can follow",
-   "i": "a rider flattening the tall grass at full gallop"
+   "i": "a rider flattening the tall grass at full gallop",
+   "m": "a bike courier threading traffic, certain of every gap before it opens"
   },
   "rv": {
    "o": [
@@ -1743,7 +1867,8 @@ root.TarotPhrases = Object.freeze({
     "charging off in three directions at once"
    ],
    "t": "being right at full volume rarely feels like winning afterward",
-   "i": "a horse bolting through a market with no rider steering"
+   "i": "a horse bolting through a market with no rider steering",
+   "m": "a car horn leaned on at every light, nobody going faster"
   }
  },
  "swords-13": {
@@ -1758,7 +1883,8 @@ root.TarotPhrases = Object.freeze({
     "honesty that forgets who is listening"
    ],
    "t": "kindness and plain speech were never actually enemies",
-   "i": "a still figure on a high seat in thin cold air"
+   "i": "a still figure on a high seat in thin cold air",
+   "m": "a friend saying the hard thing kindly, then passing the tissues"
   },
   "rv": {
    "o": [
@@ -1771,7 +1897,8 @@ root.TarotPhrases = Object.freeze({
     "keeping score of every old slight"
    ],
    "t": "the walls built for protection have started to keep out the light",
-   "i": "frost forming on the inside of a locked window"
+   "i": "frost forming on the inside of a locked window",
+   "m": "a polite smile that stays exactly as warm as a refrigerator light"
   }
  },
  "swords-14": {
@@ -1786,7 +1913,8 @@ root.TarotPhrases = Object.freeze({
     "judgment delivered before all the facts arrive"
    ],
    "t": "principles hold weight only when they are applied to yourself too",
-   "i": "a magistrate at a bare desk under an even light"
+   "i": "a magistrate at a bare desk under an even light",
+   "m": "a referee's whistle that even the losing side trusts"
   },
   "rv": {
    "o": [
@@ -1799,7 +1927,8 @@ root.TarotPhrases = Object.freeze({
     "defending a rule only because you wrote it"
    ],
    "t": "logic can be sharpened into something that only wounds",
-   "i": "a ledger used as a club in a locked office"
+   "i": "a ledger used as a club in a locked office",
+   "m": "a spreadsheet of everyone's mistakes kept ready for the right meeting"
   }
  },
  "pentacles-01": {
@@ -1814,7 +1943,8 @@ root.TarotPhrases = Object.freeze({
     "planting the seed in unprepared soil"
    ],
    "t": "something small and solid is being placed in your open hand",
-   "i": "a single seed resting in a cupped, dirty palm"
+   "i": "a single seed resting in a cupped, dirty palm",
+   "m": "an unopened envelope with a promising letterhead on the hall table"
   },
   "rv": {
    "o": [
@@ -1827,7 +1957,8 @@ root.TarotPhrases = Object.freeze({
     "budgeting around money you have not received"
    ],
    "t": "the coin you thought was yours rolled under the furniture while you looked elsewhere",
-   "i": "an empty purse swinging from a nail"
+   "i": "an empty purse swinging from a nail",
+   "m": "the job posting that closed an hour before you finished your resume"
   }
  },
  "pentacles-02": {
@@ -1842,7 +1973,8 @@ root.TarotPhrases = Object.freeze({
     "the one plate nobody is watching"
    ],
    "t": "you are steadier than the pile of things in the air suggests",
-   "i": "a street performer keeping bright objects aloft in the rain"
+   "i": "a street performer keeping bright objects aloft in the rain",
+   "m": "a bus commute spent texting three people and sipping tea without spilling"
   },
   "rv": {
    "o": [
@@ -1855,7 +1987,8 @@ root.TarotPhrases = Object.freeze({
     "a small task sliding into a large mess"
    ],
    "t": "the things you are holding up have begun to hold you down",
-   "i": "a stack of mismatched plates leaning toward the tile"
+   "i": "a stack of mismatched plates leaning toward the tile",
+   "m": "four phone alarms going off while the kettle boils over"
   }
  },
  "pentacles-03": {
@@ -1870,7 +2003,8 @@ root.TarotPhrases = Object.freeze({
     "building something no one has agreed to"
    ],
    "t": "what you make holds up better when other hands help shape it",
-   "i": "three workers fitting the last stone into an arch"
+   "i": "three workers fitting the last stone into an arch",
+   "m": "a shared whiteboard at dusk, three handwritings finally forming one plan"
   },
   "rv": {
    "o": [
@@ -1883,7 +2017,8 @@ root.TarotPhrases = Object.freeze({
     "work done fast and finished badly"
    ],
    "t": "the people around you are pulling in directions that do not meet",
-   "i": "a half-built wall with crooked bricks and no mortar"
+   "i": "a half-built wall with crooked bricks and no mortar",
+   "m": "a band rehearsal where everyone is subtly playing a different song"
   }
  },
  "pentacles-04": {
@@ -1898,7 +2033,8 @@ root.TarotPhrases = Object.freeze({
     "calling caution what is really fear"
    ],
    "t": "what you hold so tightly may be holding you in place",
-   "i": "a miser's hands closed around a single warm coin"
+   "i": "a miser's hands closed around a single warm coin",
+   "m": "a pantry stocked for a winter that may never come"
   },
   "rv": {
    "o": [
@@ -1911,7 +2047,8 @@ root.TarotPhrases = Object.freeze({
     "refusing every loan and every kindness"
    ],
    "t": "you swing between clutching and scattering and rarely rest in the middle",
-   "i": "a purse split open on the pavement, coins rolling"
+   "i": "a purse split open on the pavement, coins rolling",
+   "m": "an impulse purchase unboxed on the floor beside unpaid bills"
   }
  },
  "pentacles-05": {
@@ -1926,7 +2063,8 @@ root.TarotPhrases = Object.freeze({
     "deciding no one will answer before knocking"
    ],
    "t": "the help you assume is far off is only a doorway away",
-   "i": "two figures in thin coats passing a bright church window"
+   "i": "two figures in thin coats passing a bright church window",
+   "m": "a bus shelter at midnight, breath fogging, the last bus already gone"
   },
   "rv": {
    "o": [
@@ -1939,7 +2077,8 @@ root.TarotPhrases = Object.freeze({
     "leaving the old coldness unspoken once inside"
    ],
    "t": "the worst of the cold has passed, though something inside still shivers",
-   "i": "a threshold with snow melting off a pair of boots"
+   "i": "a threshold with snow melting off a pair of boots",
+   "m": "a stranger's hallway smelling of soup after hours of wind"
   }
  },
  "pentacles-06": {
@@ -1954,7 +2093,8 @@ root.TarotPhrases = Object.freeze({
     "giving only where someone will see"
    ],
    "t": "what you give away has a way of finding its route home",
-   "i": "a merchant weighing out grain evenly into two waiting bowls"
+   "i": "a merchant weighing out grain evenly into two waiting bowls",
+   "m": "two neighbors trading tomatoes over a fence for a spare ladder"
   },
   "rv": {
    "o": [
@@ -1967,7 +2107,8 @@ root.TarotPhrases = Object.freeze({
     "giving until nothing is left for yourself"
    ],
    "t": "some gifts are leashes made of softer material",
-   "i": "an open hand holding out bread and a folded contract"
+   "i": "an open hand holding out bread and a folded contract",
+   "m": "a free dinner that comes with a long speech about gratitude"
   }
  },
  "pentacles-07": {
@@ -1982,7 +2123,8 @@ root.TarotPhrases = Object.freeze({
     "confusing a slow season with a failed one"
    ],
    "t": "what you planted months ago is nearer ripe than it looks",
-   "i": "a gardener leaning on a hoe, studying rows of green"
+   "i": "a gardener leaning on a hoe, studying rows of green",
+   "m": "a loaf rising under a towel while you wait and do nothing"
   },
   "rv": {
    "o": [
@@ -1995,7 +2137,8 @@ root.TarotPhrases = Object.freeze({
     "quitting one week before anything turns"
    ],
    "t": "the field you have been working may not be the right one",
-   "i": "a basket of fruit going soft in the shed"
+   "i": "a basket of fruit going soft in the shed",
+   "m": "a month of daily practice with the recording sounding exactly the same"
   }
  },
  "pentacles-08": {
@@ -2010,7 +2153,8 @@ root.TarotPhrases = Object.freeze({
     "letting the craft crowd out the people"
    ],
    "t": "repetition is slowly turning your clumsy hands into something skilled",
-   "i": "an artisan bent over a bench, tapping out the same pattern"
+   "i": "an artisan bent over a bench, tapping out the same pattern",
+   "m": "the hum of a sewing machine late at night, seams getting straighter"
   },
   "rv": {
    "o": [
@@ -2023,7 +2167,8 @@ root.TarotPhrases = Object.freeze({
     "shortcuts that leave a crack in the foundation"
    ],
    "t": "effort is being poured out faster than it is being aimed",
-   "i": "a chisel scoring the same groove again and again"
+   "i": "a chisel scoring the same groove again and again",
+   "m": "retyping one sentence for an hour, or skipping to the last page"
   }
  },
  "pentacles-09": {
@@ -2038,7 +2183,8 @@ root.TarotPhrases = Object.freeze({
     "a locked gate that keeps out the kind too"
    ],
    "t": "you have built a life that can stand without borrowed props",
-   "i": "a woman in a sunlit vineyard with a falcon at her wrist"
+   "i": "a woman in a sunlit vineyard with a falcon at her wrist",
+   "m": "a quiet evening in your own apartment, bought with your own work"
   },
   "rv": {
    "o": [
@@ -2051,7 +2197,8 @@ root.TarotPhrases = Object.freeze({
     "working so hard the reward goes unseen"
    ],
    "t": "the garden has gone untended while you admired the gate",
-   "i": "wilting vines behind a handsome, unopened gate"
+   "i": "wilting vines behind a handsome, unopened gate",
+   "m": "a balcony garden going brown while you answer emails inside"
   }
  },
  "pentacles-10": {
@@ -2066,7 +2213,8 @@ root.TarotPhrases = Object.freeze({
     "assuming what was handed down can never crack"
    ],
    "t": "what you build now will be standing long after you stop",
-   "i": "three generations at one long table beneath an old stone arch"
+   "i": "three generations at one long table beneath an old stone arch",
+   "m": "a big dinner table with mismatched chairs older than the children"
   },
   "rv": {
    "o": [
@@ -2079,7 +2227,8 @@ root.TarotPhrases = Object.freeze({
     "assuming the foundations are sound without looking"
    ],
    "t": "the house you counted on is shifting in ways nobody mentions",
-   "i": "a long crack running up the wall of a grand hall"
+   "i": "a long crack running up the wall of a grand hall",
+   "m": "relatives arguing over a house in a hallway full of boxes"
   }
  },
  "pentacles-11": {
@@ -2094,7 +2243,8 @@ root.TarotPhrases = Object.freeze({
     "being dazzled by the end and bored by steps"
    ],
    "t": "a modest beginning is worth more than a splendid plan",
-   "i": "a student turning a single gold coin over in the lamplight"
+   "i": "a student turning a single gold coin over in the lamplight",
+   "m": "a brand-new notebook with the first page headed in careful handwriting"
   },
   "rv": {
    "o": [
@@ -2107,7 +2257,8 @@ root.TarotPhrases = Object.freeze({
     "waiting for perfect conditions and never starting"
    ],
    "t": "the thing you want has been waiting for you to begin it",
-   "i": "a dusty textbook open to the same chapter, unread"
+   "i": "a dusty textbook open to the same chapter, unread",
+   "m": "a half-finished online course quietly reminding you that it is waiting"
   }
  },
  "pentacles-12": {
@@ -2122,7 +2273,8 @@ root.TarotPhrases = Object.freeze({
     "grinding on past the point of rest"
    ],
    "t": "slow and steady work is carrying more weight than anyone admits",
-   "i": "a plow horse pulling one straight furrow across a wide field"
+   "i": "a plow horse pulling one straight furrow across a wide field",
+   "m": "a delivery truck arriving at the same hour every single morning"
   },
   "rv": {
    "o": [
@@ -2135,7 +2287,8 @@ root.TarotPhrases = Object.freeze({
     "saying tomorrow until the field lies fallow"
    ],
    "t": "the rut you are in has worn deeper than you noticed",
-   "i": "a cart wheel sunk to the axle in dry mud"
+   "i": "a cart wheel sunk to the axle in dry mud",
+   "m": "a screensaver bouncing around a monitor while the afternoon refuses to move"
   }
  },
  "pentacles-13": {
@@ -2150,7 +2303,8 @@ root.TarotPhrases = Object.freeze({
     "the pot that always simmers for others"
    ],
    "t": "comfort made by hand is a kind of quiet power",
-   "i": "a kitchen window fogged with soup steam and winter light"
+   "i": "a kitchen window fogged with soup steam and winter light",
+   "m": "a guest room made up with clean sheets before anyone asked"
   },
   "rv": {
    "o": [
@@ -2163,7 +2317,8 @@ root.TarotPhrases = Object.freeze({
     "fussing so closely that others feel watched"
    ],
    "t": "you have been tending everything in the house but yourself",
-   "i": "a lit kitchen where one chair stays empty at the stove"
+   "i": "a lit kitchen where one chair stays empty at the stove",
+   "m": "leftovers packed for everyone, and your own lunch forgotten on the counter"
   }
  },
  "pentacles-14": {
@@ -2178,7 +2333,8 @@ root.TarotPhrases = Object.freeze({
     "building walls so tall they shut out daylight"
    ],
    "t": "abundance is the quiet result of discipline repeated over decades",
-   "i": "an old ruler on a stone throne amid ripe vineyards"
+   "i": "an old ruler on a stone throne amid ripe vineyards",
+   "m": "a paid-off house with a well-oiled lock and an orderly garage"
   },
   "rv": {
    "o": [
@@ -2191,7 +2347,8 @@ root.TarotPhrases = Object.freeze({
     "valuing the thing over the hand that made it"
    ],
    "t": "when everything has a price, little is left that feels worth having",
-   "i": "a heavy gold chain around a neck gone cold"
+   "i": "a heavy gold chain around a neck gone cold",
+   "m": "a watch checked constantly, every conversation converted into its price"
   }
  }
 });

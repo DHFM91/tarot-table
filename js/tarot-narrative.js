@@ -236,7 +236,6 @@ function tell(drawn, spreadKey, opts = {}) {
   p1 += n === 1
     ? `With only ${cardName(hi.c, hi.r)} on the table, the vibe is ${vibe}.`
     : `Highlighting ${cardName(hi.c, hi.r)}${hi.pos ? ` (${hi.pos})` : ""}, and considering the others in the context of this draw, the general vibe is ${vibe}.`;
-  p1 += ` Picture ${hi.ph.i}.`;
   paras.push(use(p1));
 
   /* 2. the mood, plus at most two notes that really stand out */
@@ -264,6 +263,8 @@ function tell(drawn, spreadKey, opts = {}) {
   const tone = leastRepeated(TONE[tV + "|" + tM]).split(/(?<=\.)\s+/);
   const p2 = [use(tone[0])];
   tone.slice(1).concat(notes).forEach(t => { if (fresh(t)) p2.push(use(t)); else dropped++; });
+  // one subtle mood image per reading, never the card's literal illustration
+  p2.push(use(`For a sense of mood, you might imagine ${hi.ph.m}.`));
   paras.push(p2.join(" "));
 
   /* 3. what it might mean, and the message */
