@@ -16,18 +16,19 @@ A portable tarot reading table for the browser. Shuffle, cut and deal a full 78-
 - **3 deals:** from the top, picked by hand from a face-down fan, or every seventh card
 - **Reversals:** from your deck and how you shuffle (like a real deck), random 50/50, or off. See below.
 - Every card has its own distinct upright and reversed meaning
-- **The vibe reading:** a 300 to 500 word reading of the draw's overall feel, highlighting its most interesting card (see below)
+- **The vibe reading:** a short reading of the draw's overall feel, highlighting its most interesting card (see below)
 - Reading guide: position-by-position meanings, plus patterns across the spread (Major Arcana weight, leading and missing suits, reversals, court cards, repeated numbers)
 - Works offline, on phones, and from a thumb drive
 
 ## The vibe reading
 
-When you press **Interpret**, the app writes a 300 to 500 word reading of the draw's overall feel, above the card-by-card meanings. It runs fully offline: pre-written phrases are combined by rules, with nothing fetched or generated at reading time.
+When you press **Interpret**, the app writes a short reading of the draw's overall feel (roughly 100 to 200 words), above the card-by-card meanings. It runs fully offline: pre-written phrases are combined by rules, with nothing fetched or generated at reading time.
 
 - **Every card is scored** in both orientations, from -2 to +2, on four scales: negative to positive, inaction to action, stability to change, and outward to inward. Reversed scores follow a rule (bright cards dim, heavy cards ease, motion stalls, the mood turns inward), with hand-set exceptions such as the Devil reversed reading as release.
 - **The most interesting card is highlighted.** It's chosen by points: how strong its scores are, Major Arcana weight, how much it stands out from the rest of the draw, and whether it sits in a key position.
-- **The overall feel** comes from the whole spread's averages (bright, mixed or heavy; moving, balanced or still), how much change it shows, its leading and missing elements, reversals, court cards and the inward or outward lean.
+- **The overall feel** comes from the whole spread's averages (bright, mixed or heavy; moving, balanced or still). At most two extra notes are added, only where the draw is strong on them: a leading element, big change or steadiness, many Major Arcana, reversals, court cards, or an inward or outward lean.
 - It reads like a horoscope, but it's about the cards. It describes and never prescribes.
+- **A repetition guard** keeps it from leaning on the same words: optional sentences are dropped if they repeat more than two key words already used (`MAX_REPEATS` in `js/tarot-narrative.js`), and where there's a choice of wording, the one that repeats least is used.
 - The same draw always gives the same reading.
 - `js/tarot-phrases.js` holds each card's image, message, omens and cautions. The scores and passages are in `js/tarot-narrative.js`, and both are plain text you can edit.
 

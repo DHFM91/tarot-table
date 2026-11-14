@@ -1,5 +1,6 @@
 // Run: node tests/narrative.test.js
 // Writes thousands of vibe readings per spread and checks length, mechanics and tone rules.
+// Single-card readings must not talk about several cards.
 const path = require('path');
 globalThis.crypto ??= require('crypto').webcrypto;
 for (const f of ['tarot-data', 'tarot-engine', 'tarot-phrases', 'tarot-narrative']) require(path.join(__dirname, '..', 'js', f + '.js'));
@@ -26,7 +27,9 @@ for (const sp in D.SPREADS) {
     try { o = N.tell(dr, sp, { question: t % 3 ? '' : 'Will it work out?' }); } catch (e) { fail('throw', sp, e.message); continue; }
     runs++;
     const txt = o.text.join(' ');
-    if (o.words < 300 || o.words > 500) fail('length', sp, o.words);
+    if (o.words < 90 || o.words > 220) fail('length', sp, o.words);
+    if (n === 1 && /\b(cards (are|point|suggest|around)|several cards|many cards|many of the cards|the others)\b/i.test(txt)) fail('plural wording in a single-card reading', txt.slice(0, 160));
+    const sents = txt.split(/(?<=[.!?])\s+/); if (new Set(sents).size !== sents.length) fail('repeated sentence', sp);
     if (/undefined|null|NaN|\u0001|\u0002|\s{2,}|\.\.|,,/.test(txt)) fail('mechanics', sp, txt.slice(0, 160));
     if (/\b(you should|try to|make sure|remember to|consider)\b/i.test(txt)) fail('advice wording', sp);
     if (/\b(zodiac|horoscope|planet|mercury|retrograde|astrolog)/i.test(txt)) fail('astrology wording', sp);
@@ -37,5 +40,5 @@ for (const sp in D.SPREADS) {
     if (N.tell(dr, sp, {}).text.join() !== N.tell(dr, sp, {}).text.join()) fail('not repeatable', sp);
   }
 }
-console.log(bad ? `${bad} problems` : `clean: ${runs} readings, all 300-500 words`);
+console.log(bad ? `${bad} problems` : `clean: ${runs} readings, all 90-220 words`);
 process.exit(bad ? 1 : 0);
