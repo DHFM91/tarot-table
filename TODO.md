@@ -8,3 +8,5 @@ Loose ideas and fixes, newest at the bottom. Tick them off (`[x]`) as they're do
   - split "mixed" into finer shades (leaning bright, leaning heavy, truly even) using the averages
   - widen the bright/heavy and moving/still cut-offs a little so fewer draws land dead center
   - add a test that no single vibe phrase appears in more than about 15% of readings
+
+- [ ] **(Later) Learn David's reading voice from examples.** David will save a few draws (the hidden save-as-text gives the full draw), write the reading the way he'd narrate it himself, and send them over. After about 5 samples, study his voice and patterns (what he notices first, how he links cards, sentence rhythm, word choices) and rewrite or extend the phrase data and templates in `js/tarot-phrases.js` and `js/tarot-narrative.js` to imitate him, so the offline generator writes in his voice. Then show him fresh draws side by side with what he'd write, and keep tuning. Just logged for now; don't start until he sends samples.
