@@ -59,7 +59,7 @@ Copy the whole folder (or unzip a release zip) and double-click `index.html`. Th
 
 ## Adding card art
 
-Cards show simple placeholder faces until you add art:
+Until you add art, cards show drawn placeholder faces (from `js/card-faces.js`): each suit's own symbol (a wand, a cup, a sword or a pentacle), and for the Major Arcana a purple pentagram stamp over a shadowy fog with eyes looking out. The eyes are red for mostly negative cards, kind blue for mostly positive ones, and pale violet for cards in between. To use your own art instead:
 
 1. Make a folder called `art` next to `index.html`.
 2. Name each image after its card id: `major-00.jpg` … `major-21.jpg`, then `wands-01.jpg` … `wands-14.jpg`, and the same for `cups`, `swords` and `pentacles` (01 = Ace, 11 = Page, 12 = Knight, 13 = Queen, 14 = King).
@@ -77,6 +77,7 @@ Any card without an image keeps its placeholder face.
 | `js/tarot-phrases.js` | The phrases (image, message, omens, cautions) for every card and orientation. Exposes `TarotPhrases`. |
 | `js/tarot-narrative.js` | Card scores and the vibe reading. `TarotNarrative.tell(drawn, spreadKey, { question })` returns `{ text, html, highlight, scores, words }`. |
 | `tests/engine.test.js` | Checks for the engine (`node tests/engine.test.js`) |
+| `js/card-faces.js` | The drawn placeholder card faces. Exposes `TarotFaces`. |
 | `js/support.js` | The "Support my work with crypto" section (same addresses and offline QR codes as davidfeuling.com) |
 | `tests/narrative.test.js` | Writes thousands of random readings and checks length and wording rules (`node tests/narrative.test.js`) |
 

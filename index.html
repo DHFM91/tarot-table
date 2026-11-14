@@ -12,6 +12,8 @@ html,body{margin:0;min-height:100%}
 body{background:radial-gradient(ellipse at 50% -10%,#2b2160 0%,var(--bg) 60%) fixed var(--bg);color:var(--ink);font:15px/1.45 Georgia,"Palatino Linotype",Palatino,serif;-webkit-tap-highlight-color:transparent}
 button,select,input,textarea{font:inherit;color:inherit}
 header{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 16px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.h1star{display:inline-block;width:.95em;height:.95em;vertical-align:-.1em;margin-right:.45em}
+.h1star svg{width:100%;height:100%;display:block}
 h1{font-size:20px;margin:0;letter-spacing:.14em;color:var(--gold2);font-weight:normal}
 #steps{display:flex;gap:4px;flex-wrap:wrap}
 #steps span{font-size:12px;padding:3px 9px;border:1px solid var(--line);border-radius:20px;color:var(--dim)}
@@ -97,7 +99,14 @@ footer{font-size:12px;color:var(--dim);text-align:center;padding:12px;border-top
 .fi.rev{transform:rotate(180deg)}
 .fp{position:absolute;inset:0;background:linear-gradient(#f6eedb,#e7dcc0);color:#2a1d3d;border:calc(var(--cw)*.045) solid var(--sc);border-radius:8%;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:7% 5%;text-align:center}
 .fp .tn{font-size:calc(var(--cw)*.13);letter-spacing:.06em}
-.fp .gl{font-size:calc(var(--cw)*.42);color:var(--sc);line-height:1}
+.fp .gl{width:78%;flex:1;display:flex;align-items:center;justify-content:center;min-height:0;margin:4% 0}
+.fp .gl svg{width:100%;height:100%;max-height:100%;overflow:visible}
+.fp.maj{background:radial-gradient(ellipse at 50% 45%,#2c2350 0%,#140f29 70%);color:#e6dbff}
+.fp.maj .gl{width:96%}
+.fp.maj .nm{color:#e9ddff}
+.fp.maj .tn{padding:0 20%;white-space:nowrap}
+.fp .stamp{position:absolute;top:4%;right:5%;width:21%;aspect-ratio:1;transform:rotate(-14deg);opacity:.88;filter:drop-shadow(0 0 2px #8f4fd688)}
+.fp .stamp svg{width:100%;height:100%;display:block}
 .fp .nm{font-size:calc(var(--cw)*.115);line-height:1.15}
 .fi img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1}
 /* shuffle viz */
@@ -137,7 +146,7 @@ input[type=range]{width:100%;accent-color:var(--gold)}
 </head>
 <body>
 <header>
- <h1>✶ FREE TAROT READINGS</h1>
+ <h1><span class="h1star" aria-hidden="true"></span>FREE TAROT READINGS</h1>
  <div id="steps"></div>
  <button class="link" id="showDisc">For entertainment only</button>
 </header>
@@ -152,7 +161,7 @@ input[type=range]{width:100%;accent-color:var(--gold)}
  <summary><span aria-hidden="true">♥</span> Support my work with crypto</summary>
  <div class="coins" id="coins"></div>
 </details>
-<footer>Free Tarot Readings is mysticism for fun, entertainment, and self-reflection only. Not advice of any kind and no liability is assumed. Your choices are your own. · v7</footer>
+<footer>Free Tarot Readings is mysticism for fun, entertainment, and self-reflection only. Not advice of any kind and no liability is assumed. Your choices are your own. · v8</footer>
 <div id="modal" hidden>
  <div class="box">
   <h2>Before you draw…</h2>
@@ -166,6 +175,7 @@ input[type=range]{width:100%;accent-color:var(--gold)}
 <script src="js/tarot-engine.js"></script>
 <script src="js/tarot-phrases.js"></script>
 <script src="js/tarot-narrative.js"></script>
+<script src="js/card-faces.js"></script>
 <script src="js/support.js"></script>
 <script>
 "use strict";
@@ -294,11 +304,11 @@ function layout(){
 }
 function placeSlots(){const L=layout();stage.querySelectorAll(".slot").forEach((s,i)=>{s.style.left=L[i].x+"px";s.style.top=L[i].y+"px"})}
 function faceHTML(c,rev){
- const sc=c.suit?SUITS[c.suit].c:"#7a4fb0";
+ const sc=c.suit?SUITS[c.suit].c:"#8f4fd6";
  const tn=c.suit?(c.rank<=10?(c.rank===1?"ACE":c.rank):RANKS[c.rank-1].toUpperCase()):ROMAN[c.num];
- const gl=c.suit?SUITS[c.suit].g:"✶";
  const img=ART_FOLDER?`<img src="${ART_FOLDER}/${c.id}.${ART_EXT}" alt="" onerror="this.remove()">`:"";
- return `<div class="fi ${rev?"rev":""}">${img}<div class="fp" style="--sc:${sc}"><div class="tn">${tn}</div><div class="gl">${gl}</div><div class="nm">${c.name}</div></div></div>`;
+ const stamp=c.suit?"":`<div class="stamp">${TarotFaces.stamp()}</div>`;
+ return `<div class="fi ${rev?"rev":""}">${img}<div class="fp${c.suit?"":" maj"}" style="--sc:${sc}">${stamp}<div class="tn">${tn}</div><div class="gl">${TarotFaces.symbol(c)}</div><div class="nm">${c.name}</div></div></div>`;
 }
 function renderSpread(empty){
  const P=SPREADS[S.spread].pos;
@@ -478,6 +488,7 @@ $("#okDisc").onclick=()=>{$("#modal").hidden=true;store("tarotTableOK","1")};
 $("#showDisc").onclick=showModal;
 if(store("tarotTableOK")!=="1")showModal();
 
+document.querySelector(".h1star").innerHTML=TarotFaces.stamp("#d9b45a");
 go(0);
 </script>
 </body>
