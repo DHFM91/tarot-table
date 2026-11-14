@@ -53,6 +53,10 @@ On a brand-new deck, one shuffle leaves on average about 6 cards reversed for Ov
 
 The other settings are **random 50/50** (each drawn card, whatever the shuffle) and **upright only**.
 
+## Saving a reading as text
+
+After you've dealt a reading and pressed **Interpret**, enter **← ← → → ↑ ↓ ↑ ↓** on the arrow keys (or swipe those directions on a phone). A preview opens with **Download .txt** and **Copy text**. The file includes the date, app version, your question, how the cards were shuffled, cut and dealt, the vibe reading, every card's meaning and scores, and the overall patterns. Files are named by date with a number for each save that day, for example `free-tarot-readings-2026-11-13-01-celtic-cross.txt`. The code does nothing on other screens.
+
 ## Run it offline / from a thumb drive
 
 Copy the whole folder (or unzip a release zip) and double-click `index.html`. There's nothing to install and no internet needed. Keep the `js` folder next to `index.html`.

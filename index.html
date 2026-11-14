@@ -128,7 +128,14 @@ input[type=range]{width:100%;accent-color:var(--gold)}
 .fc.picked{transform:translateY(-18px);opacity:.35;cursor:default}
 .fc .badge{top:-10px;left:auto;right:-6px}
 /* modal */
-#modal[hidden]{display:none}
+#modal[hidden],#dlScrim[hidden]{display:none}
+#dlScrim{position:fixed;inset:0;background:#06040fcc;display:flex;align-items:center;justify-content:center;z-index:55;padding:16px}
+#dlScrim .box{width:min(760px,100%);max-height:92vh;display:flex;flex-direction:column;background:var(--panel);border:1px solid var(--gold);border-radius:16px;padding:18px}
+#dlScrim h2{margin:0 0 4px;color:var(--gold2);font-weight:normal;letter-spacing:.06em;font-size:20px}
+#dlScrim .dlname{margin:0 0 10px;color:var(--dim);font-size:12.5px}
+#dlScrim pre{flex:1;min-height:120px;overflow:auto;margin:0;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px;font:12px/1.45 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color:var(--ink);white-space:pre}
+#dlScrim .row .btn{flex:1}
+#dlScrim .primary{margin-top:0;width:auto}
 #modal{position:fixed;inset:0;background:#06040fcc;display:flex;align-items:center;justify-content:center;z-index:50;padding:20px}
 #modal .box{max-width:440px;background:var(--panel);border:1px solid var(--gold);border-radius:16px;padding:22px}
 #modal h2{margin:0 0 8px;color:var(--gold2);font-weight:normal;letter-spacing:.08em}
@@ -161,13 +168,21 @@ input[type=range]{width:100%;accent-color:var(--gold)}
  <summary><span aria-hidden="true">♥</span> Support my work with crypto</summary>
  <div class="coins" id="coins"></div>
 </details>
-<footer>Free Tarot Readings is mysticism for fun, entertainment, and self-reflection only. Not advice of any kind and no liability is assumed. Your choices are your own. · v8</footer>
+<footer>Free Tarot Readings is mysticism for fun, entertainment, and self-reflection only. Not advice of any kind and no liability is assumed. Your choices are your own. · <span id="ver"></span></footer>
 <div id="modal" hidden>
  <div class="box">
   <h2>Before you draw…</h2>
   <p>Free Tarot Readings is for <b>entertainment and personal reflection only</b>. Every card is drawn at random. Readings don't predict the future, and they aren't medical, legal, financial or psychological advice.</p>
   <p>Use it for fun and inspiration, and make real decisions with your own judgment. No liability is assumed for anything you do because of a reading.</p>
   <button class="btn primary" id="okDisc">I understand. Let's play</button>
+ </div>
+</div>
+<div id="dlScrim" hidden>
+ <div class="box" role="dialog" aria-label="Save reading as text">
+  <h2>Save this reading?</h2>
+  <p class="dlname" id="dlName"></p>
+  <pre id="dlPreview"></pre>
+  <div class="row"><button class="btn primary" id="dlGo">Download .txt</button><button class="btn" id="dlCopy">Copy text</button><button class="btn" id="dlCancel">Cancel</button></div>
  </div>
 </div>
 <div id="toast"></div>
@@ -190,7 +205,8 @@ const D = TarotData, E = TarotEngine;
 const {deck: DECK, SUITS, RANKS, ROMAN, SPREADS, SHUFFLES, CUTS, DEALS} = D;
 
 /* ===== STATE ===== */
-const S={deckKind:"used",step:0,spread:"ppf",rev:"natural",q:"",shuffles:0,lastShuffle:null,piles:5,cut:"none",cutDone:false,cutK:39,three:null,taps:[],deal:"top",drawn:[],revealed:[],sel:-1,busy:false,fan:[]};
+const VERSION="v9";
+const S={hist:[],cutNote:"",interpreted:false,deckKind:"used",step:0,spread:"ppf",rev:"natural",q:"",shuffles:0,lastShuffle:null,piles:5,cut:"none",cutDone:false,cutK:39,three:null,taps:[],deal:"top",drawn:[],revealed:[],sel:-1,busy:false,fan:[]};
 let deck=E.newDeck(S.deckKind);
 const $=s=>document.querySelector(s), stage=$("#stage"), side=$("#side"), reading=$("#reading");
 function el(t,c,h){const e=document.createElement(t);if(c)e.className=c;if(h!=null)e.innerHTML=h;return e}
@@ -268,17 +284,17 @@ side.addEventListener("click",async e=>{
  if(b.dataset.deal){S.deal=b.dataset.deal;renderSide();return}
  switch(b.id){
   case "next":
-   if(S.step===0){S.shuffles=0;S.lastShuffle=null;go(1)}
+   if(S.step===0){S.shuffles=0;S.lastShuffle=null;S.hist=[];go(1)}
    else if(S.step===1){S.cut="none";S.cutDone=false;S.taps=[];S.three=null;go(2)}
    else if(S.step===2)go(3);
    else if(S.step===3)doDeal();
    break;
-  case "fresh":deck=E.newDeck(S.deckKind);S.shuffles=0;S.lastShuffle=null;$("#count").textContent=countText();$("#next").disabled=true;toast("Fresh "+E.DECK_KINDS[S.deckKind].name.toLowerCase()+" ready");break;
+  case "fresh":deck=E.newDeck(S.deckKind);S.shuffles=0;S.lastShuffle=null;S.hist=["(swapped in a fresh deck)"];$("#count").textContent=countText();$("#next").disabled=true;toast("Fresh "+E.DECK_KINDS[S.deckKind].name.toLowerCase()+" ready");break;
   case "doCut":await singleCut();break;
   case "revealAll":revealAll();break;
   case "interp":await revealAll();interpret();break;
   case "copy":copyReading();break;
-  case "again":S.drawn=[];S.sel=-1;go(0);break; // the deck carries over, like a real one
+  case "again":S.drawn=[];S.sel=-1;S.interpreted=false;go(0);break; // the deck carries over, like a real one
  }
 });
 
@@ -334,7 +350,7 @@ async function shuffleAction(style){
  S.busy=true;side.querySelectorAll("button").forEach(b=>b.disabled=true);
  deck=E.shuffle(deck,style,{piles:S.piles});
  await animShuffle(style);
- S.shuffles++;S.lastShuffle=SHUFFLES[style].name;
+ S.shuffles++;S.lastShuffle=SHUFFLES[style].name;S.hist.push(SHUFFLES[style].name+(style==="pile"?` (${S.piles} piles)`:""));
  S.busy=false;side.querySelectorAll("button").forEach(b=>b.disabled=false);
  $("#count").textContent=countText();
 }
@@ -401,7 +417,7 @@ async function singleCut(){
  if(ps[0]&&ps[0].animate)await ps[0].animate([{transform:"none"},{transform:"translateY(-40px)"},{transform:"translate(0,-40px)"}],{duration:350,fill:"forwards"}).finished;
  await gatherAnim();
  deck=E.cutSingle(deck,S.cutK);
- S.cutDone=true;S.busy=false;renderSide();renderStage();
+ S.cutNote=`Single cut: ${S.cutK} cards lifted off the top and placed underneath`;S.cutDone=true;S.busy=false;renderSide();renderStage();
 }
 async function tapPile(j){
  if(S.busy||S.cutDone||S.taps.includes(j))return;
@@ -409,7 +425,7 @@ async function tapPile(j){
  if(S.taps.length<3){renderStage();return}
  renderStage();S.busy=true;await gatherAnim();
  deck=E.cutPiles(deck,S.three,S.taps);
- S.cutDone=true;S.busy=false;renderSide();renderStage();
+ S.cutNote=`Three piles, left hand (sizes ${S.three.join(", ")}), gathered in the order ${S.taps.map(k=>"ABC"[k]).join(", ")}`;S.cutDone=true;S.busy=false;renderSide();renderStage();
 }
 
 /* ===== DEAL ===== */
@@ -432,7 +448,7 @@ function renderFan(n){
 }
 function finishDeal(picks){
  S.drawn=E.orient(picks,S.rev);
- S.revealed=S.drawn.map(()=>false);S.sel=-1;
+ S.revealed=S.drawn.map(()=>false);S.sel=-1;S.interpreted=false;
  go(4);
  if(!Element.prototype.animate)return;
  const cx=stage.clientWidth/2,cy=stage.clientHeight+60;
@@ -473,7 +489,7 @@ function interpret(){
  const L=E.analyze(S.drawn,S.spread,S.rev).map(x=>`<b>${esc(x.title)}</b> ${esc(x.text)}`);
  if(L.length)h+=`<h3>Putting it together</h3><ul class="syn">${L.map(x=>`<li>${x}</li>`).join("")}</ul>`;
  h+=`<p class="hint" style="margin-top:18px">For entertainment and reflection only. Your choices are your own.</p>`;
- reading.innerHTML=h;reading.scrollIntoView({behavior:"smooth",block:"start"});
+ reading.innerHTML=h;S.interpreted=true;reading.scrollIntoView({behavior:"smooth",block:"start"});
 }
 function copyReading(){
  if(!reading.textContent.trim())interpret();
@@ -482,6 +498,102 @@ function copyReading(){
  if(navigator.clipboard&&window.isSecureContext)navigator.clipboard.writeText(t).then(()=>toast("Reading copied"),fb);else fb();
 }
 
+/* ===== HIDDEN SAVE-AS-TEXT: ← ← → → ↑ ↓ ↑ ↓ (or the same swipes), only after a reading is interpreted ===== */
+const REV_LABEL={natural:"On: from your deck and how you shuffle",random:"On: each card a random 50/50",none:"Off: upright meanings only"};
+function wrapText(t,width,indent=""){
+ const out=[];let line="";
+ t.split(/\s+/).filter(Boolean).forEach(w=>{if(line&&(line+" "+w).length>width-indent.length){out.push(indent+line);line=w}else line=line?line+" "+w:w});
+ if(line)out.push(indent+line);return out;
+}
+function signed(n){return (n>0?"+":"")+n}
+function buildReport(){
+ const W=68,line="=".repeat(W),sub="-".repeat(W),now=new Date(),out=[];
+ const sp=SPREADS[S.spread],story=TarotNarrative.tell(S.drawn,S.spread,{question:S.q.trim()});
+ const longDate=new Intl.DateTimeFormat("en-US",{weekday:"long",year:"numeric",month:"long",day:"numeric"}).format(now);
+ const stamp=new Intl.DateTimeFormat("en-US",{year:"numeric",month:"short",day:"numeric",hour:"numeric",minute:"2-digit",second:"2-digit",timeZoneName:"short"}).format(now);
+ const field=(k,v)=>wrapText(String(v),W-14).map((l,i)=>(i?" ".repeat(14):(k+":").padEnd(14))+l);
+ out.push(line,"FREE TAROT READINGS · SAVED READING",line);
+ out.push(...field("Date",longDate),...field("Saved",stamp),...field("App version",VERSION));
+ out.push(...field("Question",S.q.trim()?`“${S.q.trim()}”`:"(none, an open reading)"),...field("Spread",`${sp.name} (${sp.pos.length} card${sp.pos.length>1?"s":""})`),"");
+ out.push("HOW THE CARDS WERE DRAWN",sub);
+ out.push(...field("Reversals",REV_LABEL[S.rev]));
+ if(S.rev==="natural")out.push(...field("Deck",E.DECK_KINDS[S.deckKind].name+" (carries over between readings)"));
+ out.push(...field("Shuffles",S.hist.length?`${S.shuffles} in all: ${S.hist.join(", ")}`:"none"));
+ out.push(...field("Cut",S.cut==="none"?"No cut":S.cutNote||CUTS[S.cut].name));
+ out.push(...field("Deal",DEALS[S.deal].name),"");
+ out.push("WHAT THE CARDS ARE TRYING TO TELL YOU",sub);
+ story.text.forEach(p=>out.push(...wrapText(p,W),""));
+ out.push("THE CARDS",sub);
+ S.drawn.forEach((d,i)=>{
+  const c=DECK[d.i],p=sp.pos[i],o=d.r?c.rv:c.up,alt=d.r?c.up:c.rv,sc=TarotNarrative.score(d.i,d.r);
+  out.push(`${i+1}. ${p[0].toUpperCase()}: ${p[1]}`);
+  out.push(`   ${c.name}${d.r?" (reversed)":""}${i===story.highlight?"   * highlighted card":""}`);
+  out.push(...wrapText("Keywords: "+o.k,W,"   "),...wrapText("Meaning: "+o.m,W,"   "));
+  out.push(...wrapText(`If it were ${d.r?"upright":"reversed"}: ${alt.k}. ${alt.m}`,W,"   "));
+  out.push("   "+(c.suit?`${c.suit} · ${SUITS[c.suit].el}: ${SUITS[c.suit].t}`:`Major Arcana ${ROMAN[c.num]}`));
+  out.push(`   Scores: positive ${signed(sc.v)} · action ${signed(sc.m)} · change ${signed(sc.ch)} · inward ${signed(sc.inw)}`);
+  out.push("");
+ });
+ const L=E.analyze(S.drawn,S.spread,S.rev);
+ if(L.length){out.push("PUTTING IT TOGETHER",sub);L.forEach(x=>out.push(...wrapText(x.title+" "+x.text,W-2).map((l,j)=>(j?"  ":"- ")+l)));out.push("")}
+ const A=story.averages,f=x=>signed(Math.round(x*100)/100);
+ out.push("READING AVERAGES",sub,`Positive ${f(A.v)} · Action ${f(A.m)} · Change ${f(A.ch)} · Inward ${f(A.inw)}`,...wrapText("Each card scores from -2 to +2 on four scales: positive vs negative, action vs inaction, change vs stability, and inward vs outward. A minus sign leans toward the second word.",W),"");
+ out.push(sub,...wrapText("Free Tarot Readings is mysticism for fun, entertainment, and self-reflection only. Not advice of any kind and no liability is assumed. Your choices are your own.",W),"davidfeuling.com/tarot-table/");
+ return out.map(l=>l.replace(/\s+$/,"")).join("\n")+"\n";
+}
+function localDateKey(d=new Date()){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`}
+function readSaves(){try{return JSON.parse(store("ftrSaves")||"{}")}catch(e){return {}}}
+function reportFileName(){
+ const base=`free-tarot-readings-${localDateKey()}`,n=(readSaves()[base]||0)+1;
+ const slug=SPREADS[S.spread].name.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");
+ return {base,name:`${base}-${String(n).padStart(2,"0")}-${slug}.txt`};
+}
+function countSave(base){
+ const saves=readSaves();saves[base]=(saves[base]||0)+1;
+ const keys=Object.keys(saves).sort();while(keys.length>60)delete saves[keys.shift()]; // keep the 60 most recent days
+ store("ftrSaves",JSON.stringify(saves));
+}
+let reportText="";
+function openReport(){
+ reportText=buildReport();
+ $("#dlPreview").textContent=reportText;
+ $("#dlName").textContent="Saves as "+reportFileName().name;
+ $("#dlCopy").textContent="Copy text";
+ $("#dlScrim").hidden=false;
+}
+const closeReport=()=>{$("#dlScrim").hidden=true};
+$("#dlGo").onclick=()=>{
+ const url=URL.createObjectURL(new Blob([reportText],{type:"text/plain;charset=utf-8"})),fn=reportFileName();
+ const a=el("a");a.href=url;a.download=fn.name;document.body.append(a);a.click();a.remove();
+ countSave(fn.base);setTimeout(()=>URL.revokeObjectURL(url),2000);closeReport();toast("Reading saved");
+};
+$("#dlCopy").onclick=()=>{
+ const done=()=>{$("#dlCopy").textContent="Copied"},fb=()=>{const ta=el("textarea");ta.value=reportText;ta.style.position="fixed";ta.style.opacity=0;document.body.append(ta);ta.select();try{document.execCommand("copy");done()}catch(e){$("#dlCopy").textContent="Copy failed"}ta.remove()};
+ if(navigator.clipboard&&window.isSecureContext)navigator.clipboard.writeText(reportText).then(done,fb);else fb();
+};
+$("#dlCancel").onclick=closeReport;
+$("#dlScrim").addEventListener("click",e=>{if(e.target.id==="dlScrim")closeReport()});
+const SEQ=["left","left","right","right","up","down","up","down"];let seqPos=0;
+const codeActive=()=>S.step===4&&S.interpreted&&$("#dlScrim").hidden;
+function pushDir(dir){
+ if(!codeActive()){seqPos=0;return}
+ seqPos=dir===SEQ[seqPos]?seqPos+1:(dir===SEQ[0]?1:0);
+ if(seqPos===SEQ.length){seqPos=0;openReport()}
+}
+document.addEventListener("keydown",e=>{
+ if(e.key==="Escape"&&!$("#dlScrim").hidden){closeReport();return}
+ if(/^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName))return;
+ const dir={ArrowLeft:"left",ArrowRight:"right",ArrowUp:"up",ArrowDown:"down"}[e.key];
+ if(dir)pushDir(dir);else seqPos=0;
+});
+let touch0=null;
+document.addEventListener("touchstart",e=>{if(e.touches.length===1)touch0={x:e.touches[0].clientX,y:e.touches[0].clientY}},{passive:true});
+document.addEventListener("touchend",e=>{
+ if(!touch0)return;const t=e.changedTouches[0],dx=t.clientX-touch0.x,dy=t.clientY-touch0.y;touch0=null;
+ if(Math.max(Math.abs(dx),Math.abs(dy))<40)return;
+ pushDir(Math.abs(dx)>Math.abs(dy)?(dx<0?"left":"right"):(dy<0?"up":"down"));
+},{passive:true});
+
 /* ===== DISCLAIMER ===== */
 function showModal(){$("#modal").hidden=false}
 $("#okDisc").onclick=()=>{$("#modal").hidden=true;store("tarotTableOK","1")};
@@ -489,6 +601,7 @@ $("#showDisc").onclick=showModal;
 if(store("tarotTableOK")!=="1")showModal();
 
 document.querySelector(".h1star").innerHTML=TarotFaces.stamp("#d9b45a");
+$("#ver").textContent=VERSION;
 go(0);
 </script>
 </body>
