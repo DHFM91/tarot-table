@@ -2,7 +2,7 @@
 
 Read this first. It covers what the project is, where everything lives, how David likes the work done, and what's still open.
 
-**Current version: v15** (shown in the page footer, set by `const VERSION` in `index.html`).
+**Current version: v16** (shown in the page footer, set by `const VERSION` in `index.html`).
 
 ---
 
@@ -83,7 +83,9 @@ Script load order in `index.html`: data, engine, phrases, narrative, card-faces,
 - `art/full/` keeps the original full-size scans for reuse; `.gitattributes` keeps that folder out of the release zips.
 - GitHub is the home for these images. Dave's Daily Dashboard (`DHFM91/daylight`) carries the same 420 px set in `tarot/rws/`.
 - Numbering matches the printed cards: `major-08` is Strength (VIII) and `major-11` is Justice (XI). Checked against the scans.
-- `js/card-faces.js` still draws a placeholder for any card whose image fails to load (Major Arcana: pentagram stamp and fog with eyes, red/blue/violet by the card's upright nature).
+- **Art Style switch (v16):** a header link under "For entertainment only", same size and font, reading "Art Style: Classic" or "Art Style: Simplified"; clicking flips it. Classic = the 1909 images and `art/back.jpg`; Simplified = the drawn faces from `js/card-faces.js` and the drawn purple-and-gold back. Stored in localStorage `ftrArtStyle`; first-visit default is `DEFAULT_ART_STYLE` ("classic"). Switching on the Read step redraws the dealt cards and keeps them face-up; earlier steps only show backs, which switch through the `body.classic` class. David asked for this so he can go back to the simpler designs any time without reverting.
+- Dave's Daily Dashboard has the same choice as a code setting only: `TAROT_ART_STYLE` in its `index.html` ("classic" or "simplified").
+- `js/card-faces.js` also draws a fallback for any card whose image fails to load in Classic (Major Arcana: pentagram stamp and fog with eyes, red/blue/violet by the card's upright nature).
 
 ### Hidden save-as-text
 - **← ← → → ↑ ↓ ↑ ↓** (arrow keys, or the same swipes on touch). It works **only** on step 5 after **Interpret** has been pressed, and does nothing on other screens. This mirrors Dave's Daily Dashboard.

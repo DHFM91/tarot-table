@@ -41,6 +41,8 @@ textarea{resize:vertical;min-height:54px}
 .hint{font-size:12.5px;color:var(--dim);margin:8px 0}
 .count{font-size:13px;color:var(--gold2);margin:8px 0}
 .back-link{background:none;border:0;color:var(--dim);cursor:pointer;padding:0;margin-top:12px;font-size:13px;text-decoration:underline}
+.hlinks{display:flex;flex-direction:column;align-items:flex-end;gap:4px}
+@media(max-width:900px){.hlinks{margin-left:auto}}
 .link{background:none;border:0;color:var(--dim);text-decoration:underline;cursor:pointer;font-size:13px;padding:0}
 section.right{display:flex;flex-direction:column;min-width:0}
 #stage{position:relative;height:min(70vh,660px);min-height:340px;overflow:hidden}
@@ -105,7 +107,8 @@ footer{font-size:12px;color:var(--dim);text-align:center;padding:12px;border-top
 .front{transform:rotateY(180deg)}
 .slot.sel .face{box-shadow:0 0 0 2px var(--gold2),0 0 22px #f3d98b88}
 .badge{position:absolute;top:-8px;left:-8px;width:20px;height:20px;border-radius:50%;background:var(--gold);color:#1b1230;font:bold 11px/20px sans-serif;text-align:center;z-index:3;pointer-events:none}
-.back,.mini,.fc,.pile .stack{background:url(art/back.jpg) center/100% 100% no-repeat,radial-gradient(circle at 50% 50%,#4a3b95 0 14%,transparent 15%),radial-gradient(circle at 50% 50%,transparent 0 24%,#d9b45a55 25% 26%,transparent 27%),repeating-linear-gradient(45deg,#221b49 0 5px,#2c2462 5px 10px);border:2px solid var(--gold);border-radius:8%}
+.back,.mini,.fc,.pile .stack{background:radial-gradient(circle at 50% 50%,#4a3b95 0 14%,transparent 15%),radial-gradient(circle at 50% 50%,transparent 0 24%,#d9b45a55 25% 26%,transparent 27%),repeating-linear-gradient(45deg,#221b49 0 5px,#2c2462 5px 10px);border:2px solid var(--gold);border-radius:8%}
+body.classic .back,body.classic .mini,body.classic .fc,body.classic .pile .stack{background:url(art/back.jpg) center/100% 100% no-repeat}
 .fi{position:absolute;inset:0;transition:transform .3s}
 .fi.rev{transform:rotate(180deg)}
 .fp{position:absolute;inset:0;background:linear-gradient(#f6eedb,#e7dcc0);color:#2a1d3d;border:calc(var(--cw)*.045) solid var(--sc);border-radius:8%;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:7% 5%;text-align:center}
@@ -171,7 +174,7 @@ input[type=range]{width:100%;accent-color:var(--gold)}
 <header>
  <h1><span class="h1star" aria-hidden="true"></span>FREE TAROT READINGS</h1>
  <div id="steps"></div>
- <button class="link" id="showDisc">For entertainment only</button>
+ <div class="hlinks"><button class="link" id="showDisc">For entertainment only</button><button class="link" id="artStyle" aria-live="polite">Art Style: Classic</button></div>
 </header>
 <main>
  <aside id="side"></aside>
@@ -217,17 +220,21 @@ input[type=range]{width:100%;accent-color:var(--gold)}
 <script>
 "use strict";
 /* ===== CONFIG: card art =====
-   Card images live in the art folder (1909 Rider-Waite-Smith deck, public domain; see art/README.md).
+   Two art styles, switched by the "Art Style" link in the header (remembered in localStorage "ftrArtStyle"):
+   - Classic: images in ART_FOLDER (1909 Rider-Waite-Smith deck, public domain; see art/README.md), including the card back.
+   - Simplified: the drawn faces from js/card-faces.js and the drawn purple-and-gold back.
+   DEFAULT_ART_STYLE is what first-time visitors see.
    File names = card ids: major-00 … major-21, wands-01 … wands-14, cups-…, swords-…, pentacles-…
    (01 = Ace, 11 = Page, 12 = Knight, 13 = Queen, 14 = King). Missing images fall back to the placeholder face. */
 const ART_FOLDER = "art";
+const DEFAULT_ART_STYLE = "classic";   // "classic" or "simplified"
 const ART_EXT = "jpg";
 
 const D = TarotData, E = TarotEngine;
 const {deck: DECK, SUITS, RANKS, ROMAN, SPREADS, SHUFFLES, CUTS, DEALS} = D;
 
 /* ===== STATE ===== */
-const VERSION="v15";
+const VERSION="v16";
 const S={hist:[],cutNote:"",interpreted:false,deckKind:"used",step:0,spread:"ppf",rev:"natural",q:"",shuffles:0,lastShuffle:null,piles:5,cut:"none",cutDone:false,cutK:39,three:null,taps:[],deal:"top",drawn:[],revealed:[],sel:-1,busy:false,fan:[]};
 let deck=E.newDeck(S.deckKind);
 const $=s=>document.querySelector(s), stage=$("#stage"), side=$("#side"), reading=$("#reading");
@@ -321,6 +328,19 @@ side.addEventListener("click",async e=>{
 });
 
 /* ===== STAGE ===== */
+/* ===== ART STYLE ===== */
+const ART_STYLES={classic:"Classic",simplified:"Simplified"};
+let artStyle=ART_STYLES[store("ftrArtStyle")]?store("ftrArtStyle"):DEFAULT_ART_STYLE;
+function applyArtStyle(){
+ document.body.classList.toggle("classic",artStyle==="classic");
+ $("#artStyle").textContent="Art Style: "+ART_STYLES[artStyle];
+ $("#artStyle").title="Switch to "+(artStyle==="classic"?"Simplified":"Classic")+" card art";
+}
+function toggleArtStyle(){
+ artStyle=artStyle==="classic"?"simplified":"classic";store("ftrArtStyle",artStyle);applyArtStyle();
+ if(S.step===4)renderStage();   // redraw dealt cards; earlier steps only show card backs, which switch through the body class
+}
+
 function renderStage(){
  stage.innerHTML="";
  if(S.step===0)renderSpread(true);
@@ -344,7 +364,7 @@ function placeSlots(){const L=layout();stage.querySelectorAll(".slot").forEach((
 function faceHTML(c,rev){
  const sc=c.suit?SUITS[c.suit].c:"#8f4fd6";
  const tn=c.suit?(c.rank<=10?(c.rank===1?"ACE":c.rank):RANKS[c.rank-1].toUpperCase()):ROMAN[c.num];
- const img=ART_FOLDER?`<img src="${ART_FOLDER}/${c.id}.${ART_EXT}" alt="" onerror="this.remove()">`:"";
+ const img=ART_FOLDER&&artStyle==="classic"?`<img src="${ART_FOLDER}/${c.id}.${ART_EXT}" alt="" onerror="this.remove()">`:"";
  const stamp=c.suit?"":`<div class="stamp">${TarotFaces.stamp()}</div>`;
  return `<div class="fi ${rev?"rev":""}">${img}<div class="fp${c.suit?"":" maj"}" style="--sc:${sc}">${stamp}<div class="tn">${tn}</div><div class="gl">${TarotFaces.symbol(c)}</div><div class="nm">${c.name}</div></div></div>`;
 }
@@ -653,6 +673,8 @@ document.addEventListener("touchend",e=>{
 function showModal(){$("#modal").hidden=false}
 $("#okDisc").onclick=()=>{$("#modal").hidden=true;store("tarotTableOK","1")};
 $("#showDisc").onclick=showModal;
+$("#artStyle").onclick=toggleArtStyle;
+applyArtStyle();
 if(store("tarotTableOK")!=="1")showModal();
 
 document.querySelector(".h1star").innerHTML=TarotFaces.stamp("#d9b45a");

@@ -74,7 +74,9 @@ The cards use the original 1909 Rider-Waite-Smith deck, art by Pamela Colman Smi
 
 The numbering follows the printed cards: VIII is Strength and XI is Justice.
 
-If an image is missing, that card falls back to a drawn placeholder face from `js/card-faces.js`. To swap in different art, replace the files in `art` with the same names (or point `ART_FOLDER` in `index.html` somewhere else).
+**Art Style switch:** the "Art Style: Classic / Simplified" link under "For entertainment only" (top right) switches between this 1909 art (Classic) and the simpler drawn cards from `js/card-faces.js` (Simplified), card backs included. The choice is remembered on that device. New visitors start on Classic; change `DEFAULT_ART_STYLE` in `index.html` to make Simplified the default.
+
+If an image is missing in Classic mode, that card falls back to its drawn face. To swap in different art, replace the files in `art` with the same names (or point `ART_FOLDER` in `index.html` somewhere else).
 
 ## Files
 
