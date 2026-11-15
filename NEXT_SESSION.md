@@ -2,7 +2,7 @@
 
 Read this first. It covers what the project is, where everything lives, how David likes the work done, and what's still open.
 
-**Current version: v14** (shown in the page footer, set by `const VERSION` in `index.html`).
+**Current version: v15** (shown in the page footer, set by `const VERSION` in `index.html`).
 
 ---
 
@@ -38,7 +38,8 @@ A free, offline, browser-based tarot reading table. The user picks a spread, shu
 | `js/tarot-engine.js` | `TarotEngine`: pure functions, no page needed. Deck kinds, shuffles, cuts, deals, `orient`, `dailyCard`, `seededRng`, and `analyze` (the "Putting it together" notes). |
 | `js/tarot-phrases.js` | `TarotPhrases[id].up/.rv`: `o` (3 omens), `c` (2 cautions), `t` (message), `i` (literal card illustration, kept but no longer shown), `m` (subtle mood image). |
 | `js/tarot-narrative.js` | `TarotNarrative`: card scores (`UP` table plus `REVERSED` overrides), highlight selection and the vibe reading (`tell`). |
-| `js/card-faces.js` | `TarotFaces`: SVG placeholder card faces (suit symbols; Major Arcana with a pentagram stamp and fog with eyes). |
+| `js/card-faces.js` | `TarotFaces`: SVG fallback card faces, shown only if an image is missing. |
+| `art/` | Card images (1909 Rider-Waite-Smith), `full/` originals, `README.md` and `rws-cards.json` sources. |
 | `js/support.js` | The collapsible "Support my work with crypto" section: 3 wallets with offline QR codes. |
 | `tests/engine.test.js` | About 5,300 checks on deck mechanics. Run: `node tests/engine.test.js` |
 | `tests/narrative.test.js` | 12,000 random readings checking length, wording rules and repeatability. Run: `node tests/narrative.test.js` |
@@ -76,9 +77,13 @@ Script load order in `index.html`: data, engine, phrases, narrative, card-faces,
 - The bar width is scaled to the spread size: full at |average| = 2 / sqrt(n). Labels: under 12% of full "In balance", under 35% "a gentle pull", under 70% "a strong pull", otherwise "an overwhelming pull". Violet bars lean left, gold bars lean right.
 - The saved .txt shows ASCII bars plus the raw averages, right after the vibe reading.
 
-### Card faces (placeholders until real art)
-- Real card art is being made **in a separate thread**. Don't redesign the art here. To use it: put images in an `art/` folder named by card id (`major-00.jpg` to `major-21.jpg`, `wands-01.jpg` to `pentacles-14.jpg`; 01 = Ace, 11 = Page, 12 = Knight, 13 = Queen, 14 = King) and set `ART_FOLDER = "art"`.
-- Placeholders: Wands = leafy staff, Cups = chalice, Swords = sword, Pentacles = gold coin with pentagram. Major Arcana: a dark face, a tilted purple pentagram stamp, and fog with eyes: **red, narrowed** for negative cards (upright v < 0), **kind blue** for positive (v > 0), **pale violet, half-lidded** for neutral (v = 0: the Hierophant, the Hermit, Justice and the Hanged Man). The eyes follow the card's upright nature, not its orientation in a reading. Changing that was offered but not requested.
+### Card art (v15)
+- The deck is the **1909 Rider-Waite-Smith** first edition ("Roses & Lilies"), art by Pamela Colman Smith, public domain. Scans by Saskia Jansen via Wikimedia Commons. Details and per-card sources: `art/README.md` and `art/rws-cards.json`.
+- `art/<card id>.jpg` (420 x 693, the app's 1 : 1.65 card shape, resized without cropping so the printed titles stay visible) and `art/back.jpg`, which is the card back everywhere (`.back`, `.mini`, `.fc`, `.pile .stack` in the CSS). `ART_FOLDER = "art"`.
+- `art/full/` keeps the original full-size scans for reuse; `.gitattributes` keeps that folder out of the release zips.
+- GitHub is the home for these images. Dave's Daily Dashboard (`DHFM91/daylight`) carries the same 420 px set in `tarot/rws/`.
+- Numbering matches the printed cards: `major-08` is Strength (VIII) and `major-11` is Justice (XI). Checked against the scans.
+- `js/card-faces.js` still draws a placeholder for any card whose image fails to load (Major Arcana: pentagram stamp and fog with eyes, red/blue/violet by the card's upright nature).
 
 ### Hidden save-as-text
 - **← ← → → ↑ ↓ ↑ ↓** (arrow keys, or the same swipes on touch). It works **only** on step 5 after **Interpret** has been pressed, and does nothing on other screens. This mirrors Dave's Daily Dashboard.
@@ -120,7 +125,6 @@ Release:
 
 **Check `TODO.md` first.** David parks loose ideas and fixes there; work through it before starting anything new.
 
-- Real card art (in progress in another thread), then wire it in via `ART_FOLDER`.
 - Phone app packaging (Capacitor or similar).
 - No license file yet, so default copyright applies. Offered; not decided.
 - Possible: let the Major Arcana eyes follow orientation in a reading (a reversed Sun turning red). Offered; not requested.

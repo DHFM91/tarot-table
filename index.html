@@ -105,7 +105,7 @@ footer{font-size:12px;color:var(--dim);text-align:center;padding:12px;border-top
 .front{transform:rotateY(180deg)}
 .slot.sel .face{box-shadow:0 0 0 2px var(--gold2),0 0 22px #f3d98b88}
 .badge{position:absolute;top:-8px;left:-8px;width:20px;height:20px;border-radius:50%;background:var(--gold);color:#1b1230;font:bold 11px/20px sans-serif;text-align:center;z-index:3;pointer-events:none}
-.back,.mini,.fc,.pile .stack{background:radial-gradient(circle at 50% 50%,#4a3b95 0 14%,transparent 15%),radial-gradient(circle at 50% 50%,transparent 0 24%,#d9b45a55 25% 26%,transparent 27%),repeating-linear-gradient(45deg,#221b49 0 5px,#2c2462 5px 10px);border:2px solid var(--gold);border-radius:8%}
+.back,.mini,.fc,.pile .stack{background:url(art/back.jpg) center/100% 100% no-repeat,radial-gradient(circle at 50% 50%,#4a3b95 0 14%,transparent 15%),radial-gradient(circle at 50% 50%,transparent 0 24%,#d9b45a55 25% 26%,transparent 27%),repeating-linear-gradient(45deg,#221b49 0 5px,#2c2462 5px 10px);border:2px solid var(--gold);border-radius:8%}
 .fi{position:absolute;inset:0;transition:transform .3s}
 .fi.rev{transform:rotate(180deg)}
 .fp{position:absolute;inset:0;background:linear-gradient(#f6eedb,#e7dcc0);color:#2a1d3d;border:calc(var(--cw)*.045) solid var(--sc);border-radius:8%;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:7% 5%;text-align:center}
@@ -217,17 +217,17 @@ input[type=range]{width:100%;accent-color:var(--gold)}
 <script>
 "use strict";
 /* ===== CONFIG: card art =====
-   When your art is ready, put it in a folder next to index.html and set ART_FOLDER (e.g. "art").
+   Card images live in the art folder (1909 Rider-Waite-Smith deck, public domain; see art/README.md).
    File names = card ids: major-00 … major-21, wands-01 … wands-14, cups-…, swords-…, pentacles-…
    (01 = Ace, 11 = Page, 12 = Knight, 13 = Queen, 14 = King). Missing images fall back to the placeholder face. */
-const ART_FOLDER = "";
+const ART_FOLDER = "art";
 const ART_EXT = "jpg";
 
 const D = TarotData, E = TarotEngine;
 const {deck: DECK, SUITS, RANKS, ROMAN, SPREADS, SHUFFLES, CUTS, DEALS} = D;
 
 /* ===== STATE ===== */
-const VERSION="v14";
+const VERSION="v15";
 const S={hist:[],cutNote:"",interpreted:false,deckKind:"used",step:0,spread:"ppf",rev:"natural",q:"",shuffles:0,lastShuffle:null,piles:5,cut:"none",cutDone:false,cutK:39,three:null,taps:[],deal:"top",drawn:[],revealed:[],sel:-1,busy:false,fan:[]};
 let deck=E.newDeck(S.deckKind);
 const $=s=>document.querySelector(s), stage=$("#stage"), side=$("#side"), reading=$("#reading");

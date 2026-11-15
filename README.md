@@ -68,15 +68,13 @@ After you've dealt a reading and pressed **Interpret**, enter **← ← → → 
 
 Copy the whole folder (or unzip a release zip) and double-click `index.html`. There's nothing to install and no internet needed. Keep the `js` folder next to `index.html`.
 
-## Adding card art
+## Card art
 
-Until you add art, cards show drawn placeholder faces (from `js/card-faces.js`): each suit's own symbol (a wand, a cup, a sword or a pentacle), and for the Major Arcana a purple pentagram stamp over a shadowy fog with eyes looking out. The eyes are red for mostly negative cards, kind blue for mostly positive ones, and pale violet for cards in between. To use your own art instead:
+The cards use the original 1909 Rider-Waite-Smith deck, art by Pamela Colman Smith (public domain), scanned from a first-edition "Roses & Lilies" deck. The images are in the `art` folder, named by card id (`major-00.jpg` to `major-21.jpg`, then `wands-01.jpg` to `pentacles-14.jpg`, plus `back.jpg`); `art/full/` holds the original full-size scans. See `art/README.md` for sources.
 
-1. Make a folder called `art` next to `index.html`.
-2. Name each image after its card id: `major-00.jpg` … `major-21.jpg`, then `wands-01.jpg` … `wands-14.jpg`, and the same for `cups`, `swords` and `pentacles` (01 = Ace, 11 = Page, 12 = Knight, 13 = Queen, 14 = King).
-3. In `index.html`, set `const ART_FOLDER = "art";` (and `ART_EXT` if your files aren't `.jpg`).
+The numbering follows the printed cards: VIII is Strength and XI is Justice.
 
-Any card without an image keeps its placeholder face.
+If an image is missing, that card falls back to a drawn placeholder face from `js/card-faces.js`. To swap in different art, replace the files in `art` with the same names (or point `ART_FOLDER` in `index.html` somewhere else).
 
 ## Files
 
@@ -90,7 +88,8 @@ Any card without an image keeps its placeholder face.
 | `TODO.md` | Loose ideas and fixes to come back to |
 | `NEXT_SESSION.md` | Handoff notes for whoever picks up the work next |
 | `tests/engine.test.js` | Checks for the engine (`node tests/engine.test.js`) |
-| `js/card-faces.js` | The drawn placeholder card faces. Exposes `TarotFaces`. |
+| `js/card-faces.js` | Drawn fallback card faces, used only if an image is missing. Exposes `TarotFaces`. |
+| `art/` | The card images (1909 Rider-Waite-Smith, public domain) and their sources |
 | `js/support.js` | The "Support my work with crypto" section (same addresses and offline QR codes as davidfeuling.com) |
 | `tests/narrative.test.js` | Writes thousands of random readings and checks length and wording rules (`node tests/narrative.test.js`) |
 
@@ -126,5 +125,4 @@ A card looks like `{ id, name, suit, rank, num, up: { k, m }, rv: { k, m } }`, w
 
 ## Ideas for later
 
-- Card art (in progress)
 - Phone app version (the layout is already touch-ready; it could be packaged with a tool like Capacitor)
