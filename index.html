@@ -139,7 +139,12 @@ input[type=range]{width:100%;accent-color:var(--gold)}
 .fc.picked{transform:translateY(-18px);opacity:.35;cursor:default}
 .fc .badge{top:-10px;left:auto;right:-6px}
 /* modal */
-#modal[hidden],#dlScrim[hidden]{display:none}
+#modal[hidden],#dlScrim[hidden],#confirmScrim[hidden]{display:none}
+#confirmScrim{position:fixed;inset:0;background:#06040fcc;display:flex;align-items:center;justify-content:center;z-index:56;padding:16px}
+#confirmScrim .box{max-width:380px;width:100%;background:var(--panel);border:1px solid var(--gold);border-radius:16px;padding:20px;text-align:center}
+#confirmScrim p{margin:0 0 16px;font-size:16px;color:var(--ink)}
+#confirmScrim .row .btn{flex:1}
+#confirmScrim .primary{margin-top:0;width:auto}
 #dlScrim{position:fixed;inset:0;background:#06040fcc;display:flex;align-items:center;justify-content:center;z-index:55;padding:16px}
 #dlScrim .box{width:min(760px,100%);max-height:92vh;display:flex;flex-direction:column;background:var(--panel);border:1px solid var(--gold);border-radius:16px;padding:18px}
 #dlScrim h2{margin:0 0 4px;color:var(--gold2);font-weight:normal;letter-spacing:.06em;font-size:20px}
@@ -188,6 +193,12 @@ input[type=range]{width:100%;accent-color:var(--gold)}
   <button class="btn primary" id="okDisc">I understand. Let's play</button>
  </div>
 </div>
+<div id="confirmScrim" hidden>
+ <div class="box" role="alertdialog" aria-modal="true" aria-labelledby="confirmMsg">
+  <p id="confirmMsg">This will clear your current reading. Are you sure?</p>
+  <div class="row"><button class="btn primary" id="confirmYes">Yes, start over</button><button class="btn" id="confirmNo">Cancel</button></div>
+ </div>
+</div>
 <div id="dlScrim" hidden>
  <div class="box" role="dialog" aria-label="Save reading as text">
   <h2>Save this reading?</h2>
@@ -216,7 +227,7 @@ const D = TarotData, E = TarotEngine;
 const {deck: DECK, SUITS, RANKS, ROMAN, SPREADS, SHUFFLES, CUTS, DEALS} = D;
 
 /* ===== STATE ===== */
-const VERSION="v13";
+const VERSION="v14";
 const S={hist:[],cutNote:"",interpreted:false,deckKind:"used",step:0,spread:"ppf",rev:"natural",q:"",shuffles:0,lastShuffle:null,piles:5,cut:"none",cutDone:false,cutK:39,three:null,taps:[],deal:"top",drawn:[],revealed:[],sel:-1,busy:false,fan:[]};
 let deck=E.newDeck(S.deckKind);
 const $=s=>document.querySelector(s), stage=$("#stage"), side=$("#side"), reading=$("#reading");
@@ -305,7 +316,7 @@ side.addEventListener("click",async e=>{
   case "revealAll":revealAll();break;
   case "interp":await revealAll();interpret();break;
   case "copy":copyReading();break;
-  case "again":S.drawn=[];S.sel=-1;S.interpreted=false;go(0);break; // the deck carries over, like a real one
+  case "again":askConfirm(startOver);break;
  }
 });
 
@@ -525,6 +536,16 @@ function copyReading(){
  const fb=()=>{const ta=el("textarea");ta.value=t;ta.style.position="fixed";ta.style.opacity=0;document.body.append(ta);ta.select();try{document.execCommand("copy");toast("Reading copied")}catch(e){toast("Copy not supported here")}ta.remove()};
  if(navigator.clipboard&&window.isSecureContext)navigator.clipboard.writeText(t).then(()=>toast("Reading copied"),fb);else fb();
 }
+
+/* ===== "NEW READING" CONFIRMATION ===== */
+function startOver(){S.drawn=[];S.sel=-1;S.interpreted=false;go(0)} // the deck carries over, like a real one
+let confirmAction=null;
+function askConfirm(fn){confirmAction=fn;$("#confirmScrim").hidden=false;$("#confirmNo").focus()}
+function closeConfirm(){$("#confirmScrim").hidden=true;confirmAction=null}
+$("#confirmYes").onclick=()=>{const fn=confirmAction;closeConfirm();if(fn)fn()};
+$("#confirmNo").onclick=closeConfirm;
+$("#confirmScrim").addEventListener("click",e=>{if(e.target.id==="confirmScrim")closeConfirm()});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("#confirmScrim").hidden)closeConfirm()});
 
 /* ===== HIDDEN SAVE-AS-TEXT: ← ← → → ↑ ↓ ↑ ↓ (or the same swipes), only after a reading is interpreted ===== */
 const REV_LABEL={natural:"On: from your deck and how you shuffle",random:"On: each card a random 50/50",none:"Off: upright meanings only"};

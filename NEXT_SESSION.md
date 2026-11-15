@@ -2,7 +2,7 @@
 
 Read this first. It covers what the project is, where everything lives, how David likes the work done, and what's still open.
 
-**Current version: v13** (shown in the page footer, set by `const VERSION` in `index.html`).
+**Current version: v14** (shown in the page footer, set by `const VERSION` in `index.html`).
 
 ---
 
@@ -53,7 +53,7 @@ Script load order in `index.html`: data, engine, phrases, narrative, card-faces,
 2. **Shuffle:** Overhand, Riffle (straight), Riffle (one half turned), Hindu, Wash and Pile, each with an animation. The count and history are tracked in `S.hist`.
 3. **Cut:** none; single (slider); or three piles, left hand (the user taps the gathering order).
 4. **Deal:** from the top; choose from a face-down fan; or every seventh card.
-5. **Read:** tap a card to flip it, then tap again for details (the details box stays hidden until a card is tapped). **Interpret** writes the vibe reading, card by card and "Putting it together".
+5. **Read:** tap a card to flip it, then tap again for details (the details box stays hidden until a card is tapped). **Interpret** writes the vibe reading, card by card and "Putting it together". **New reading** asks for confirmation first ("This will clear your current reading. Are you sure?"), because it sits right under Interpret and is easy to hit by mistake; Cancel, Escape or clicking outside keeps the reading.
 
 ### Reversals (David cared a lot about realism)
 - Setting `natural` (default): orientation comes from the deck and the shuffles. `random`: 50/50 per drawn card. `none`: all upright.
