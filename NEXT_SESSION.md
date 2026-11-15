@@ -2,7 +2,7 @@
 
 Read this first. It covers what the project is, where everything lives, how David likes the work done, and what's still open.
 
-**Current version: v17** (shown in the page footer, set by `const VERSION` in `index.html`).
+**Current version: v18** (shown in the page footer, set by `const VERSION` in `index.html`).
 
 ---
 
@@ -73,7 +73,7 @@ Script load order in `index.html`: data, engine, phrases, narrative, card-faces,
 - **Tone rules David set:** describe, never prescribe (no "you should", "try to" and so on); horoscope-style vagueness but about tarot, never astrology; no literal "Picture [the card's illustration]" lines (the mood image must stay subtle, one per reading); less is more before the card-by-card section; single-card readings must never talk about "the cards" in the plural.
 
 ### The currents (added in v12)
-- Four bars under the vibe reading, defined in `CURRENTS` in `index.html`: Shadow/Light (`v`), Stillness/Motion (`m`), Constancy/Change (`ch`), Without/Within (`inw`). They use `story.averages` from `TarotNarrative.tell`.
+- Four bars under the vibe reading, defined in `CURRENTS` in `index.html`: Shadow/Light (`v`), Stillness/Motion (`m`), Constancy/Change (`ch`), Outward/Inward (`inw`; called Without/Within before v18). They use `story.averages` from `TarotNarrative.tell`.
 - The bar width is scaled to the spread size: full at |average| = 2 / sqrt(n). Labels: under 12% of full "In balance", under 35% "a gentle pull", under 70% "a strong pull", otherwise "an overwhelming pull". Violet bars lean left, gold bars lean right.
 - The saved .txt shows ASCII bars plus the raw averages, right after the vibe reading.
 

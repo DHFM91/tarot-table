@@ -234,7 +234,7 @@ const D = TarotData, E = TarotEngine;
 const {deck: DECK, SUITS, RANKS, ROMAN, SPREADS, SHUFFLES, CUTS, DEALS} = D;
 
 /* ===== STATE ===== */
-const VERSION="v17";
+const VERSION="v18";
 const S={hist:[],cutNote:"",interpreted:false,deckKind:"used",step:0,spread:"ppf",rev:"natural",q:"",shuffles:0,lastShuffle:null,piles:5,cut:"none",cutDone:false,cutK:39,three:null,taps:[],deal:"top",drawn:[],revealed:[],sel:-1,busy:false,fan:[]};
 let deck=E.newDeck(S.deckKind);
 const $=s=>document.querySelector(s), stage=$("#stage"), side=$("#side"), reading=$("#reading");
@@ -525,7 +525,9 @@ const CURRENTS=[
  {key:"v",neg:"Shadow",pos:"Light"},
  {key:"m",neg:"Stillness",pos:"Motion"},
  {key:"ch",neg:"Constancy",pos:"Change"},
- {key:"inw",neg:"Without",pos:"Within"}];
+ {key:"inw",neg:"Outward",pos:"Inward",dir:true}];
+/* "toward Motion", but "outward"/"inward" for direction words */
+const curToward=(c,x)=>c.dir?" "+(x<0?c.neg:c.pos).toLowerCase():" toward "+(x<0?c.neg:c.pos);
 /* Bars use the reading's scaled scores (story.scaled, -1..+1): measured against the deck's typical draw
    and scaled to the spread size, so a full bar means an unusually strong pull for that many cards. */
 function currentFrac(z){return Math.min(1,Math.abs(z))}
@@ -533,7 +535,7 @@ function currentStrength(z){const f=currentFrac(z);return f<0.15?"in balance":f<
 function currentRow(c,x){
  const frac=currentFrac(x),pct=frac*50,side=x<0?"neg":"pos",bal=frac<0.15;
  const bar=Math.abs(x)<0.05?"":`<div class="cur-bar ${x<0?"neg":""}" style="${x<0?`right:50%`:`left:50%`};width:${pct}%"></div>`;
- const note=bal?"In balance":`${currentStrength(x)} toward ${x<0?c.neg:c.pos}`.replace(/^./,m=>m.toUpperCase());
+ const note=bal?"In balance":(currentStrength(x)+curToward(c,x)).replace(/^./,m=>m.toUpperCase());
  return `<div class="cur-row" role="img" aria-label="${c.neg} to ${c.pos}: ${note}"><span class="pole l ${side==="neg"&&!bal?"on":""}">${c.neg}</span><div class="cur-track">${bar}</div><span class="pole ${side==="pos"&&!bal?"on":""}">${c.pos}</span><span class="cur-note">${note}</span></div>`;
 }
 function first(k){return k.split(",")[0].trim()}
@@ -597,7 +599,7 @@ function buildReport(){
   const left=x<0?" ".repeat(cells-n)+"#".repeat(n):" ".repeat(cells),right=x>0?"#".repeat(n)+" ".repeat(cells-n):" ".repeat(cells);
   const v=signed(Math.round(raw*100)/100);
   out.push(`${c.neg.padStart(10)} [${left}|${right}] ${c.pos}`);
-  out.push(`${" ".repeat(12)}${frac<0.15?"In balance":currentStrength(x).replace(/^./,m=>m.toUpperCase())+" toward "+(x<0?c.neg:c.pos)} (average ${v})`);
+  out.push(`${" ".repeat(12)}${frac<0.15?"In balance":currentStrength(x).replace(/^./,m=>m.toUpperCase())+curToward(c,x)} (average ${v})`);
  });
  out.push(...wrapText("How strongly the cards pull one way or the other on each current. Each card scores from -2 to +2; the average counts Major Arcana a little extra, and the bars are measured against the deck's typical draw and scaled to the spread size, so a full bar means an unusually strong pull for this many cards.",W),"");
  out.push("THE CARDS",sub);
