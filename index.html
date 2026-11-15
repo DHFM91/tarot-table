@@ -187,7 +187,7 @@ input[type=range]{width:100%;accent-color:var(--gold)}
  <summary><span aria-hidden="true">♥</span> Support my work with crypto</summary>
  <div class="coins" id="coins"></div>
 </details>
-<footer>Free Tarot Readings is mysticism for fun, entertainment, and self-reflection only. Not advice of any kind and no liability is assumed. Your choices are your own. · <span id="ver"></span></footer>
+<footer>Free Tarot Readings is mysticism for fun, entertainment, and self-reflection only. No real advice of any kind is implied and no liability is assumed by the creator. Your choices are your own, and astrology and tarot are not considered scientific predictions. · <span id="ver"></span></footer>
 <div id="modal" hidden>
  <div class="box">
   <h2>Before you draw…</h2>
@@ -234,7 +234,7 @@ const D = TarotData, E = TarotEngine;
 const {deck: DECK, SUITS, RANKS, ROMAN, SPREADS, SHUFFLES, CUTS, DEALS} = D;
 
 /* ===== STATE ===== */
-const VERSION="v16";
+const VERSION="v17";
 const S={hist:[],cutNote:"",interpreted:false,deckKind:"used",step:0,spread:"ppf",rev:"natural",q:"",shuffles:0,lastShuffle:null,piles:5,cut:"none",cutDone:false,cutK:39,three:null,taps:[],deal:"top",drawn:[],revealed:[],sel:-1,busy:false,fan:[]};
 let deck=E.newDeck(S.deckKind);
 const $=s=>document.querySelector(s), stage=$("#stage"), side=$("#side"), reading=$("#reading");
@@ -613,7 +613,7 @@ function buildReport(){
  });
  const L=E.analyze(S.drawn,S.spread,S.rev);
  if(L.length){out.push("PUTTING IT TOGETHER",sub);L.forEach(x=>out.push(...wrapText(x.title+" "+x.text,W-2).map((l,j)=>(j?"  ":"- ")+l)));out.push("")}
- out.push(sub,...wrapText("Free Tarot Readings is mysticism for fun, entertainment, and self-reflection only. Not advice of any kind and no liability is assumed. Your choices are your own.",W),"davidfeuling.com/tarot-table/");
+ out.push(sub,...wrapText("Free Tarot Readings is mysticism for fun, entertainment, and self-reflection only. No real advice of any kind is implied and no liability is assumed by the creator. Your choices are your own, and astrology and tarot are not considered scientific predictions.",W),"davidfeuling.com/tarot-table/");
  return out.map(l=>l.replace(/\s+$/,"")).join("\n")+"\n";
 }
 function localDateKey(d=new Date()){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`}

@@ -2,7 +2,7 @@
 
 Read this first. It covers what the project is, where everything lives, how David likes the work done, and what's still open.
 
-**Current version: v16** (shown in the page footer, set by `const VERSION` in `index.html`).
+**Current version: v17** (shown in the page footer, set by `const VERSION` in `index.html`).
 
 ---
 
@@ -120,7 +120,7 @@ Release:
 
 ## 7. Approved wording (don't change without asking)
 
-- Footer: "Free Tarot Readings is mysticism for fun, entertainment, and self-reflection only. Not advice of any kind and no liability is assumed. Your choices are your own. · vN"
+- Footer: "Free Tarot Readings is mysticism for fun, entertainment, and self-reflection only. No real advice of any kind is implied and no liability is assumed by the creator. Your choices are your own, and astrology and tarot are not considered scientific predictions. · vN"
 - End of each reading: "For entertainment and reflection only. Your choices are your own."
 
 ## 8. Open items and ideas
