@@ -265,7 +265,8 @@ function cardName(c, reversed) {
 
 function tell(drawn, spreadKey, opts = {}) {
   const roles = (D.SPREADS[spreadKey] || { pos: [] }).pos;
-  const rng = E.seededRng(spreadKey + "|" + drawn.map(d => d.i + (d.r ? "r" : "u")).join(",") + "|" + (opts.question || ""));
+  // seeded by the cards alone (not the question), so a shared reading code gives the same wording everywhere
+  const rng = E.seededRng(spreadKey + "|" + drawn.map(d => d.i + (d.r ? "r" : "u")).join(","));
   const pick = a => a[rng(a.length)];
   const cards = drawn.map((d, k) => {
     const c = D.deck[d.i];

@@ -148,6 +148,14 @@ input[type=range]{width:100%;accent-color:var(--gold)}
 #confirmScrim p{margin:0 0 16px;font-size:16px;color:var(--ink)}
 #confirmScrim .row .btn{flex:1}
 #confirmScrim .primary{margin-top:0;width:auto}
+.codebox{margin-top:18px;padding-top:14px;border-top:1px solid var(--line)}
+.codebox label{margin:0 0 6px}
+.codebox input{flex:2;min-width:0;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:8px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;letter-spacing:.06em;text-transform:uppercase}
+.codebox .row{margin-top:0}
+.codebox .btn{flex:1}
+.codeerr{color:#ff9e9e}
+#reading .codeline{margin:14px 0 0;font-size:13px;color:var(--dim)}
+#reading .codeline b{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color:var(--gold2);font-weight:normal;letter-spacing:.06em;user-select:all}
 #dlScrim{position:fixed;inset:0;background:#06040fcc;display:flex;align-items:center;justify-content:center;z-index:55;padding:16px}
 #dlScrim .box{width:min(760px,100%);max-height:92vh;display:flex;flex-direction:column;background:var(--panel);border:1px solid var(--gold);border-radius:16px;padding:18px}
 #dlScrim h2{margin:0 0 4px;color:var(--gold2);font-weight:normal;letter-spacing:.06em;font-size:20px}
@@ -215,6 +223,7 @@ input[type=range]{width:100%;accent-color:var(--gold)}
 <script src="js/tarot-engine.js"></script>
 <script src="js/tarot-phrases.js"></script>
 <script src="js/tarot-narrative.js"></script>
+<script src="js/reading-code.js"></script>
 <script src="js/card-faces.js"></script>
 <script src="js/support.js"></script>
 <script>
@@ -234,8 +243,8 @@ const D = TarotData, E = TarotEngine;
 const {deck: DECK, SUITS, RANKS, ROMAN, SPREADS, SHUFFLES, CUTS, DEALS} = D;
 
 /* ===== STATE ===== */
-const VERSION="v18";
-const S={hist:[],cutNote:"",interpreted:false,deckKind:"used",step:0,spread:"ppf",rev:"natural",q:"",shuffles:0,lastShuffle:null,piles:5,cut:"none",cutDone:false,cutK:39,three:null,taps:[],deal:"top",drawn:[],revealed:[],sel:-1,busy:false,fan:[]};
+const VERSION="v19";
+const S={fromCode:"",hist:[],cutNote:"",interpreted:false,deckKind:"used",step:0,spread:"ppf",rev:"natural",q:"",shuffles:0,lastShuffle:null,piles:5,cut:"none",cutDone:false,cutK:39,three:null,taps:[],deal:"top",drawn:[],revealed:[],sel:-1,busy:false,fan:[]};
 let deck=E.newDeck(S.deckKind);
 const $=s=>document.querySelector(s), stage=$("#stage"), side=$("#side"), reading=$("#reading");
 function el(t,c,h){const e=document.createElement(t);if(c)e.className=c;if(h!=null)e.innerHTML=h;return e}
@@ -265,7 +274,12 @@ function renderSide(){
    <select id="deckKind">${Object.keys(E.DECK_KINDS).map(k=>`<option value="${k}" ${k===S.deckKind?"selected":""}>${E.DECK_KINDS[k].name}</option>`).join("")}</select></label>
   <p class="hint">${E.DECK_KINDS[S.deckKind].desc} Your deck carries over from reading to reading, and every shuffle style turns cards in its own way.</p>`
   :`<p class="hint">${S.rev==="random"?"Every drawn card has an even chance of landing reversed.":"Every card is read upright."}</p>`}
-  <button class="btn primary" id="next">Begin shuffling →</button>`;
+  <button class="btn primary" id="next">Begin shuffling →</button>
+  <div class="codebox">
+   <label for="codeIn">Have a reading code? Paste it here to see that reading</label>
+   <div class="row"><input id="codeIn" type="text" autocomplete="off" spellcheck="false" placeholder="4GH5-2YGC-S"><button class="btn" id="codeGo">Open</button></div>
+   <p class="hint codeerr" id="codeErr" hidden></p>
+  </div>`;
  }else if(st===1){
   h=`<h2>2 · Shuffle</h2><p class="hint">Pick a style and shuffle as many times as feels right. You can mix styles.</p>
   ${Object.keys(SHUFFLES).map(k=>`<button class="opt" data-shuf="${k}"><b>${SHUFFLES[k].name}</b><small>${SHUFFLES[k].desc}</small></button>`).join("")}
@@ -297,7 +311,8 @@ function renderSide(){
 function countText(){return `Shuffles so far: ${S.shuffles}${S.lastShuffle?` · last: ${S.lastShuffle}`:""}${S.shuffles>0&&S.shuffles<7?" · it takes about seven riffles to fully mix a deck":""}`}
 
 /* ===== EVENTS (delegated) ===== */
-side.addEventListener("input",e=>{if(e.target.id==="q")S.q=e.target.value});
+side.addEventListener("input",e=>{if(e.target.id==="q")S.q=e.target.value;if(e.target.id==="codeIn"){const x=$("#codeErr");if(x)x.hidden=true}});
+side.addEventListener("keydown",e=>{if(e.target.id==="codeIn"&&e.key==="Enter"){e.preventDefault();openCode()}});
 side.addEventListener("change",e=>{
  if(e.target.id==="rev"){S.rev=e.target.value;renderSide()}
  if(e.target.id==="deckKind"){S.deckKind=e.target.value;deck=E.newDeck(S.deckKind);renderSide();toast("New "+E.DECK_KINDS[S.deckKind].name.toLowerCase()+" ready")}
@@ -313,7 +328,7 @@ side.addEventListener("click",async e=>{
  if(b.dataset.deal){S.deal=b.dataset.deal;renderSide();return}
  switch(b.id){
   case "next":
-   if(S.step===0){S.shuffles=0;S.lastShuffle=null;S.hist=[];go(1)}
+   if(S.step===0){S.shuffles=0;S.lastShuffle=null;S.hist=[];S.fromCode="";go(1)}
    else if(S.step===1){S.cut="none";S.cutDone=false;S.taps=[];S.three=null;go(2)}
    else if(S.step===2)go(3);
    else if(S.step===3)doDeal();
@@ -324,6 +339,8 @@ side.addEventListener("click",async e=>{
   case "interp":await revealAll();interpret();break;
   case "copy":copyReading();break;
   case "again":askConfirm(startOver);break;
+  case "codeGo":openCode();break;
+  case "copyCode":copyText(currentCode(),"Reading code copied");break;
  }
 });
 
@@ -550,13 +567,29 @@ function interpret(){
  const L=E.analyze(S.drawn,S.spread,S.rev).map(x=>`<b>${esc(x.title)}</b> ${esc(x.text)}`);
  if(L.length)h+=`<h3>Putting it together</h3><ul class="syn">${L.map(x=>`<li>${x}</li>`).join("")}</ul>`;
  h+=`<p class="hint" style="margin-top:18px">For entertainment and reflection only. Your choices are your own.</p>`;
- reading.innerHTML=h;S.interpreted=true;reading.scrollIntoView({behavior:"smooth",block:"start"});
+ h=`<p class="codeline">Reading code: <b id="codeShow">${esc(currentCode())}</b> <button class="link" id="copyCode2">Copy code</button><span class="hint"> · anyone can paste it into Free Tarot Readings to see this reading</span></p>`+h;
+ reading.innerHTML=h;S.interpreted=true;$("#copyCode2").onclick=()=>copyText(currentCode(),"Reading code copied");reading.scrollIntoView({behavior:"smooth",block:"start"});
 }
 function copyReading(){
  if(!reading.textContent.trim())interpret();
- const t=reading.innerText;
+ const t=`Reading code: ${currentCode()}\n(Paste it into Free Tarot Readings at davidfeuling.com/tarot-table/ to see this reading.)\n\n`+reading.innerText.replace(/^Reading code:[^\n]*\n+/,"");
  const fb=()=>{const ta=el("textarea");ta.value=t;ta.style.position="fixed";ta.style.opacity=0;document.body.append(ta);ta.select();try{document.execCommand("copy");toast("Reading copied")}catch(e){toast("Copy not supported here")}ta.remove()};
  if(navigator.clipboard&&window.isSecureContext)navigator.clipboard.writeText(t).then(()=>toast("Reading copied"),fb);else fb();
+}
+
+/* ===== SHAREABLE READING CODES ===== */
+function currentCode(){return TarotCode.encode({spread:S.spread,rev:S.rev,drawn:S.drawn})}
+function copyText(t,msg){
+ const fb=()=>{const ta=el("textarea");ta.value=t;ta.style.position="fixed";ta.style.opacity=0;document.body.append(ta);ta.select();try{document.execCommand("copy");toast(msg)}catch(e){toast("Copy not supported here")}ta.remove()};
+ if(navigator.clipboard&&window.isSecureContext)navigator.clipboard.writeText(t).then(()=>toast(msg),fb);else fb();
+}
+function openCode(){
+ const inp=$("#codeIn"),err=$("#codeErr");if(!inp)return;
+ let r;
+ try{r=TarotCode.decode(inp.value)}catch(e){err.textContent=inp.value.trim()?e.message:"Paste a reading code first.";err.hidden=false;return}
+ S.spread=r.spread;S.rev=r.rev;S.drawn=r.drawn.map(d=>({i:d.i,r:d.r}));S.revealed=S.drawn.map(()=>true);
+ S.sel=-1;S.q="";S.hist=[];S.shuffles=0;S.cutNote="";S.interpreted=false;S.fromCode=TarotCode.encode(r);
+ go(4);interpret();toast("Reading opened");
 }
 
 /* ===== "NEW READING" CONFIRMATION ===== */
@@ -584,14 +617,16 @@ function buildReport(){
  const stamp=new Intl.DateTimeFormat("en-US",{year:"numeric",month:"short",day:"numeric",hour:"numeric",minute:"2-digit",second:"2-digit",timeZoneName:"short"}).format(now);
  const field=(k,v)=>wrapText(String(v),W-14).map((l,i)=>(i?" ".repeat(14):(k+":").padEnd(14))+l);
  out.push(line,"FREE TAROT READINGS · SAVED READING",line);
+ out.push(...field("Reading code",currentCode()+"  (paste into the app to see this reading)"));
  out.push(...field("Date",longDate),...field("Saved",stamp),...field("App version",VERSION));
  out.push(...field("Question",S.q.trim()?`“${S.q.trim()}”`:"(none, an open reading)"),...field("Spread",`${sp.name} (${sp.pos.length} card${sp.pos.length>1?"s":""})`),"");
  out.push("HOW THE CARDS WERE DRAWN",sub);
  out.push(...field("Reversals",REV_LABEL[S.rev]));
+ if(S.fromCode){out.push(...field("Source",`Opened from reading code ${S.fromCode}; shuffling, cutting and dealing happened elsewhere`),"")}else{
  if(S.rev==="natural")out.push(...field("Deck",E.DECK_KINDS[S.deckKind].name+" (carries over between readings)"));
  out.push(...field("Shuffles",S.hist.length?`${S.shuffles} in all: ${S.hist.join(", ")}`:"none"));
  out.push(...field("Cut",S.cut==="none"?"No cut":S.cutNote||CUTS[S.cut].name));
- out.push(...field("Deal",DEALS[S.deal].name),"");
+ out.push(...field("Deal",DEALS[S.deal].name),"");}
  out.push("WHAT THE CARDS ARE TRYING TO TELL YOU",sub);
  story.text.forEach(p=>out.push(...wrapText(p,W),""));
  out.push("THE CURRENTS OF THIS READING",sub);

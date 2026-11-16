@@ -2,7 +2,7 @@
 
 Read this first. It covers what the project is, where everything lives, how David likes the work done, and what's still open.
 
-**Current version: v18** (shown in the page footer, set by `const VERSION` in `index.html`).
+**Current version: v19** (shown in the page footer, set by `const VERSION` in `index.html`).
 
 ---
 
@@ -86,6 +86,14 @@ Script load order in `index.html`: data, engine, phrases, narrative, card-faces,
 - **Art Style switch (v16):** a header link under "For entertainment only", same size and font, reading "Art Style: Classic" or "Art Style: Simplified"; clicking flips it. Classic = the 1909 images and `art/back.jpg`; Simplified = the drawn faces from `js/card-faces.js` and the drawn purple-and-gold back. Stored in localStorage `ftrArtStyle`; first-visit default is `DEFAULT_ART_STYLE` ("classic"). Switching on the Read step redraws the dealt cards and keeps them face-up; earlier steps only show backs, which switch through the `body.classic` class. David asked for this so he can go back to the simpler designs any time without reverting.
 - Dave's Daily Dashboard has the same choice as a code setting only: `TAROT_ART_STYLE` in its `index.html` ("classic" or "simplified").
 - `js/card-faces.js` also draws a fallback for any card whose image fails to load in Classic (Major Arcana: pentagram stamp and fog with eyes, red/blue/violet by the card's upright nature).
+
+### Reading codes (added in v19)
+- `js/reading-code.js` (`TarotCode`). Bits: version (3) | spread (3) | reversal setting (2) | per card index (7) + reversed (1), padded, written in Crockford base32, plus two check characters (weighted sum mod 1021). Lengths: single 6, three-card 9, Five-Card Cross 12, Two Paths 14, Horseshoe 15, Celtic Cross 20.
+- **`SPREAD_ORDER` and `REV_ORDER` are frozen forever**: only append new spreads at the end, or old codes break. Card indexes follow `TarotData.deck` order, which must never change either.
+- The code is shown at the top of every interpreted reading, prepended to Copy reading, and added to the hidden .txt save. The first screen has a "Have a reading code?" box; opening a code jumps straight to step 5 with every card face up and interpreted, and sets `S.fromCode`.
+- David decided codes carry only the cards, positions and orientations (no question, no shuffle history), and that the app's current meanings and wording are what the recipient sees.
+- The vibe reading is seeded by the cards alone (not the question) so a code gives identical wording everywhere.
+- Test: `node tests/code.test.js`.
 
 ### Hidden save-as-text
 - **← ← → → ↑ ↓ ↑ ↓** (arrow keys, or the same swipes on touch). It works **only** on step 5 after **Interpret** has been pressed, and does nothing on other screens. This mirrors Dave's Daily Dashboard.

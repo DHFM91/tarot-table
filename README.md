@@ -60,6 +60,14 @@ On a brand-new deck, one shuffle leaves on average about 6 cards reversed for Ov
 
 The other settings are **random 50/50** (each drawn card, whatever the shuffle) and **upright only**.
 
+## Sharing a reading with a code
+
+Every interpreted reading gets a short **reading code**, shown at the top of the reading and at the top of **Copy reading** (for example `4GH5-2YGC-S` for a three-card spread; a Celtic Cross is 20 characters). Anyone can paste it into the "Have a reading code?" box on the first screen to see the same spread, the same cards in the same positions and orientations, and the same vibe reading, on any computer. No account or internet connection is needed: the code itself holds the reading.
+
+- The code holds the spread, the reversal setting, and each card with its orientation. It doesn't hold the question or how the cards were shuffled, cut and dealt.
+- Meanings and wording come from the app as it is when the code is opened.
+- Codes use letters and numbers that are hard to confuse (no I, L, O or U), ignore case, spaces and dashes, and end in two check characters, so a mistyped or swapped character is caught rather than opening the wrong reading.
+
 ## Saving a reading as text
 
 After you've dealt a reading and pressed **Interpret**, enter **← ← → → ↑ ↓ ↑ ↓** on the arrow keys (or swipe those directions on a phone). A preview opens with **Download .txt** and **Copy text**. The file includes the date, app version, your question, how the cards were shuffled, cut and dealt, the vibe reading, every card's meaning and scores, and the overall patterns. Files are named by date with a number for each save that day, for example `free-tarot-readings-2026-11-13-01-celtic-cross.txt`. The code does nothing on other screens.
@@ -93,6 +101,8 @@ If an image is missing in Classic mode, that card falls back to its drawn face. 
 | `js/card-faces.js` | Drawn fallback card faces, used only if an image is missing. Exposes `TarotFaces`. |
 | `art/` | The card images (1909 Rider-Waite-Smith, public domain) and their sources |
 | `js/support.js` | The "Support my work with crypto" section (same addresses and offline QR codes as davidfeuling.com) |
+| `js/reading-code.js` | Shareable reading codes. Exposes `TarotCode.encode` and `TarotCode.decode`. |
+| `tests/code.test.js` | Round-trips thousands of readings through codes and checks typo detection (`node tests/code.test.js`) |
 | `tests/narrative.test.js` | Writes thousands of random readings and checks length and wording rules (`node tests/narrative.test.js`) |
 
 ## Reusing the deck in another project
